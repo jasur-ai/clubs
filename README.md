@@ -11,13 +11,17 @@ directory and can be switched on one by one — the data model is multi-club fro
 
 ## Preview
 
-| Public portal | Club page |
+| Public portal | Club directory |
 | --- | --- |
-| ![Portal](docs/screenshots/portal.png) | ![Club](docs/screenshots/club.png) |
+| ![Portal](docs/screenshots/portal.png) | ![Clubs](docs/screenshots/clubs.png) |
 
 | Member Mini App | Admin console |
 | --- | --- |
 | ![Mini App](docs/screenshots/mini-app.png) | ![Admin](docs/screenshots/admin.png) |
+
+Each club keeps its own emblem, pulled from its Telegram channel and served locally
+(`public/clubs/<slug>.jpg`), so the directory reads as the real club network rather than a
+placeholder grid.
 
 ## What is inside
 
