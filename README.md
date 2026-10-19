@@ -7,6 +7,16 @@ public website, Telegram bot and Telegram Mini App.
 Phase 1 ships the Book Club (`@tsuebookclub`) end to end. The other 21 clubs are present in the
 directory and can be switched on one by one — the data model is multi-club from day one.
 
+## Preview
+
+| Public portal | Club page |
+| --- | --- |
+| ![Portal](docs/screenshots/portal.png) | ![Club](docs/screenshots/club.png) |
+
+| Member Mini App | Admin console |
+| --- | --- |
+| ![Mini App](docs/screenshots/mini-app.png) | ![Admin](docs/screenshots/admin.png) |
+
 ## What is inside
 
 | Surface | Route | Purpose |

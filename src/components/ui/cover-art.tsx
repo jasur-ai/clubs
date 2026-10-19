@@ -8,6 +8,7 @@ type Props = {
   variant?: string | null;
   className?: string;
   compact?: boolean;
+  label?: string;
 };
 
 /**
@@ -15,7 +16,7 @@ type Props = {
  * Keeps the product fast and works offline in previews; can be replaced with
  * real artwork by adding `coverUrl` to Book/Event in a later iteration.
  */
-export function CoverArt({ from, to, title, author, variant = "arc", className, compact = false }: Props) {
+export function CoverArt({ from, to, title, author, variant = "arc", className, compact = false, label }: Props) {
   return (
     <div
       className={cn("relative isolate flex overflow-hidden rounded-[12px] text-white", className)}
@@ -24,7 +25,7 @@ export function CoverArt({ from, to, title, author, variant = "arc", className, 
       <Pattern variant={variant ?? "arc"} />
       <div className={cn("relative flex w-full flex-col justify-between", compact ? "p-3.5" : "p-5")}>
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
-          {author ? "Kitob" : "Tadbir"}
+          {label ?? (author ? "Kitob" : "Tadbir")}
         </span>
         <div>
           <p className={cn("font-serif leading-tight", compact ? "text-[15px]" : "text-[22px]")}>{title}</p>

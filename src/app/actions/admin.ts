@@ -54,10 +54,11 @@ export async function reviewJoinRequestAction(formData: FormData) {
       if (existing) {
         userId = existing.id;
       } else {
+        const [first, ...rest] = request.fullName.trim().split(/\s+/);
         const created = await db.user.create({
           data: {
-            firstName: request.fullName.split(" ").slice(1).join(" ") || request.fullName,
-            lastName: request.fullName.split(" ")[0] || null,
+            firstName: first,
+            lastName: rest.length ? rest.join(" ") : null,
             username,
             role: "MEMBER",
           },

@@ -39,12 +39,14 @@ export async function SiteHeader() {
           >
             Telegram <ArrowUpRight size={13} />
           </a>
-          <Link href={user ? "/app" : "/login"} className="btn btn-secondary btn-sm hidden sm:inline-flex">
-            {user ? "Kabinet" : "Kirish"}
-          </Link>
-          <Link href="/join" className="btn btn-primary btn-sm hidden sm:inline-flex">
-            A’zo bo‘lish
-          </Link>
+          <div className="hidden items-center gap-2.5 sm:flex">
+            <Link href={user ? "/app" : "/login"} className="btn btn-secondary btn-sm">
+              {user ? "Kabinet" : "Kirish"}
+            </Link>
+            <Link href="/join" className="btn btn-primary btn-sm">
+              A’zo bo‘lish
+            </Link>
+          </div>
           <MobileNav authed={Boolean(user)} />
         </div>
       </div>

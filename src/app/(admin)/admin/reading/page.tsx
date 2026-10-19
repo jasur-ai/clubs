@@ -73,7 +73,7 @@ export default async function ReadingAdminPage({ searchParams }: { searchParams:
         }
       />
 
-      <div className="mb-4 flex flex-wrap gap-1.5">
+      <div className="hide-scrollbar mb-4 flex items-center gap-1.5 overflow-x-auto pb-1">
         {clubs.map((c) => (
           <Link
             key={c.id}

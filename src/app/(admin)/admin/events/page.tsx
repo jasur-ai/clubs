@@ -98,7 +98,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
         action={selected ? <FormDialog label="Tadbir qo‘shish" title="Yangi tadbir" description={selected.name}>{eventForm()}</FormDialog> : null}
       />
 
-      <div className="mb-4 flex flex-wrap items-center gap-1.5">
+      <div className="hide-scrollbar mb-4 flex items-center gap-1.5 overflow-x-auto pb-1">
         {clubs.map((c) => (
           <Link
             key={c.id}

@@ -30,7 +30,7 @@ export async function loginAction(_prev: AuthState, formData: FormData): Promise
   if (!valid) return { error: "Email yoki parol xato" };
 
   await createSession(user.id);
-  redirect(user.role === "MEMBER" ? "/app" : "/admin");
+  redirect(safeNext(formData.get("next"), user.role));
 }
 
 /** Development-only shortcut so reviewers can explore both roles without Telegram. */
@@ -42,7 +42,13 @@ export async function demoLoginAction(formData: FormData) {
   const user = await db.user.findUnique({ where: { email } });
   if (!user) throw new Error("Demo user not found — run `npm run db:seed`");
   await createSession(user.id);
-  redirect(user.role === "MEMBER" ? "/app" : "/admin");
+  redirect(safeNext(formData.get("next"), user.role));
+}
+
+function safeNext(raw: FormDataEntryValue | null, role: string) {
+  const value = typeof raw === "string" ? raw : "";
+  if (value.startsWith("/") && !value.startsWith("//") && !value.startsWith("/login")) return value;
+  return role === "MEMBER" ? "/app" : "/admin";
 }
 
 export async function telegramLoginAction(rawInitData: string): Promise<AuthState> {

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function MemberLayout({ children }: { children: React.ReactNode }) {
   const user = await getSession();
-  if (!user) redirect("/tg");
+  if (!user) redirect("/login?next=/app");
 
   const [membership, unread] = await Promise.all([
     db.membership.findFirst({

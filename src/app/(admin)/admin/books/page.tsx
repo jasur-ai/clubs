@@ -37,7 +37,7 @@ export default async function AdminBooksPage({ searchParams }: { searchParams: P
         action={selected ? <FormDialog label="Kitob qo‘shish" title="Yangi kitob" description={selected.name}><BookForm clubs={clubs} defaultClubId={selected.id} /></FormDialog> : null}
       />
 
-      <div className="mb-4 flex flex-wrap gap-1.5">
+      <div className="hide-scrollbar mb-4 flex items-center gap-1.5 overflow-x-auto pb-1">
         {clubs.map((c) => (
           <Link
             key={c.id}
