@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { requireStaffPage } from "@/lib/session";
 import { db } from "@/lib/db";
-import { broadcastAction, changePasswordAction } from "@/app/actions/admin";
+import { broadcastAction } from "@/app/actions/admin";
+import { PasswordForm } from "@/components/admin/password-form";
 import { PageHeader, Panel, FieldLabel } from "@/components/admin/ui";
 
 export const metadata = { title: "Sozlamalar" };
@@ -74,25 +75,7 @@ export default async function SettingsPage() {
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <Panel title="Parolni almashtirish" meta="xavfsizlik">
-          <form action={changePasswordAction} className="space-y-3 p-4">
-            <div>
-              <FieldLabel>Joriy parol</FieldLabel>
-              <input name="current" type="password" className="input" required autoComplete="current-password" />
-            </div>
-            <div>
-              <FieldLabel>Yangi parol</FieldLabel>
-              <input name="next" type="password" className="input" required minLength={10} autoComplete="new-password" />
-            </div>
-            <div>
-              <FieldLabel>Yangi parol (takror)</FieldLabel>
-              <input name="repeat" type="password" className="input" required minLength={10} autoComplete="new-password" />
-            </div>
-            <button className="btn btn-secondary w-full">Parolni yangilash</button>
-            <p className="text-[11px] leading-relaxed text-[color:var(--color-muted)]">
-              Kamida 10 belgi. Almashtirilgandan keyin boshqa qurilmalardagi sessiyalar amal qiladi — kerak bo‘lsa
-              barcha qurilmalardan chiqib, qayta kiring.
-            </p>
-          </form>
+          <PasswordForm />
         </Panel>
 
         <Panel title="Telegram bot" meta="integratsiya">
