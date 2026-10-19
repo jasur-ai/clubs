@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireStaffPage } from "@/lib/session";
 import { db } from "@/lib/db";
-import { broadcastAction } from "@/app/actions/admin";
+import { broadcastAction, changePasswordAction } from "@/app/actions/admin";
 import { PageHeader, Panel, FieldLabel } from "@/components/admin/ui";
 
 export const metadata = { title: "Sozlamalar" };
@@ -69,6 +69,51 @@ export default async function SettingsPage() {
             </div>
             <button className="btn btn-primary w-full">Yuborish</button>
           </form>
+        </Panel>
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <Panel title="Parolni almashtirish" meta="xavfsizlik">
+          <form action={changePasswordAction} className="space-y-3 p-4">
+            <div>
+              <FieldLabel>Joriy parol</FieldLabel>
+              <input name="current" type="password" className="input" required autoComplete="current-password" />
+            </div>
+            <div>
+              <FieldLabel>Yangi parol</FieldLabel>
+              <input name="next" type="password" className="input" required minLength={10} autoComplete="new-password" />
+            </div>
+            <div>
+              <FieldLabel>Yangi parol (takror)</FieldLabel>
+              <input name="repeat" type="password" className="input" required minLength={10} autoComplete="new-password" />
+            </div>
+            <button className="btn btn-secondary w-full">Parolni yangilash</button>
+            <p className="text-[11px] leading-relaxed text-[color:var(--color-muted)]">
+              Kamida 10 belgi. Almashtirilgandan keyin boshqa qurilmalardagi sessiyalar amal qiladi — kerak bo‘lsa
+              barcha qurilmalardan chiqib, qayta kiring.
+            </p>
+          </form>
+        </Panel>
+
+        <Panel title="Telegram bot" meta="integratsiya">
+          <div className="divide-y divide-[color:var(--color-line)] text-[11.5px]">
+            {[
+              ["Bot", "@Tsue_clubs_bot"],
+              ["Webhook", "/api/telegram"],
+              ["Mini App", "/tg"],
+              ["Buyruqlar", "/clubs, /events, /read, /help"],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between px-4 py-2.5">
+                <span className="text-[color:var(--color-muted)]">{k}</span>
+                <code className="text-[color:var(--color-ink-soft)]">{v}</code>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-[color:var(--color-line)] px-4 py-3">
+            <a href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm w-full">
+              Botni ochish
+            </a>
+          </div>
         </Panel>
       </div>
 

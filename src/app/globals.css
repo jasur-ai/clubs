@@ -376,3 +376,10 @@ body {
     radial-gradient(120% 120% at 100% 0%, color-mix(in oklab, var(--club-accent) 14%, #ffffff) 0%, #ffffff 45%),
     #ffffff;
 }
+
+
+/* Horizontal scrollers: soften the clipped edge instead of cutting a control in half. */
+.fade-x {
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%);
+}

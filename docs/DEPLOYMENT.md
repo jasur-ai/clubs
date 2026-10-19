@@ -46,6 +46,19 @@ curl -s -X POST https://api.render.com/v1/blueprints \
   -d '{"repo":"https://github.com/jasur-ai/clubs","branch":"main","name":"tsue-clubs"}'
 ```
 
+### This deployment
+
+| | |
+| --- | --- |
+| Site | https://tsue-clubs.onrender.com |
+| Service | `srv-dbb5cdon74is73blv3m0` (Docker, Frankfurt) |
+| Database | `tsue-clubs-db`, PostgreSQL 16 (internal URL in `DATABASE_URL`) |
+| Bot | [@Tsue_clubs_bot](https://t.me/Tsue_clubs_bot) — webhook `/api/telegram`, menu button `/tg` |
+| Admin | `admin@clubs.tdiu.uz` — password in the `SEED_ADMIN_PASSWORD` env var |
+
+`ALLOW_DEMO_LOGIN=0` on the live service: the demo role switcher exists only for
+local development.
+
 ## 3. Database
 
 Local development uses SQLite (`prisma/dev.db`). Production should use PostgreSQL:

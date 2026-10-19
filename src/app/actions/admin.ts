@@ -381,6 +381,30 @@ export async function deleteNewsAction(formData: FormData) {
   refreshAll();
 }
 
+/* ------------------------------------------------------------------ parol */
+
+export async function changePasswordAction(formData: FormData) {
+  const user = await requireStaff();
+  const bcrypt = (await import("bcryptjs")).default;
+
+  const current = String(formData.get("current") ?? "");
+  const next = String(formData.get("next") ?? "");
+  const repeat = String(formData.get("repeat") ?? "");
+
+  if (next.length < 10) throw new Error("Yangi parol kamida 10 belgidan iborat bo‘lsin");
+  if (next !== repeat) throw new Error("Parollar mos kelmadi");
+
+  const record = await db.user.findUnique({ where: { id: user.id }, select: { passwordHash: true } });
+  if (!record?.passwordHash) throw new Error("Bu hisob parol bilan kirmaydi (Telegram)");
+
+  const valid = await bcrypt.compare(current, record.passwordHash);
+  if (!valid) throw new Error("Joriy parol xato");
+
+  await db.user.update({ where: { id: user.id }, data: { passwordHash: await bcrypt.hash(next, 10) } });
+  await audit(user.id, "user.password", "User", user.id);
+  revalidatePath("/admin/settings");
+}
+
 /* -------------------------------------------------------------------- klub */
 
 export async function updateClubAction(formData: FormData) {
