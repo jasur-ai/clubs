@@ -165,9 +165,9 @@ export default async function HomePage() {
       <section className="border-b border-[color:var(--color-line)] bg-[#fbfcfd]">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 divide-x divide-[color:var(--color-line)] px-4 sm:px-6 lg:grid-cols-4">
           <EcoItem icon={<LayoutDashboard size={16} />} title="Veb-sayt" text="Klublar, yangiliklar, tadbirlar" />
-          <EcoItem icon={<Send size={16} />} title="Telegram bot" text="Eslatmalar va tezkor kirish" />
-          <EcoItem icon={<Smartphone size={16} />} title="Mini-ilova" text="O‘qish va RSVP — telefondan" />
-          <EcoItem icon={<Users size={16} />} title="Admin panel" text="A’zolar, kontent, statistika" />
+          <EcoItem icon={<Send size={16} />} title="Telegram bot" text="@Tsue_clubs_bot — eslatmalar va kirish" href="https://t.me/Tsue_clubs_bot" />
+          <EcoItem icon={<Smartphone size={16} />} title="Mini-ilova" text="O‘qish va RSVP — telefondan" href="https://t.me/Tsue_clubs_bot/app" />
+          <EcoItem icon={<Users size={16} />} title="Admin panel" text="A’zolar, kontent, statistika" href="/admin" />
         </div>
       </section>
 
@@ -347,8 +347,8 @@ export default async function HomePage() {
               <Link href="/join" className="btn btn-primary btn-lg">
                 A’zo bo‘lish <ArrowRight size={16} />
               </Link>
-              <a href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
-                <Send size={15} /> Telegram
+              <a href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
+                <Send size={15} /> Telegram bot
               </a>
             </div>
           </div>
@@ -372,9 +372,9 @@ function HeroStat({ value, label }: { value: number; label: string }) {
   );
 }
 
-function EcoItem({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
-  return (
-    <div className="flex items-start gap-3 px-4 py-5 first:pl-0 sm:px-6">
+function EcoItem({ icon, title, text, href }: { icon: React.ReactNode; title: string; text: string; href?: string }) {
+  const body = (
+    <>
       <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--color-line)] bg-white text-[#104070]">
         {icon}
       </span>
@@ -382,6 +382,19 @@ function EcoItem({ icon, title, text }: { icon: React.ReactNode; title: string; 
         <p className="text-[13px] font-semibold text-[color:var(--color-ink)]">{title}</p>
         <p className="mt-0.5 line-clamp-2 text-[11.5px] leading-snug text-[color:var(--color-muted)]">{text}</p>
       </div>
-    </div>
+    </>
   );
+  if (href) {
+    const external = href.startsWith("http");
+    return (
+      <a
+        href={href}
+        {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+        className="flex items-start gap-3 px-4 py-5 transition-colors first:pl-0 hover:bg-white sm:px-6"
+      >
+        {body}
+      </a>
+    );
+  }
+  return <div className="flex items-start gap-3 px-4 py-5 first:pl-0 sm:px-6">{body}</div>;
 }

@@ -17,7 +17,36 @@ Copy `.env.example` to `.env` and fill:
 
 Never commit `.env`. The repository ships `.env.example` only.
 
-## 2. Database
+## 2. One-click deploy on Render
+
+The repository ships `render.yaml` (web service + managed PostgreSQL) and a
+multi-stage `Dockerfile`. Render reads both automatically:
+
+1. Render Dashboard → **New → Blueprint** → select `jasur-ai/clubs` → branch `main`.
+2. Render creates `tsue-clubs-db` and the `tsue-clubs` web service.
+3. Fill the values it cannot generate:
+   - `NEXT_PUBLIC_SITE_URL` — `https://tsue-clubs.onrender.com` (or a custom domain)
+   - `TELEGRAM_BOT_TOKEN` — from BotFather
+   - `SEED_ADMIN_PASSWORD` — a fresh password for `admin@clubs.tdiu.uz`
+4. Deploy. The container runs `prisma db push` + `seed-if-empty` on boot, so the
+   database is created and filled on the first start and left untouched after that.
+5. When the service is healthy, `NEXT_PUBLIC_SITE_URL` is HTTPS and
+   `src/instrumentation.node.ts` registers the webhook and the Mini App menu button
+   by itself. Nothing else to run.
+
+`render.yaml` sets `ALLOW_DEMO_LOGIN=0`; demo role switching is a development tool
+only.
+
+### Deploying from a laptop with the Render API
+
+```bash
+export RENDER_API_KEY=...          # Account Settings → API Keys
+curl -s -X POST https://api.render.com/v1/blueprints \
+  -H "Authorization: Bearer $RENDER_API_KEY" -H "Content-Type: application/json" \
+  -d '{"repo":"https://github.com/jasur-ai/clubs","branch":"main","name":"tsue-clubs"}'
+```
+
+## 3. Database
 
 Local development uses SQLite (`prisma/dev.db`). Production should use PostgreSQL:
 
@@ -29,7 +58,7 @@ Local development uses SQLite (`prisma/dev.db`). Production should use PostgreSQ
 
 Backups: nightly `pg_dump` is sufficient; the database is small and append-mostly.
 
-## 3. Build and run
+## 4. Build and run
 
 ```bash
 npm ci
@@ -44,7 +73,7 @@ Vercel, set all environment variables in the project settings and use a pooled P
 Reverse proxy notes: forward `X-Forwarded-Proto`, keep the body size limit above 1 MB (webhook
 payloads are small), and serve the app over HTTPS — Telegram refuses non-HTTPS web-app URLs.
 
-## 4. Telegram
+## 5. Telegram
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://clubs.tdiu.uz \
@@ -68,7 +97,7 @@ Then in BotFather:
 Local development: Telegram cannot reach `localhost`. Use a tunnel (Cloudflare Tunnel,
 `ngrok http 3000`) and set `NEXT_PUBLIC_SITE_URL` to the tunnel URL before `npm run tg:webhook`.
 
-## 5. First-run checklist
+## 6. First-run checklist
 
 - [ ] `.env` filled, `AUTH_SECRET` rotated away from the example
 - [ ] `npm run db:setup` completes; `admin@clubs.tdiu.uz` login works
@@ -80,7 +109,7 @@ Local development: Telegram cannot reach `localhost`. Use a tunnel (Cloudflare T
 - [ ] Mini App opens from the bot menu button and lands on `/app`
 - [ ] Backup job scheduled for the database
 
-## 6. Operations
+## 7. Operations
 
 - Notifications are written to `Notification`; the Mini App shows unread counts. Delivery through
   the bot can be added by a worker that reads undelivered rows (the schema already separates

@@ -13,7 +13,7 @@ export type BotUpdate = {
   };
 };
 
-type Reply = { text: string; keyboard?: InlineKeyboard };
+type Reply = { text: string; keyboard?: InlineKeyboard; photo?: string };
 
 export async function handleUpdate(update: BotUpdate, bot: BotRuntime): Promise<void> {
   const message = update.message;
@@ -28,6 +28,10 @@ export async function handleUpdate(update: BotUpdate, bot: BotRuntime): Promise<
   const reply = await respond(command, payload, message.from?.first_name, bot);
   if (!reply) return;
 
+  if (reply.photo) {
+    await tg.sendPhoto(chatId, reply.photo, reply.text, reply.keyboard ?? miniAppKeyboard(bot));
+    return;
+  }
   await tg.sendMessage(chatId, reply.text, reply.keyboard ?? miniAppKeyboard(bot));
 }
 
@@ -50,6 +54,8 @@ async function respond(command: string, payload: string, name: string | undefine
       return payload.startsWith("club_")
         ? clubBrief(payload.replace("club_", ""), bot)
         : welcome(name, bot);
+    case "/clubs":
+      return clubsReply(bot);
     case "/events":
       return eventsReply(bot);
     case "/read":
@@ -58,7 +64,7 @@ async function respond(command: string, payload: string, name: string | undefine
       return helpReply(bot);
     default:
       return {
-        text: "Buyruqlar: /events — yaqin tadbirlar, /read — joriy kitob, /help — yordam.",
+        text: "Buyruqlar: /clubs — klublar, /events — yaqin tadbirlar, /read — joriy kitob, /help — yordam.",
       };
   }
 }
@@ -100,12 +106,32 @@ async function clubBrief(slug: string, bot: BotRuntime): Promise<Reply> {
 
   return {
     text: parts.join("\n"),
+    photo: club.logoUrl ? new URL(club.logoUrl, bot.siteUrl).toString() : undefined,
     keyboard: {
       inline_keyboard: [
         [{ text: "Klub sahifasi", url: `${bot.siteUrl}/clubs/${club.slug}` }],
         [{ text: "Ariza topshirish", url: `${bot.siteUrl}/join?club=${club.slug}` }],
       ],
     },
+  };
+}
+
+async function clubsReply(bot: BotRuntime): Promise<Reply> {
+  const clubs = await db.club.findMany({
+    where: { isActive: true },
+    orderBy: { sortOrder: "asc" },
+    select: { name: true, slug: true },
+  });
+
+  const lines = ["<b>Klublar</b>", ""];
+  for (const c of clubs) {
+    lines.push(`<a href="${bot.siteUrl}/clubs/${c.slug}">${c.name}</a>`);
+  }
+  lines.push("", `${clubs.length} ta klub. Har birining o‘z sahifasi, tadbirlari va a’zolik tartibi bor.`);
+
+  return {
+    text: lines.join("\n"),
+    keyboard: { inline_keyboard: [[{ text: "Katalog", url: `${bot.siteUrl}/clubs` }]] },
   };
 }
 
@@ -148,7 +174,7 @@ async function readingReply(bot: BotRuntime): Promise<Reply> {
 
 async function helpReply(bot: BotRuntime): Promise<Reply> {
   return {
-    text: ["<b>Yordam</b>", "", "/start — boshlash", "/events — yaqin tadbirlar", "/read — joriy kitob", "/help — bu xabar", "", `Savollar: ${bot.siteUrl}/about`].join("\n"),
+    text: ["<b>Yordam</b>", "", "/start — boshlash", "/clubs — klublar ro‘yxati", "/events — yaqin tadbirlar", "/read — joriy kitob", "/help — bu xabar", "", `Savollar: ${bot.siteUrl}/about`].join("\n"),
     keyboard: miniAppKeyboard(bot),
   };
 }

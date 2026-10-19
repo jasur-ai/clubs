@@ -1,5 +1,3 @@
-import "server-only";
-
 import crypto from "node:crypto";
 
 export type TelegramUser = {
@@ -137,6 +135,19 @@ function makeClient(token: string | undefined) {
         drop_pending_updates: true,
       }),
     setMyCommands: (commands: Array<{ command: string; description: string }>) => call("setMyCommands", { commands }),
+    setChatMenuButton: (url: string, text = "Ilova") =>
+      call("setChatMenuButton", { menu_button: { type: "web_app", text, web_app: { url } } }),
+    setMyName: (name: string) => call("setMyName", { name }),
+    setMyDescription: (description: string) => call("setMyDescription", { description }),
+    setMyShortDescription: (short: string) => call("setMyShortDescription", { short_description: short }),
+    sendPhoto: (chatId: number | string, photo: string, caption: string, keyboard?: InlineKeyboard) =>
+      call("sendPhoto", {
+        chat_id: chatId,
+        photo,
+        caption,
+        parse_mode: "HTML",
+        ...(keyboard ? { reply_markup: keyboard } : {}),
+      }),
     deleteWebhook: () => call("deleteWebhook", { drop_pending_updates: true }),
     getMe: () => call<{ id: number; username: string }>("getMe"),
   };

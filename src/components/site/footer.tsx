@@ -10,7 +10,16 @@ export function SiteFooter() {
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-[color:var(--color-muted)]">
             TDIU talabalar klublarining yagona platformasi: tadbirlar, kitobxonlik dasturi va muhokamalar.
           </p>
-          <p className="mt-4 text-xs text-[color:var(--color-muted-soft)]">TDIU Yoshlar ittifoqi bilan hamkorlikda</p>
+          <div className="mt-5 flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/tsue-emblem.png" alt="Toshkent davlat iqtisodiyot universiteti gerbi" width={38} height={38} loading="lazy" className="h-[38px] w-[38px]" />
+            <div className="text-[11px] leading-snug text-[color:var(--color-muted)]">
+              Toshkent davlat
+              <br />
+              iqtisodiyot universiteti
+            </div>
+          </div>
+          <p className="mt-4 text-xs text-[color:var(--color-muted-soft)]">Yoshlar ittifoqi bilan hamkorlikda</p>
         </div>
         <FooterCol
           title="Platforma"
@@ -37,6 +46,11 @@ export function SiteFooter() {
             <li>
               <a className="hover:text-[#104070]" href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer">
                 @tsuebookclub
+              </a>
+            </li>
+            <li>
+              <a className="hover:text-[#104070]" href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer">
+                @Tsue_clubs_bot
               </a>
             </li>
             <li>

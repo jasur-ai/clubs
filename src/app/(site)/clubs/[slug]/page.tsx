@@ -7,7 +7,9 @@ import { getClubBySlug, getCurrentCycle, getCycleHistory, getPastEvents, getUpco
 import { EventRow, BookRow } from "@/components/site/cards";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Avatar, Badge, ProgressBar, SectionHeading } from "@/components/ui/primitives";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { formatDate } from "@/lib/format";
+import { getChannelFeed, channelUsername } from "@/lib/channel-feed";
 import { db } from "@/lib/db";
 
 type Params = { slug: string };
@@ -41,9 +43,12 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
       where: { isActive: true, slug: { not: slug } },
       orderBy: { sortOrder: "asc" },
       take: 3,
-      select: { slug: true, name: true, summary: true, category: true, accent: true, coverStyle: true },
+      select: { slug: true, name: true, summary: true, category: true, accent: true, logoUrl: true, coverStyle: true },
     }),
   ]);
+
+  const channel = channelUsername(club.telegramUrl);
+  const feed = channel ? await getChannelFeed(channel, 3) : [];
 
   return (
     <div style={{ "--club-accent": club.accent } as React.CSSProperties}>
@@ -60,10 +65,20 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
 
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge tone="accent">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
-                <Badge tone="neutral">{club._count.memberships} a’zo</Badge>
-                {isBookClub && <Badge tone="navy">Bookonomics</Badge>}
+              <div className="flex items-center gap-4">
+                <ClubLogo
+                  name={club.name}
+                  logoUrl={club.logoUrl}
+                  accent={club.accent}
+                  size={72}
+                  rounded="rounded-[14px]"
+                  className="shadow-[0_6px_20px_rgba(11,31,51,0.08)]"
+                />
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge tone="accent">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
+                  <Badge tone="neutral">{club._count.memberships} a’zo</Badge>
+                  {isBookClub && <Badge tone="navy">Bookonomics</Badge>}
+                </div>
               </div>
               <h1 className="display mt-4 text-[40px] leading-[1.03] sm:text-[54px]">{club.name}</h1>
               <p className="mt-3 font-serif text-[20px] leading-snug text-[color:var(--club-accent)]">{club.tagline}</p>
@@ -95,18 +110,19 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                     <Send size={15} /> Telegram
                   </a>
                 )}
-                {isBookClub && (
-                  <Link href="/app" className="btn btn-secondary btn-lg">
-                    <MessageSquare size={15} /> Mini-ilova
-                  </Link>
-                )}
+                <Link href="/app" className="btn btn-secondary btn-lg">
+                  <MessageSquare size={15} /> Mini-ilova
+                </Link>
               </div>
             </div>
 
             <div className="rounded-[16px] border border-[color:var(--color-line)] bg-white p-5 shadow-[var(--shadow-card)]">
-              <div className="flex items-center justify-between">
-                <span className="eyebrow">Klub pasporti</span>
-                <span className="font-serif text-[13px] text-[color:var(--color-muted)]">{club.shortName ?? club.name}</span>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <ClubLogo name={club.name} logoUrl={club.logoUrl} accent={club.accent} size={28} rounded="rounded-[7px]" />
+                  <span className="eyebrow">Klub pasporti</span>
+                </div>
+                <span className="truncate font-serif text-[13px] text-[color:var(--color-muted)]">{club.shortName ?? club.name}</span>
               </div>
               <div className="mt-5 grid grid-cols-3 divide-x divide-[color:var(--color-line)] text-center">
                 <div>
@@ -298,6 +314,45 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
         )}
       </section>
 
+      {/* telegram channel mirror */}
+      {feed.length > 0 && (
+        <section className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6">
+          <SectionHeading
+            eyebrow="Telegram"
+            title="Kanaldagi so‘nggi postlar"
+            description="Klub hayoti asosan Telegramda kechadi — eng muhim e’lonlar shu yerda ham ko‘rinadi."
+            action={
+              club.telegramUrl ? (
+                <a href={club.telegramUrl} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
+                  Kanalga o‘tish <ArrowRight size={14} />
+                </a>
+              ) : null
+            }
+          />
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            {feed.map((post) => (
+              <a
+                key={post.id}
+                href={post.url}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex flex-col rounded-[14px] border border-[color:var(--color-line)] bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-[color:var(--color-line-strong)] hover:shadow-[var(--shadow-card)]"
+              >
+                <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
+                  {post.publishedAt ? formatDate(post.publishedAt, "d MMMM, HH:mm") : "Telegram"}
+                </span>
+                <p className="mt-3 line-clamp-6 whitespace-pre-line text-[13px] leading-relaxed text-[color:var(--color-ink-soft)]">
+                  {post.text}
+                </p>
+                <span className="mt-auto inline-flex items-center gap-1 pt-4 text-[12px] font-semibold text-[color:var(--color-ink)] group-hover:text-[var(--club-accent)]">
+                  Kanalda o‘qish <ArrowRight size={13} />
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* team */}
       {club.memberships.length > 0 && (
         <section className="border-y border-[color:var(--color-line)] bg-[#fbfcfd]">
@@ -332,9 +387,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
               href={`/clubs/${p.slug}`}
               className="group rounded-[14px] border border-[color:var(--color-line)] bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-card)]"
             >
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-[8px] text-[13px] font-serif text-white" style={{ background: p.accent }}>
-                {p.name.slice(0, 1)}
-              </span>
+              <ClubLogo name={p.name} logoUrl={p.logoUrl} accent={p.accent} size={36} rounded="rounded-[8px]" />
               <h3 className="mt-3 font-serif text-[18px]">{p.name}</h3>
               <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[color:var(--color-muted)]">{p.summary}</p>
             </Link>

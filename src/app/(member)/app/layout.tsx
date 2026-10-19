@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Avatar } from "@/components/ui/primitives";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { BottomNav } from "@/components/app/bottom-nav";
 import { TelegramBootstrap } from "@/components/tg/telegram-bootstrap";
 import { Bell } from "lucide-react";
@@ -20,7 +21,7 @@ export default async function MemberLayout({ children }: { children: React.React
   const [membership, unread] = await Promise.all([
     db.membership.findFirst({
       where: { userId: user.id, status: "ACTIVE" },
-      include: { club: { select: { name: true, slug: true, accent: true } } },
+      include: { club: { select: { name: true, slug: true, accent: true, logoUrl: true } } },
       orderBy: { joinedAt: "asc" },
     }),
     db.notification.count({ where: { userId: user.id, readAt: null } }),
@@ -36,12 +37,19 @@ export default async function MemberLayout({ children }: { children: React.React
         <header className="sticky top-0 z-30 border-b border-[color:var(--color-line)] bg-white/90 backdrop-blur-md">
           <div className="flex h-14 items-center justify-between px-4">
             <Link href="/app" className="flex items-center gap-2">
-              <span
-                className="inline-flex h-7 w-7 items-center justify-center rounded-[7px] text-[11px] font-serif text-white"
-                style={{ background: membership?.club.accent ?? "#104070" }}
-              >
-                {(membership?.club.name ?? "TDIU").slice(0, 1)}
-              </span>
+              {membership?.club ? (
+                <ClubLogo
+                  name={membership.club.name}
+                  logoUrl={membership.club.logoUrl}
+                  accent={membership.club.accent}
+                  size={30}
+                  rounded="rounded-[7px]"
+                />
+              ) : (
+                <span className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#104070] font-serif text-[11px] text-white">
+                  T
+                </span>
+              )}
               <span className="text-[13px] font-semibold">{membership?.club.name ?? "TDIU Clubs"}</span>
             </Link>
             <div className="flex items-center gap-2">

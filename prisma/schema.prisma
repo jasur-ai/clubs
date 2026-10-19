@@ -54,6 +54,7 @@ model Club {
   description  String
   category     String // intellectual | academic | creative | sport | social | travel
   accent       String   @default("#104070")
+  logoUrl      String? // club's own emblem, seeded from /public/clubs/<slug>.jpg
   coverStyle   String   @default("grid") // visual variant for generated covers
   telegramUrl  String?
   instagramUrl String?

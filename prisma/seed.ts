@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { clubs } from "../src/config/clubs";
 
 const db = new PrismaClient();
@@ -33,6 +35,14 @@ async function main() {
   await db.siteSetting.deleteMany();
 
   // --- clubs ---------------------------------------------------------------
+  // Logos are the clubs' own emblems, pulled from each Telegram channel and
+  // stored in /public/clubs/<slug>.jpg. A club without artwork keeps the
+  // typographic monogram, so the seed stays safe on a clean checkout.
+  const logoFor = (slug: string) => {
+    const file = join(process.cwd(), "public", "clubs", `${slug}.jpg`);
+    return existsSync(file) ? `/clubs/${slug}.jpg` : null;
+  };
+
   const clubMap = new Map<string, string>();
   for (const c of clubs) {
     const club = await db.club.create({
@@ -45,6 +55,7 @@ async function main() {
         description: c.description,
         category: c.category,
         accent: c.accent,
+        logoUrl: logoFor(c.slug),
         coverStyle: c.coverStyle,
         telegramUrl: c.telegramUrl,
         instagramUrl: c.instagramUrl,
@@ -120,7 +131,11 @@ async function main() {
           lastName: last,
           telegramId: `2${Math.floor(Math.random() * 1e8).toString().padStart(8, "0")}`,
           username,
+          // Demo students share the seed password so the Mini App can be shown
+          // in a browser. Production accounts come from Telegram initData and
+          // have no password at all.
           email: `${username}@demo.tdiu.uz`,
+          passwordHash: await bcrypt.hash(password, 10),
           role: "MEMBER",
           points,
         },

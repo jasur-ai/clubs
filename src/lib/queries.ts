@@ -11,6 +11,7 @@ export const clubCardSelect = {
   summary: true,
   category: true,
   accent: true,
+  logoUrl: true,
   coverStyle: true,
   telegramUrl: true,
   meetingDay: true,

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CalendarDays, MapPin, Users, ArrowUpRight, BookOpen } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Badge } from "@/components/ui/primitives";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
 import { formatDate, timeRange } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -13,6 +14,7 @@ type ClubCardClub = {
   summary: string;
   category: string;
   accent: string;
+  logoUrl?: string | null;
   coverStyle: string;
   meetingDay?: string | null;
   _count?: { memberships: number; events?: number };
@@ -29,13 +31,7 @@ export function ClubCard({ club, className }: { club: ClubCardClub; className?: 
       style={{ "--club-accent": club.accent } as React.CSSProperties}
     >
       <div className="flex items-start justify-between gap-3">
-        <span
-          className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] font-serif text-lg text-white"
-          style={{ background: club.accent }}
-          aria-hidden
-        >
-          {club.name.slice(0, 1)}
-        </span>
+        <ClubLogo name={club.name} logoUrl={club.logoUrl} accent={club.accent} size={44} />
         <Badge tone="neutral">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
       </div>
       <h3 className="mt-4 font-serif text-[19px] leading-snug text-[color:var(--color-ink)]">{club.name}</h3>

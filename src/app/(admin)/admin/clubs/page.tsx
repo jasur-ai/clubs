@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { updateClubAction } from "@/app/actions/admin";
 import { PageHeader, Panel, FieldLabel } from "@/components/admin/ui";
 import { FormDialog } from "@/components/admin/form-dialog";
+import { ClubLogo } from "@/components/ui/club-logo";
 
 export const metadata = { title: "Klublar" };
 
@@ -28,8 +29,8 @@ export default async function AdminClubsPage() {
           <Panel key={c.id}>
             <div className="flex items-start justify-between gap-3 border-b border-[color:var(--color-line)] px-4 py-3">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: c.accent }} />
+                <div className="flex items-center gap-2.5">
+                  <ClubLogo name={c.name} logoUrl={c.logoUrl} accent={c.accent} size={32} rounded="rounded-[7px]" />
                   <p className="text-[13px] font-semibold">{c.name}</p>
                   {!c.isActive && <span className="text-[10px] font-semibold text-[#8f3b3b]">nofaol</span>}
                 </div>
