@@ -1,0 +1,90 @@
+# Deployment
+
+## 1. Environment
+
+Copy `.env.example` to `.env` and fill:
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | yes | Public HTTPS URL. Used in metadata, bot buttons and sitemap |
+| `AUTH_SECRET` | yes | `openssl rand -base64 48`; rotating it invalidates all sessions |
+| `DATABASE_URL` | yes | `file:./dev.db` locally, PostgreSQL URL in production |
+| `TELEGRAM_BOT_TOKEN` | for bot | From BotFather |
+| `TELEGRAM_BOT_USERNAME` | optional | Display only |
+| `TELEGRAM_WEBHOOK_SECRET` | for bot | Random string; Telegram echoes it in a header |
+| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | seed only | Change before first production seed |
+| `ALLOW_DEMO_LOGIN` | optional | `1` enables passwordless role preview; never in production |
+
+Never commit `.env`. The repository ships `.env.example` only.
+
+## 2. Database
+
+Local development uses SQLite (`prisma/dev.db`). Production should use PostgreSQL:
+
+1. Create the database (Neon, Supabase, RDS or a managed university instance).
+2. In `prisma/schema.prisma` change `provider = "sqlite"` to `"postgresql"`.
+3. Set `DATABASE_URL` to the connection string (append `?sslmode=require` where needed).
+4. Run `npx prisma db push` (or `prisma migrate deploy` once you start versioning migrations).
+5. `npm run db:seed` to create clubs, the admin account, books, events and news.
+
+Backups: nightly `pg_dump` is sufficient; the database is small and append-mostly.
+
+## 3. Build and run
+
+```bash
+npm ci
+npx prisma generate
+npm run build
+npm run start        # binds 0.0.0.0:3000
+```
+
+Any Node 20+ host works (Vercel, Render, Fly.io, a university VM behind Nginx). If you deploy on
+Vercel, set all environment variables in the project settings and use a pooled PostgreSQL URL.
+
+Reverse proxy notes: forward `X-Forwarded-Proto`, keep the body size limit above 1 MB (webhook
+payloads are small), and serve the app over HTTPS — Telegram refuses non-HTTPS web-app URLs.
+
+## 4. Telegram
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://clubs.tdiu.uz \
+TELEGRAM_BOT_TOKEN=... \
+TELEGRAM_WEBHOOK_SECRET=... \
+npm run tg:webhook
+```
+
+The script calls `setWebhook` with `allowed_updates` and registers the command list. Verify:
+
+```bash
+curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getWebhookInfo"
+```
+
+Then in BotFather:
+
+1. `/setmenubutton` → `https://clubs.tdiu.uz/tg` — the Mini App entry.
+2. `/setdescription`, `/setabouttext` — Uzbek copy, no emoji.
+3. Add the bot as admin to the club channel if it should read posts later.
+
+Local development: Telegram cannot reach `localhost`. Use a tunnel (Cloudflare Tunnel,
+`ngrok http 3000`) and set `NEXT_PUBLIC_SITE_URL` to the tunnel URL before `npm run tg:webhook`.
+
+## 5. First-run checklist
+
+- [ ] `.env` filled, `AUTH_SECRET` rotated away from the example
+- [ ] `npm run db:setup` completes; `admin@clubs.tdiu.uz` login works
+- [ ] Admin password changed; demo login disabled in production
+- [ ] Club contacts reviewed in `/admin/clubs`
+- [ ] Book Club cycle started in `/admin/reading`; milestones dated
+- [ ] First news item published; sitemap reachable at `/sitemap.xml`
+- [ ] Webhook registered and `/start` answers in Telegram
+- [ ] Mini App opens from the bot menu button and lands on `/app`
+- [ ] Backup job scheduled for the database
+
+## 6. Operations
+
+- Notifications are written to `Notification`; the Mini App shows unread counts. Delivery through
+  the bot can be added by a worker that reads undelivered rows (the schema already separates
+  creation from delivery).
+- Audit entries are append-only and visible in `/admin/settings`.
+- Logs: the webhook logs failed Bot API calls with the method name; the app logs Prisma errors.
+- Health: `GET /api/health` returns `{ ok: true, db: true }`.

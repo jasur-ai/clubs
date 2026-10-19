@@ -1,0 +1,48 @@
+{
+  "name": "tdiu-clubs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TDIU student clubs ecosystem — website, member mini app, Telegram bot and admin console.",
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3000",
+    "build": "prisma generate && next build",
+    "start": "next start -H 0.0.0.0 -p 3000",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:setup": "prisma db push && tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "tg:webhook": "tsx scripts/set-webhook.ts",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.15.0",
+    "bcryptjs": "3.0.2",
+    "clsx": "2.1.1",
+    "date-fns": "4.1.0",
+    "jose": "6.1.0",
+    "lucide-react": "0.468.0",
+    "next": "15.5.4",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "recharts": "2.15.4",
+    "tailwind-merge": "3.3.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.12",
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "22.15.3",
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.7",
+    "postcss": "8.5.6",
+    "prisma": "6.15.0",
+    "tailwindcss": "4.1.12",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2"
+  }
+}
