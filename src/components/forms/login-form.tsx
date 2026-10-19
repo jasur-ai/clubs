@@ -5,10 +5,11 @@ import { AlertCircle } from "lucide-react";
 import { loginAction, type AuthState } from "@/app/actions/auth";
 import { Field } from "@/components/ui/primitives";
 
-export function LoginForm() {
+export function LoginForm({ next }: { next?: string }) {
   const [state, action, pending] = useActionState<AuthState, FormData>(loginAction, {});
   return (
     <form action={action} className="space-y-4">
+      {next && <input type="hidden" name="next" value={next} />}
       <Field label="Email" htmlFor="email">
         <input id="email" name="email" type="email" className="input" placeholder="admin@clubs.tdiu.uz" required autoComplete="email" />
       </Field>

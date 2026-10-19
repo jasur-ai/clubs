@@ -7,7 +7,8 @@ import { db } from "@/lib/db";
 
 export const metadata: Metadata = { title: "Kirish" };
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+  const { next } = await searchParams;
   const demoEnabled = process.env.NODE_ENV !== "production" || process.env.ALLOW_DEMO_LOGIN === "1";
   const [superAdmin, clubAdmin, demoStudent] = demoEnabled
     ? await Promise.all([
@@ -57,7 +58,7 @@ export default async function LoginPage() {
             Klub rahbari, muharrir va platforma administratori email va parol bilan kiradi.
           </p>
           <div className="mt-4">
-            <LoginForm />
+            <LoginForm next={next} />
           </div>
         </div>
       </div>

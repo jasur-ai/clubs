@@ -53,7 +53,7 @@ export default async function ReadPage() {
       </div>
 
       <div className="flex gap-4 rounded-[14px] border border-[color:var(--color-line)] bg-white p-3.5">
-        <CoverArt from={cycle.book.coverFrom} to={cycle.book.coverTo} title={cycle.book.title} variant="lines" className="h-[104px] w-[78px] shrink-0 rounded-[6px]" compact />
+        <CoverArt from={cycle.book.coverFrom} to={cycle.book.coverTo} title={cycle.book.title} author={cycle.book.author} label="Kitob" variant="lines" className="h-[104px] w-[78px] shrink-0 rounded-[6px]" compact />
         <div className="min-w-0 text-[12px] leading-relaxed text-[color:var(--color-muted)]">
           <p className="line-clamp-4">{cycle.book.description}</p>
           {cycle.meetingAt && (

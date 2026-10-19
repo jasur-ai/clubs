@@ -17,7 +17,7 @@ export function Logo({ className, invert = false, compact = false }: { className
           <path d="M11 12h2" stroke="white" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
       </span>
-      <span className="flex flex-col leading-none">
+      <span className="flex flex-col whitespace-nowrap leading-none">
         <span className={cn(compact ? "text-[14px]" : "text-[15px]", "font-extrabold tracking-tight", invert ? "text-white" : "text-[color:var(--color-ink)]")}>
           TDIU <span className={invert ? "text-white/70" : "text-[#104070]"}>Clubs</span>
         </span>

@@ -76,7 +76,7 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
           </Link>
         ))}
         {clubs.length > 1 && (
-          <div className="ml-auto flex flex-wrap gap-1.5">
+          <div className="ml-auto flex shrink-0 gap-1.5">
             <Link href={`/admin/join-requests?status=${status}`} className={cn("rounded-full px-2.5 py-1.5 text-[11px] font-medium", !params.club ? "bg-[#eef2f7] text-[#104070]" : "text-[color:var(--color-muted)]")}>
               Barcha klublar
             </Link>

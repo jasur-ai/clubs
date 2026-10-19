@@ -59,7 +59,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         }
       />
 
-      <div className="mb-4 flex flex-wrap gap-1.5">
+      <div className="hide-scrollbar mb-4 flex items-center gap-1.5 overflow-x-auto pb-1">
         <a href="/admin/members" className={`rounded-full px-3 py-1.5 text-[11.5px] font-semibold ${!params.club ? "bg-[#0b1f33] text-white" : "bg-white text-[color:var(--color-ink-soft)] border border-[color:var(--color-line)]"}`}>
           Barchasi
         </a>

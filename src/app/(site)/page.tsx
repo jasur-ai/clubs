@@ -61,8 +61,9 @@ export default async function HomePage() {
               TDIU · Yoshlar tashabbuslari
             </div>
             <h1 className="display mt-4 text-[40px] leading-[1.02] text-[color:var(--color-ink)] sm:text-[56px] lg:text-[62px]">
-              Universitet hayoti —<br />
-              bir platformada.
+              Universitet hayoti{" "}
+              <span className="hidden sm:inline">—</span>
+              <br className="hidden sm:block" /> bir platformada.
             </h1>
             <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[color:var(--color-muted)]">
               {clubs.length} ta klub, kitobxonlik dasturi va tadbirlar. Veb-sayt, Telegram bot va mini-ilova — bitta

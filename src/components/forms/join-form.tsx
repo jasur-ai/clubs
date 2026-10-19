@@ -45,7 +45,7 @@ export function JoinForm({ clubs, defaultClub }: { clubs: Club[]; defaultClub?: 
         </Field>
 
         <Field label="To‘liq ism" htmlFor="fullName" error={state.fieldErrors?.fullName}>
-          <input id="fullName" name="fullName" className="input" placeholder="Familiya Ism Sharif" autoComplete="name" required />
+          <input id="fullName" name="fullName" className="input" placeholder="Ism Familiya" autoComplete="name" required />
         </Field>
 
         <Field label="Fakultet" htmlFor="faculty" error={state.fieldErrors?.faculty}>
