@@ -12,10 +12,12 @@ export async function register() {
   if (!token || !site.startsWith("https://")) return;
 
   const { createTelegramClient } = await import("@/lib/telegram");
+  const { resolveBot } = await import("@/lib/bot-runtime");
   const tg = createTelegramClient(token);
+  const bot = resolveBot();
 
   try {
-    await tg.setWebhook(`${site}/api/telegram`, process.env.TELEGRAM_WEBHOOK_SECRET);
+    await tg.setWebhook(`${site}/api/telegram`, bot?.webhookSecret);
     await tg.setChatMenuButton(`${site}/tg`, "Ilova");
     console.log(`[telegram] webhook registered for ${site}`);
   } catch (error) {

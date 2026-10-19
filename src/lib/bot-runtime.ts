@@ -9,6 +9,8 @@
  * path; it serves DEFAULT_CLUB_SLUG, or book-club while Phase 1 is the only live club.
  */
 
+import { createHash } from "node:crypto";
+
 export type BotRuntime = {
   slug: string;
   token: string;
@@ -19,6 +21,18 @@ export type BotRuntime = {
 };
 
 const SITE_FALLBACK = "http://localhost:3000";
+
+/**
+ * Telegram only accepts A-Z, a-z, 0-9, "_" and "-" in the webhook secret, while
+ * Render's "generate value" produces base64 (slashes, plus). Any other secret is
+ * folded to hex here, and every consumer — webhook route, start-up hook and the
+ * registration script — reads it through this function, so both sides agree.
+ */
+export function normalizeSecret(raw?: string | null): string | undefined {
+  if (!raw) return undefined;
+  if (/^[A-Za-z0-9_-]{1,256}$/.test(raw)) return raw;
+  return createHash("sha256").update(raw).digest("hex");
+}
 
 export function envKeyFor(slug: string) {
   return slug.replace(/[^a-zA-Z0-9]+/g, "_").toUpperCase();
@@ -33,7 +47,7 @@ export function resolveBot(slug?: string): BotRuntime | null {
     return {
       slug: "default",
       token,
-      webhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
+      webhookSecret: normalizeSecret(process.env.TELEGRAM_WEBHOOK_SECRET),
       siteUrl,
       clubSlug: process.env.DEFAULT_CLUB_SLUG ?? "book-club",
       name: process.env.TELEGRAM_BOT_USERNAME ?? "TDIU Clubs",
@@ -48,7 +62,9 @@ export function resolveBot(slug?: string): BotRuntime | null {
   return {
     slug,
     token,
-    webhookSecret: process.env[`TELEGRAM_WEBHOOK_SECRET_${key}`] ?? process.env.TELEGRAM_WEBHOOK_SECRET,
+    webhookSecret: normalizeSecret(
+      process.env[`TELEGRAM_WEBHOOK_SECRET_${key}`] ?? process.env.TELEGRAM_WEBHOOK_SECRET,
+    ),
     siteUrl,
     clubSlug: process.env[`DEFAULT_CLUB_SLUG_${key}`] ?? slug,
     name: process.env[`TELEGRAM_BOT_USERNAME_${key}`] ?? slug,
