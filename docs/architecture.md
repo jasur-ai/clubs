@@ -103,6 +103,20 @@ to the command hint.
 (`clubId`, token secret reference, webhook path `/api/telegram/[botId]`) and resolve the token from
 the path — the handler body stays the same.
 
+### 6.1 Per-club webhooks (branch `feat/per-club-bots`)
+
+`src/lib/bot-runtime.ts` resolves a bot from the slug in the webhook path:
+
+| Webhook | Token | Club |
+| --- | --- | --- |
+| `/api/telegram` | `TELEGRAM_BOT_TOKEN` | `DEFAULT_CLUB_SLUG` (book-club in Phase 1) |
+| `/api/telegram/book-club` | `TELEGRAM_BOT_TOKEN_BOOK_CLUB` | `book-club` |
+| `/api/telegram/debate` | `TELEGRAM_BOT_TOKEN_DEBATE` | `debate` |
+
+`npm run tg:webhook` registers every configured bot, `npm run tg:webhook -- debate` registers one.
+Secrets are per bot (`TELEGRAM_WEBHOOK_SECRET_<SLUG>` falling back to the shared secret), so a
+leaked bot token can be rotated without touching the others.
+
 ## 7. Admin console
 
 The console is organized by the jobs an officer does, not by database tables:
