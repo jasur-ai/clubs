@@ -96,48 +96,57 @@ export function validateInitData(raw: string, botToken: string): { ok: true; dat
 
 const API = "https://api.telegram.org";
 
-async function call<T = unknown>(method: string, payload: Record<string, unknown> = {}): Promise<T | null> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  if (!token) return null;
-  try {
-    const res = await fetch(`${API}/bot${token}/${method}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
-    const json = (await res.json()) as { ok: boolean; result?: T; description?: string };
-    if (!json.ok) {
-      console.error(`[telegram] ${method} failed: ${json.description}`);
+export type InlineKeyboard = { inline_keyboard: Array<Array<{ text: string; url?: string; web_app?: { url: string } }>> };
+
+function makeClient(token: string | undefined) {
+  async function call<T = unknown>(method: string, payload: Record<string, unknown> = {}): Promise<T | null> {
+    if (!token) return null;
+    try {
+      const res = await fetch(`${API}/bot${token}/${method}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        cache: "no-store",
+      });
+      const json = (await res.json()) as { ok: boolean; result?: T; description?: string };
+      if (!json.ok) {
+        console.error(`[telegram] ${method} failed: ${json.description}`);
+        return null;
+      }
+      return json.result ?? null;
+    } catch (error) {
+      console.error(`[telegram] ${method} network error`, error);
       return null;
     }
-    return json.result ?? null;
-  } catch (error) {
-    console.error(`[telegram] ${method} network error`, error);
-    return null;
   }
+
+  return {
+    sendMessage: (chatId: number | string, text: string, keyboard?: InlineKeyboard) =>
+      call("sendMessage", {
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        ...(keyboard ? { reply_markup: keyboard } : {}),
+      }),
+    setWebhook: (url: string, secretToken?: string) =>
+      call("setWebhook", {
+        url,
+        secret_token: secretToken,
+        allowed_updates: ["message", "callback_query"],
+        drop_pending_updates: true,
+      }),
+    setMyCommands: (commands: Array<{ command: string; description: string }>) => call("setMyCommands", { commands }),
+    deleteWebhook: () => call("deleteWebhook", { drop_pending_updates: true }),
+    getMe: () => call<{ id: number; username: string }>("getMe"),
+  };
 }
 
-type InlineKeyboard = { inline_keyboard: Array<Array<{ text: string; url?: string; web_app?: { url: string } }>> };
+export type TelegramClient = ReturnType<typeof makeClient>;
 
-export const telegram = {
-  sendMessage: (chatId: number | string, text: string, keyboard?: InlineKeyboard) =>
-    call("sendMessage", {
-      chat_id: chatId,
-      text,
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      ...(keyboard ? { reply_markup: keyboard } : {}),
-    }),
-  setWebhook: (url: string, secretToken?: string) =>
-    call("setWebhook", {
-      url,
-      secret_token: secretToken,
-      allowed_updates: ["message", "callback_query"],
-      drop_pending_updates: true,
-    }),
-  setMyCommands: (commands: Array<{ command: string; description: string }>) =>
-    call("setMyCommands", { commands }),
-  deleteWebhook: () => call("deleteWebhook", { drop_pending_updates: true }),
-  getMe: () => call<{ id: number; username: string }>("getMe"),
-};
+export function createTelegramClient(token: string) {
+  return makeClient(token);
+}
+
+/** Default client bound to TELEGRAM_BOT_TOKEN (single-bot deployments). */
+export const telegram = makeClient(process.env.TELEGRAM_BOT_TOKEN);
