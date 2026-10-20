@@ -13,23 +13,23 @@ directory and can be switched on one by one — the data model is multi-club fro
 
 | Public portal — light | Public portal — dark |
 | --- | --- |
-| ![Portal](docs/screenshots/portal.png) | ![Portal dark](docs/screenshots/portal-dark.png) |
+| ![Portal](docs/screenshots/portal.jpg) | ![Portal dark](docs/screenshots/portal-dark.jpg) |
 
 | Club page | Club directory |
 | --- | --- |
-| ![Club](docs/screenshots/club.png) | ![Clubs](docs/screenshots/clubs.png) |
+| ![Club](docs/screenshots/club.jpg) | ![Clubs](docs/screenshots/clubs.jpg) |
 
 | Member Mini App | Admin console |
 | --- | --- |
-| ![Mini App](docs/screenshots/mini-app.png) | ![Admin](docs/screenshots/admin.png) |
+| ![Mini App](docs/screenshots/mini-app.jpg) | ![Admin](docs/screenshots/admin.jpg) |
 
 | Admin console — dark | Mobile portal |
 | --- | --- |
-| ![Admin dark](docs/screenshots/admin-dark.png) | ![Mobile](docs/screenshots/portal-mobile.png) |
+| ![Admin dark](docs/screenshots/admin-dark.jpg) | ![Mobile](docs/screenshots/portal-mobile.jpg) |
 
 | Member Mini App — dark | Sign in |
 | --- | --- |
-| ![Mini App dark](docs/screenshots/mini-app-dark.png) | ![Sign in](docs/screenshots/login.png) |
+| ![Mini App dark](docs/screenshots/mini-app-dark.jpg) | ![Sign in](docs/screenshots/login.jpg) |
 
 Each club keeps its own emblem, pulled from its Telegram channel and served locally
 (`public/clubs/<slug>.jpg`), so the directory reads as the real club network rather than a
