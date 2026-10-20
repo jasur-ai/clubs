@@ -131,7 +131,7 @@ html[data-theme="dark"] {
 
 :root {
   --club-accent: #14713f;
-  --club-accent-soft: #e8eef5;
+  --club-accent-soft: #eaf0e7;
   --club-accent-ink: var(--club-accent);
 }
 html[data-theme="dark"] {
@@ -139,7 +139,7 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="light"] {
-  --club-accent-ink: color-mix(in oklab, var(--club-accent) 88%, #0a1630);
+  --club-accent-ink: color-mix(in oklab, var(--club-accent) 88%, #131d17);
 }
 
 /* Base -------------------------------------------------------------------- */
@@ -331,7 +331,7 @@ body {
     radial-gradient(120% 120% at 92% -10%, rgb(33 160 76 / 0.26) 0%, transparent 55%),
     radial-gradient(90% 90% at 4% 110%, rgb(154 116 52 / 0.18) 0%, transparent 58%),
     linear-gradient(150deg, #12301f 0%, #0d2418 46%, #08170f 100%);
-  color: #f2f5fb;
+  color: #f1f5ee;
 }
 
 .hairline {
@@ -440,17 +440,17 @@ body {
 }
 .btn-light {
   background: #ffffff;
-  color: #0a1630;
+  color: #131d17;
   border-color: transparent;
   box-shadow: 0 10px 24px -18px rgb(0 0 0 / 0.5);
 }
 .btn-light:hover {
-  background: #f2f6ff;
+  background: #f4f7f1;
   transform: translateY(-1px);
 }
 .btn-outline-light {
   background: rgb(255 255 255 / 0.06);
-  color: #f2f5fb;
+  color: #f1f5ee;
   border-color: rgb(255 255 255 / 0.3);
   backdrop-filter: blur(6px);
 }
@@ -729,7 +729,7 @@ html[data-theme="dark"] .hero-shell {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #eef2fa;
+  color: #edf2ea;
   background:
     radial-gradient(110% 130% at 100% 0%, rgb(33 160 76 / 0.24) 0%, transparent 54%),
     radial-gradient(90% 110% at 0% 100%, rgb(154 116 52 / 0.14) 0%, transparent 56%),
@@ -772,7 +772,7 @@ html[data-theme="dark"] .hero-shell {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #f3f8ff;
+  color: #f0f6ee;
   background:
     radial-gradient(100% 130% at 96% -12%, rgb(33 160 76 / 0.5) 0%, transparent 56%),
     radial-gradient(90% 120% at -4% 112%, rgb(154 116 52 / 0.34) 0%, transparent 58%),
