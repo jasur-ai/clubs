@@ -93,8 +93,9 @@ export function HeaderBar({ authed }: { authed: boolean }) {
             <Link href={authed ? "/app" : "/login"} className="btn btn-ghost btn-sm">
               {authed ? "Kabinet" : "Kirish"}
             </Link>
-            <Link href="/join" className="btn btn-primary btn-sm">
+            <Link href="/join" className="btn btn-primary btn-sm group">
               A’zo bo‘lish
+              <ArrowUpRight size={14} className="btn-arrow-up opacity-80" />
             </Link>
           </div>
           <button

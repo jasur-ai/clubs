@@ -23,22 +23,23 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       /* private mode */
     }
     const meta = document.querySelector('meta[name="theme-color"]:not([media])');
-    if (meta) meta.setAttribute("content", next === "dark" ? "#080c15" : "#f7f6f2");
+    if (meta) meta.setAttribute("content", next === "dark" ? "#080f22" : "#e8edf4");
   }
+
+  const label = theme === "dark" ? "Yorug‘ mavzuga o‘tish" : "Tungi mavzuga o‘tish";
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme === "dark" ? "Yorug‘ mavzuga o‘tish" : "Tungi mavzuga o‘tish"}
-      title={theme === "dark" ? "Yorug‘ mavzu" : "Tungi mavzu"}
+      aria-label={label}
+      aria-pressed={theme === "dark"}
+      title={label}
       className={`theme-toggle ${className}`}
     >
-      <span className="theme-toggle-track" aria-hidden>
-        <span className="theme-toggle-thumb" />
-      </span>
-      <Sun size={15} className="theme-ico-light" aria-hidden />
-      <Moon size={15} className="theme-ico-dark" aria-hidden />
+      <span className="theme-toggle-thumb" aria-hidden />
+      <Sun size={14} strokeWidth={1.9} className="ico-sun" aria-hidden />
+      <Moon size={14} strokeWidth={1.9} className="ico-moon" aria-hidden />
     </button>
   );
 }

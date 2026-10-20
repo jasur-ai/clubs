@@ -5,7 +5,7 @@ import { YiSignature } from "@/components/brand/marks";
 
 export function SiteFooter() {
   return (
-    <footer className="band-dark grain mt-24">
+    <footer className="band-dark grain mt-16">
       <div aria-hidden className="contour-field opacity-40" />
       <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1.1fr]">

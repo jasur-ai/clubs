@@ -69,28 +69,13 @@ export default async function HomePage() {
               </div>
 
               <h1
-                className="display rise mt-5 text-[42px] leading-[0.98] text-[color:var(--color-ink)] sm:text-[58px] lg:text-[64px]"
+                className="display rise mt-5 text-[44px] leading-[0.95] text-[color:var(--color-ink)] sm:text-[60px] lg:text-[68px]"
                 style={{ "--delay": "110ms" } as React.CSSProperties}
               >
                 <span className="block">Universitetdagi</span>
                 <span className="block">har bir tashabbus</span>
                 <span className="relative inline-block">
                   <em className="text-[color:var(--color-green)]">bir joyda.</em>
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 300 18"
-                    preserveAspectRatio="none"
-                    className="absolute -bottom-2 left-0 h-[12px] w-full"
-                  >
-                    <path
-                      d="M2 12C58 4 128 3 186 7c40 3 74 5 112 2"
-                      fill="none"
-                      stroke="var(--color-green)"
-                      strokeWidth="2.4"
-                      strokeLinecap="round"
-                      opacity="0.45"
-                    />
-                  </svg>
                 </span>
               </h1>
 
@@ -110,8 +95,9 @@ export default async function HomePage() {
                   Klub topish
                   <ArrowRight size={16} className="btn-arrow" />
                 </Link>
-                <Link href="/join" className="btn btn-secondary btn-lg">
+                <Link href="/join" className="btn btn-secondary btn-lg group">
                   A’zo bo‘lish
+                  <ArrowUpRight size={15} className="btn-arrow-up opacity-70" />
                 </Link>
                 <a
                   href="https://t.me/Tsue_clubs_bot/app"
@@ -317,7 +303,7 @@ export default async function HomePage() {
           {featured ? (
             <Link
               href={`/clubs/${featured.slug}`}
-              className="reveal group relative flex flex-col justify-between overflow-hidden rounded-[18px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] lg:col-span-6 lg:row-span-2 lg:p-9"
+              className="reveal group relative overflow-hidden rounded-[18px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] transition-all duration-500 hover:-translate-y-1 hover:border-[color:var(--color-line-strong)] hover:shadow-[var(--shadow-lift)] lg:col-span-6 lg:row-span-2"
               style={
                 {
                   "--club-accent": featured.accent,
@@ -327,62 +313,91 @@ export default async function HomePage() {
             >
               <div
                 aria-hidden
-                className="absolute inset-0 opacity-[0.55] transition-opacity duration-500 group-hover:opacity-[0.8]"
+                className="absolute inset-0 opacity-[0.5] transition-opacity duration-500 group-hover:opacity-[0.75]"
                 style={{
-                  background: `radial-gradient(110% 90% at 100% 0%, ${featured.accent}22 0%, transparent 62%)`,
+                  background: `radial-gradient(90% 70% at 0% 0%, ${featured.accent}1a 0%, transparent 60%)`,
                 }}
               />
 
-              <div className="relative">
-                <div className="flex items-start justify-between">
-                  <span className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
-                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: featured.accent }} />
-                    Tanlangan klub · pilot
-                  </span>
+              <div className="relative flex h-full flex-col sm:flex-row">
+                <div className="flex flex-1 flex-col justify-between p-7 lg:p-9">
+                  <div>
+                    <span className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ background: featured.accent }} />
+                      Tanlangan klub · Bookonomics
+                    </span>
+                    <h3 className="display mt-6 text-[32px] leading-tight text-[color:var(--color-ink)] lg:text-[40px]">
+                      {featured.name}
+                    </h3>
+                    <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-[color:var(--color-ink-soft)]">
+                      {featured.tagline}
+                    </p>
+                    <p className="mt-2 max-w-md text-[13px] leading-relaxed text-[color:var(--color-muted)]">
+                      {featured.summary}
+                    </p>
+                    {featured.meetingDay && (
+                      <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3 py-1.5 text-[11.5px] font-medium text-[color:var(--color-ink-soft)]">
+                        <CalendarDays size={12} className="text-[color:var(--club-accent-ink)]" />
+                        {featured.meetingDay}
+                        {featured.meetingTime ? `, ${featured.meetingTime}` : ""}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[color:var(--color-line)] pt-5 text-[12.5px] text-[color:var(--color-muted)]">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Users size={13} /> {featured._count.memberships} a’zo
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <CalendarDays size={13} /> {featured._count.events} tadbir
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <BookOpen size={13} /> {featured._count.books} asar
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className="relative flex shrink-0 items-center justify-between gap-4 overflow-hidden border-t border-[color:var(--color-line)] px-7 py-6 text-white sm:w-[216px] sm:flex-col sm:justify-center sm:border-l sm:border-t-0 sm:px-6 sm:py-9"
+                  style={{
+                    background: `linear-gradient(
+                      160deg,
+                      color-mix(in oklab, ${featured.accent} 88%, #ffffff) 0%,
+                      ${featured.accent} 42%,
+                      color-mix(in oklab, ${featured.accent} 62%, #0a1630) 100%
+                    )`,
+                  }}
+                >
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 opacity-40"
+                    style={{
+                      background:
+                        "repeating-radial-gradient(ellipse 140% 120% at 110% -10%, transparent 0 26px, rgb(255 255 255 / 0.16) 26px 27px)",
+                      maskImage: "radial-gradient(120% 100% at 90% 0%, #000 0%, transparent 72%)",
+                      WebkitMaskImage: "radial-gradient(120% 100% at 90% 0%, #000 0%, transparent 72%)",
+                    }}
+                  />
                   <ClubLogo
                     name={featured.name}
                     logoUrl={featured.logoUrl}
                     accent={featured.accent}
-                    size={64}
-                    rounded="rounded-[15px]"
+                    size={84}
+                    rounded="rounded-[18px]"
+                    className="relative shadow-[0_18px_36px_-20px_rgba(0,0,0,0.7)]"
                   />
-                </div>
-                <h3 className="display mt-6 text-[32px] leading-tight text-[color:var(--color-ink)] lg:text-[40px]">
-                  {featured.name}
-                </h3>
-                <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-[color:var(--color-ink-soft)]">
-                  {featured.tagline}
-                </p>
-                <p className="mt-2 max-w-md text-[13px] leading-relaxed text-[color:var(--color-muted)]">
-                  {featured.summary}
-                </p>
-                {featured.meetingDay && (
-                  <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3 py-1.5 text-[11.5px] font-medium text-[color:var(--color-ink-soft)]">
-                    <CalendarDays size={12} className="text-[color:var(--club-accent-ink)]" />
-                    {featured.meetingDay}
-                    {featured.meetingTime ? `, ${featured.meetingTime}` : ""}
-                  </p>
-                )}
-              </div>
-
-              <div className="relative mt-8">
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[color:var(--color-line)] pt-5 text-[12.5px] text-[color:var(--color-muted)]">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Users size={13} /> {featured._count.memberships} a’zo
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays size={13} /> {featured._count.events} tadbir
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <BookOpen size={13} /> {featured._count.books} asar
-                  </span>
-                  <span className="ml-auto inline-flex items-center gap-1.5 font-semibold text-[color:var(--club-accent-ink)]">
-                    Klub sahifasi
-                    <ArrowUpRight
-                      size={14}
-                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    />
-                  </span>
+                  <div className="relative text-right sm:text-center">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                      Klub sahifasi
+                    </p>
+                    <span className="mt-2 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-white">
+                      Ochish
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -454,17 +469,17 @@ export default async function HomePage() {
       </section>
 
       {/* --------------------------------------------------------------- reading */}
-      <section className="band-dark grain relative">
+      <section className="band-brand grain relative">
         <div aria-hidden className="contour-field" />
         <div className="relative mx-auto grid w-full max-w-[1180px] gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div className="reveal">
-            <div className="eyebrow text-white/55">Bookonomics · Kitobxonlik dasturi</div>
+            <div className="eyebrow text-white/75">Bookonomics · Kitobxonlik dasturi</div>
             <h2 className="display mt-4 text-[36px] text-white sm:text-[46px]">
               Bir kitob —
               <br />
               butun universitet.
             </h2>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/65">
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/80">
               Har oy yangi asar, bosqichma-bosqich o‘qish va ochiq muhokama. Book Club — platformaning
               yadrosi va birinchi to‘liq ishga tushgan klubi.
             </p>
@@ -474,19 +489,19 @@ export default async function HomePage() {
                 <div className="font-serif text-[30px] leading-none">
                   <Counter value={community.readers} />
                 </div>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/45">o‘quvchi</div>
+                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/65">o‘quvchi</div>
               </div>
               <div>
                 <div className="font-serif text-[30px] leading-none">
                   <Counter value={community.average} suffix="%" />
                 </div>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/45">o‘rtacha</div>
+                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/65">o‘rtacha</div>
               </div>
               <div>
                 <div className="font-serif text-[30px] leading-none">
                   <Counter value={bookCount} />
                 </div>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/45">kutubxonada</div>
+                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/65">kutubxonada</div>
               </div>
             </div>
 
