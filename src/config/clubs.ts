@@ -260,7 +260,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Mushoira klubi Oliy ta’lim vazirligi tashabbusi bilan tashkil etilgan. Klub she’r yozuvchilarni birlashtiradi, “Qalb satrlari” loyihasida ijod namunalarini saralab e’lon qiladi va boshqa universitetlar bilan adabiy kechalar o‘tkazadi.",
     category: "creative",
-    accent: "#5b3f7a",
+    accent: "#6d5a2a",
     coverStyle: "lines",
     telegramUrl: "https://t.me/Mushoira_clubi",
     sortOrder: 10,
@@ -318,7 +318,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Cybersport Club kibersport turnirlarini tashkil qiladi: EA Sports FC saralash bosqichlari, Red Bull Wings Cup universitet ligasi va o‘yin kechalari. Klub jamoalari respublika miqyosidagi musobaqalarda qatnashadi.",
     category: "sport",
-    accent: "#5c3a64",
+    accent: "#5c3a46",
     coverStyle: "grid",
     telegramUrl: "https://t.me/cybersporttsue",
     instagramUrl: "https://instagram.com/tsue_cybersport",
