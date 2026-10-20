@@ -762,7 +762,7 @@ export default async function HomePage() {
                 <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/40">
                   Rasmiy loyiha
                 </p>
-                <YoshlarIttifoqiLockup height={72} className="mt-4" />
+                <YoshlarIttifoqiLockup height={96} className="mt-4" />
                 <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

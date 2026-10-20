@@ -64,7 +64,7 @@ export function YoshlarIttifoqiLockup({
     <span className={cn("inline-flex items-center", className)} style={{ height }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/brand/yoshlar-ittifoqi-mark.png"
+        src="/brand/yoshlar-ittifoqi-lockup@3x.png"
         alt="O‘zbekiston Yoshlar ittifoqi"
         style={{ height: "100%", width: "auto" }}
         loading="lazy"
