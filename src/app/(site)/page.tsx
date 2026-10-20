@@ -58,9 +58,17 @@ export default async function HomePage() {
       {/* ------------------------------------------------------------------ hero */}
       <section className="hero-shell grain relative border-b border-[color:var(--color-line)]">
         <div aria-hidden className="contour-field" />
-        <BrandRibbon
-          className="pointer-events-none absolute -right-[8%] -top-[10%] hidden h-[122%] w-[68%] opacity-[0.85] sm:block"
-        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-[8%] -top-[10%] hidden h-[122%] w-[68%] sm:block"
+          style={{
+            maskImage: "linear-gradient(105deg, transparent 34%, #000 62%)",
+            WebkitMaskImage: "linear-gradient(105deg, transparent 34%, #000 62%)",
+            opacity: 0.85,
+          }}
+        >
+          <BrandRibbon className="h-full w-full" />
+        </div>
         <div aria-hidden className="bloom-blue -right-28 -top-32 h-[240px] w-[240px] opacity-70 drift sm:h-[420px] sm:w-[420px] sm:opacity-100" />
         <div aria-hidden className="bloom-green -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
 
