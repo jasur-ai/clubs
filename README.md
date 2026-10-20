@@ -27,6 +27,10 @@ directory and can be switched on one by one — the data model is multi-club fro
 | --- | --- |
 | ![Admin dark](docs/screenshots/admin-dark.png) | ![Mobile](docs/screenshots/portal-mobile.png) |
 
+| Member Mini App — dark | Sign in |
+| --- | --- |
+| ![Mini App dark](docs/screenshots/mini-app-dark.png) | ![Sign in](docs/screenshots/login.png) |
+
 Each club keeps its own emblem, pulled from its Telegram channel and served locally
 (`public/clubs/<slug>.jpg`), so the directory reads as the real club network rather than a
 placeholder grid.
