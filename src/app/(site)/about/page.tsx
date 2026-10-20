@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge } from "@/components/ui/primitives";
+
 
 export const metadata: Metadata = {
   title: "Platforma haqida",
@@ -17,7 +17,7 @@ const modules = [
 export default function AboutPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-14 sm:px-6">
-      <Badge tone="accent">TDIU · Yoshlar ittifoqi</Badge>
+      <span className="eyebrow">TDIU · Yoshlar ittifoqi</span>
       <h1 className="display mt-4 text-[40px] leading-tight sm:text-[50px]">Bitta platforma,<br />butun klub ekotizimi.</h1>
       <p className="prose-editorial mt-5">
         TDIU Clubs — universitet klublarini raqamlashtirish loyihasi. Maqsad oddiy: talaba klubni topadi, a’zo bo‘ladi,

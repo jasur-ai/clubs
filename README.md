@@ -11,13 +11,21 @@ directory and can be switched on one by one — the data model is multi-club fro
 
 ## Preview
 
-| Public portal | Club directory |
+| Public portal — light | Public portal — dark |
 | --- | --- |
-| ![Portal](docs/screenshots/portal.png) | ![Clubs](docs/screenshots/clubs.png) |
+| ![Portal](docs/screenshots/portal.png) | ![Portal dark](docs/screenshots/portal-dark.png) |
+
+| Club page | Club directory |
+| --- | --- |
+| ![Club](docs/screenshots/club.png) | ![Clubs](docs/screenshots/clubs.png) |
 
 | Member Mini App | Admin console |
 | --- | --- |
 | ![Mini App](docs/screenshots/mini-app.png) | ![Admin](docs/screenshots/admin.png) |
+
+| Admin console — dark | Mobile portal |
+| --- | --- |
+| ![Admin dark](docs/screenshots/admin-dark.png) | ![Mobile](docs/screenshots/portal-mobile.png) |
 
 Each club keeps its own emblem, pulled from its Telegram channel and served locally
 (`public/clubs/<slug>.jpg`), so the directory reads as the real club network rather than a
@@ -37,9 +45,20 @@ placeholder grid.
 | Admin console | `/admin` | Requests, members, library, reading cycles, events, news, settings |
 | Bot webhook | `/api/telegram` | Commands, deep links, web-app entry point |
 
-Design language: TSUE navy `#104070`, institutional blue `#2070D0`, paper `#f6f7f8`, warm clay
-accent `#a8492f` for the Book Club. Fraunces for editorial headlines, Manrope for UI. No emoji,
-no decorative filler — every block maps to a task a student or an administrator performs.
+Design language: O'zbekiston Yoshlar ittifoqi palette — deep navy `#0d1646`, youth green
+`#1e9e4f`, institutional blue `#2458d6` — on warm paper `#f7f6f2`, with each club keeping its own
+accent. Fraunces for editorial headlines, Manrope for UI. Light and dark themes share one set of
+semantic tokens (`html[data-theme]`), toggled from the header and remembered in `localStorage`
+with the system preference as the default.
+
+The backdrop is a contour field: concentric elliptical arcs in the same sweep as the Yoshlar
+ittifoqi swoosh, plus soft colour bloom and a fine paper grain — no grid, no gradient clichés.
+Motion is layered on top: IntersectionObserver scroll reveals, a count-up on the live figures,
+hover lift on cards, an animated mobile sheet and a route transition — all disabled under
+`prefers-reduced-motion`.
+
+Brand assets in `public/brand/`: `yoshlar-ittifoqi-mark.png` (official lockup, knocked out to
+transparency for dark surfaces), `yoshlar-ittifoqi.png` (full artwork), `tsue-emblem.png`.
 
 ## Stack
 

@@ -39,7 +39,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           className="mt-7 flex items-center justify-between rounded-[14px] border border-[color:var(--color-line)] bg-white p-4 transition-colors hover:border-[color:var(--color-line-strong)]"
         >
           <span className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[#e8f1fb] text-[#2070d0]">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[color:var(--color-surface-3)] text-[color:var(--color-link)]">
               <Send size={18} />
             </span>
             <span>
