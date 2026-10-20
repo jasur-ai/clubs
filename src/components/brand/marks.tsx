@@ -67,7 +67,6 @@ export function YoshlarIttifoqiLockup({
         src="/brand/yoshlar-ittifoqi-lockup@3x.png"
         alt="O‘zbekiston Yoshlar ittifoqi"
         style={{ height: "100%", width: "auto" }}
-        loading="lazy"
         decoding="async"
         draggable={false}
       />

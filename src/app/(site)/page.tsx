@@ -332,20 +332,12 @@ export default async function HomePage() {
                   background: `radial-gradient(110% 90% at 100% 0%, ${featured.accent}22 0%, transparent 62%)`,
                 }}
               />
-              {featured.logoUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={featured.logoUrl}
-                  alt=""
-                  aria-hidden
-                  className="pointer-events-none absolute -bottom-16 -right-10 w-[260px] opacity-[0.07] transition-opacity duration-700 group-hover:opacity-[0.12]"
-                />
-              ) : null}
+
               <div className="relative">
                 <div className="flex items-start justify-between">
                   <span className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ background: featured.accent }} />
-                    Tanlangan klub
+                    Tanlangan klub · pilot
                   </span>
                   <ClubLogo
                     name={featured.name}
