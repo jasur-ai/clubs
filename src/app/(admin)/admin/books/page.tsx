@@ -55,7 +55,7 @@ export default async function AdminBooksPage({ searchParams }: { searchParams: P
         {books.map((b) => (
           <Panel key={b.id}>
             <div className="flex gap-3 p-3.5">
-              <CoverArt from={b.coverFrom} to={b.coverTo} title={b.title} variant="lines" className="h-[86px] w-[64px] shrink-0 rounded-[5px]" compact />
+              <CoverArt from={b.coverFrom} to={b.coverTo} title={b.title} label="Kitob" variant="lines" className="h-[86px] w-[64px] shrink-0 rounded-[5px]" compact />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-semibold">{b.title}</p>
                 <p className="text-[11.5px] text-[color:var(--color-muted)]">{b.author}{b.year ? `, ${b.year}` : ""}</p>
