@@ -17,7 +17,7 @@ export function LoginForm({ next }: { next?: string }) {
         <input id="password" name="password" type="password" className="input" required autoComplete="current-password" />
       </Field>
       {state.error && (
-        <div className="flex items-start gap-2 rounded-[10px] border border-red-200 bg-red-50 px-3.5 py-2.5 text-[12.5px] text-red-800">
+        <div className="flex items-start gap-2 rounded-[10px] border border-[color:var(--color-danger-line)] bg-[color:var(--color-danger-bg)] px-3.5 py-2.5 text-[12.5px] text-[color:var(--color-danger)]">
           <AlertCircle size={15} className="mt-0.5 shrink-0" /> {state.error}
         </div>
       )}

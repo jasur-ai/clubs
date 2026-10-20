@@ -64,12 +64,12 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
               {past.length === 0 && <p className="text-[13px] text-[color:var(--color-muted)]">Hozircha bo‘sh.</p>}
             </div>
           </div>
-          <div className="rounded-[14px] border border-[color:var(--color-line)] bg-[#0b1f33] p-5 text-white">
+          <div className="rounded-[14px] border border-[color:var(--color-line)] bg-[color:var(--color-plate)] p-5 text-white">
             <h2 className="font-serif text-[19px]">Eslatmalar</h2>
             <p className="mt-2 text-[12.5px] leading-relaxed text-white/70">
               Telegram bot orqali tadbir eslatmalarini oling — har bir tadbirdan 24 soat oldin.
             </p>
-            <a href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer" className="btn btn-sm mt-4 bg-white text-[#0b1f33] hover:bg-white/90">
+            <a href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer" className="btn btn-sm mt-4 bg-white text-[color:var(--color-ink)] hover:bg-[color:var(--color-surface)]/90">
               Botni ochish
             </a>
           </div>
@@ -85,7 +85,7 @@ function Chip({ href, label, active }: { href: string; label: string; active: bo
       href={href}
       className={cn(
         "whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[12.5px] font-semibold",
-        active ? "border-[#104070] bg-[#104070] text-white" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]",
+        active ? "border-[#104070] bg-[color:var(--color-navy)] text-white" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]",
       )}
     >
       {label}

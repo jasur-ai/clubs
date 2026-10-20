@@ -12,12 +12,12 @@ export function Badge({
   className?: string;
 }) {
   const tones: Record<string, string> = {
-    neutral: "bg-white text-[color:var(--color-ink-soft)] border-[color:var(--color-line)]",
-    accent: "bg-[color-mix(in_oklab,var(--club-accent)_8%,white)] text-[color:var(--club-accent)] border-[color-mix(in_oklab,var(--club-accent)_24%,white)]",
-    success: "bg-emerald-50 text-emerald-800 border-emerald-200",
-    warning: "bg-amber-50 text-amber-800 border-amber-200",
-    danger: "bg-red-50 text-red-800 border-red-200",
-    navy: "bg-[#0e3558] text-white border-transparent",
+    neutral: "bg-[color:var(--color-surface)] text-[color:var(--color-ink-soft)] border-[color:var(--color-line)]",
+    accent: "bg-[color-mix(in_oklab,var(--club-accent)_9%,var(--tint-base))] text-[color:var(--club-accent-ink)] border-[color-mix(in_oklab,var(--club-accent)_24%,var(--tint-base))]",
+    success: "bg-[color:var(--color-success-bg)] text-[color:var(--color-success)] border-[color:var(--color-success-line)]",
+    warning: "bg-[color:var(--color-warning-bg)] text-[color:var(--color-warning)] border-[color:var(--color-warning-line)]",
+    danger: "bg-[color:var(--color-danger-bg)] text-[color:var(--color-danger)] border-[color:var(--color-danger-line)]",
+    navy: "bg-[color:var(--color-navy)] text-white border-transparent",
   };
   return (
     <span
@@ -53,7 +53,7 @@ export function Avatar({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full bg-[#e9eef4] font-semibold text-[#104070]",
+        "inline-flex shrink-0 items-center justify-center rounded-full bg-[color:var(--color-surface-3)] font-semibold text-[color:var(--color-link)]",
         className,
       )}
       style={{ width: size, height: size, fontSize: Math.max(11, size * 0.34) }}
@@ -77,8 +77,8 @@ export function ProgressBar({
 }) {
   const v = Math.max(0, Math.min(100, Math.round(value)));
   const bg =
-    tone === "light" ? "bg-white/25" : tone === "navy" ? "bg-[#dbe4ee]" : "bg-[color-mix(in_oklab,var(--club-accent)_14%,white)]";
-  const fg = tone === "light" ? "bg-white" : tone === "navy" ? "bg-[#104070]" : "bg-[var(--club-accent)]";
+    tone === "light" ? "bg-white/25" : tone === "navy" ? "bg-[color:var(--color-surface-3)]" : "bg-[color-mix(in_oklab,var(--club-accent)_15%,var(--tint-base))]";
+  const fg = tone === "light" ? "bg-white" : tone === "navy" ? "bg-[color:var(--color-ink)]" : "bg-[var(--club-accent)]";
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <div className={cn("h-1.5 w-full overflow-hidden rounded-full", bg)}>
@@ -209,9 +209,9 @@ export function Callout({
   children: ReactNode;
 }) {
   const tones = {
-    neutral: "border-[color:var(--color-line)] bg-white",
-    accent: "border-[color-mix(in_oklab,var(--club-accent)_25%,white)] bg-[color-mix(in_oklab,var(--club-accent)_6%,white)]",
-    warning: "border-amber-200 bg-amber-50",
+    neutral: "border-[color:var(--color-line)] bg-[color:var(--color-surface)]",
+    accent: "border-[color-mix(in_oklab,var(--club-accent)_24%,var(--tint-base))] bg-[color-mix(in_oklab,var(--club-accent)_7%,var(--tint-base))]",
+    warning: "border-[color:var(--color-warning-line)] bg-[color:var(--color-warning-bg)]",
   };
   return (
     <div className={cn("rounded-[12px] border p-4 text-sm leading-relaxed text-[color:var(--color-ink-soft)]", tones[tone])}>

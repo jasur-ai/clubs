@@ -72,11 +72,11 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
                 </Badge>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-[10px] bg-[#f8f9fb] p-3.5">
+                <div className="rounded-[10px] bg-[color:var(--color-surface-2)] p-3.5">
                   <p className="text-[11px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">Boshlanish</p>
                   <p className="mt-1 text-[13.5px] font-medium">{cycle.startsAt ? formatDate(cycle.startsAt) : "—"}</p>
                 </div>
-                <div className="rounded-[10px] bg-[#f8f9fb] p-3.5">
+                <div className="rounded-[10px] bg-[color:var(--color-surface-2)] p-3.5">
                   <p className="text-[11px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">Uchrashuv</p>
                   <p className="mt-1 inline-flex items-center gap-1.5 text-[13.5px] font-medium">
                     <CalendarDays size={13} /> {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMM, HH:mm") : "—"}

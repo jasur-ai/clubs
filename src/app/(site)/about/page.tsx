@@ -43,7 +43,7 @@ export default function AboutPage() {
           ["Hisobot", "Klub rahbari statistikani ko‘radi; platforma “Ijtimoiy faollik indeksi” uchun ma’lumot beradi."],
         ].map(([title, text], i) => (
           <li key={title} className="flex gap-4 rounded-[12px] border border-[color:var(--color-line)] bg-white p-4">
-            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#104070] text-[12px] font-semibold text-white">
+            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--color-navy)] text-[12px] font-semibold text-white">
               {i + 1}
             </span>
             <div>

@@ -71,7 +71,7 @@ export default async function AdminNewsPage() {
                 </FormDialog>
                 <form action={deleteNewsAction}>
                   <input type="hidden" name="id" value={n.id} />
-                  <button className="btn btn-ghost btn-sm text-[#8f3b3b]" aria-label="O‘chirish">
+                  <button className="btn btn-ghost btn-sm text-[color:var(--color-danger)]" aria-label="O‘chirish">
                     <Trash2 size={13} />
                   </button>
                 </form>

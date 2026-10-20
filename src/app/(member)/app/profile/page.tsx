@@ -40,13 +40,13 @@ export default async function ProfilePage() {
             <p className="mt-0.5 text-[11.5px] text-[color:var(--color-muted)]">
               {user.username ? `@${user.username}` : user.email}
             </p>
-            <p className="mt-1 inline-flex rounded-full bg-[#f1f4f8] px-2 py-0.5 text-[10px] font-semibold text-[#104070]">
+            <p className="mt-1 inline-flex rounded-full bg-[color:var(--color-surface-3)] px-2 py-0.5 text-[10px] font-semibold text-[color:var(--color-link)]">
               {user.role === "SUPER_ADMIN" ? "Platforma admini" : user.role === "CLUB_ADMIN" ? "Klub rahbari" : user.role === "EDITOR" ? "Muharrir" : "Talaba"}
             </p>
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-3 divide-x divide-[color:var(--color-line)] rounded-[10px] bg-[#f8f9fb] py-3">
+        <div className="mt-5 grid grid-cols-3 divide-x divide-[color:var(--color-line)] rounded-[10px] bg-[color:var(--color-surface-2)] py-3">
           <div className="px-3 text-center">
             <p className="font-serif text-[20px] leading-none">{user.points}</p>
             <p className="mt-1 text-[10px] text-[color:var(--color-muted)]">Ball</p>

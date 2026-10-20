@@ -68,7 +68,7 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
             href={`/admin/join-requests?status=${value}`}
             className={cn(
               "rounded-full border px-3 py-1.5 text-[11.5px] font-semibold",
-              status === value ? "border-[#0b1f33] bg-[#0b1f33] text-white" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]",
+              status === value ? "border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-paper)]" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]",
             )}
           >
             {label}
@@ -77,14 +77,14 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
         ))}
         {clubs.length > 1 && (
           <div className="ml-auto flex shrink-0 gap-1.5">
-            <Link href={`/admin/join-requests?status=${status}`} className={cn("rounded-full px-2.5 py-1.5 text-[11px] font-medium", !params.club ? "bg-[#eef2f7] text-[#104070]" : "text-[color:var(--color-muted)]")}>
+            <Link href={`/admin/join-requests?status=${status}`} className={cn("rounded-full px-2.5 py-1.5 text-[11px] font-medium", !params.club ? "bg-[color:var(--color-surface-3)] text-[color:var(--color-link)]" : "text-[color:var(--color-muted)]")}>
               Barcha klublar
             </Link>
             {clubs.map((c) => (
               <Link
                 key={c.id}
                 href={`/admin/join-requests?status=${status}&club=${c.slug}`}
-                className={cn("rounded-full px-2.5 py-1.5 text-[11px] font-medium", params.club === c.slug ? "bg-[#eef2f7] text-[#104070]" : "text-[color:var(--color-muted)]")}
+                className={cn("rounded-full px-2.5 py-1.5 text-[11px] font-medium", params.club === c.slug ? "bg-[color:var(--color-surface-3)] text-[color:var(--color-link)]" : "text-[color:var(--color-muted)]")}
               >
                 {c.name}
               </Link>
@@ -114,7 +114,7 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
                   </a>
                 </div>
                 {r.motivation && (
-                  <p className="mt-2 max-w-2xl rounded-[8px] bg-[#f8f9fb] px-3 py-2 text-[11.5px] leading-relaxed text-[color:var(--color-ink-soft)]">
+                  <p className="mt-2 max-w-2xl rounded-[8px] bg-[color:var(--color-surface-2)] px-3 py-2 text-[11.5px] leading-relaxed text-[color:var(--color-ink-soft)]">
                     {r.motivation}
                   </p>
                 )}
@@ -143,7 +143,7 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
                   <form action={reviewJoinRequestAction}>
                     <input type="hidden" name="requestId" value={r.id} />
                     <input type="hidden" name="decision" value="REJECTED" />
-                    <button className="btn btn-ghost btn-sm gap-1 text-[#8f3b3b]">
+                    <button className="btn btn-ghost btn-sm gap-1 text-[color:var(--color-danger)]">
                       <X size={13} /> Rad
                     </button>
                   </form>

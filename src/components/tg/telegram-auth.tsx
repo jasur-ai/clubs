@@ -35,7 +35,7 @@ export function TelegramAuth() {
     <div className="flex min-h-dvh flex-col items-center justify-center bg-[color:var(--color-paper)] px-6 text-center">
       {state === "loading" && (
         <>
-          <Loader2 className="animate-spin text-[#104070]" size={26} />
+          <Loader2 className="animate-spin text-[color:var(--color-link)]" size={26} />
           <p className="mt-4 text-[13px] text-[color:var(--color-muted)]">Telegram hisobi tekshirilmoqda…</p>
         </>
       )}

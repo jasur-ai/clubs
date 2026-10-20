@@ -38,7 +38,7 @@ export function FormDialog({
         <Plus size={13} /> {label}
       </button>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#0b1f33]/45 p-4 sm:p-8" onClick={() => setOpen(false)}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[color:var(--color-plate)]/45 p-4 sm:p-8" onClick={() => setOpen(false)}>
           <div
             className="w-full max-w-[640px] rounded-[14px] bg-white shadow-[0_24px_60px_rgba(11,31,51,0.2)]"
             onClick={(e) => e.stopPropagation()}

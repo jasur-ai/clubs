@@ -102,7 +102,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                 <p className="text-[11px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">Qatnashuvchilar</p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {event.rsvps.slice(0, 8).map((r) => (
-                    <span key={r.id} className="rounded-full bg-[#f1f4f8] px-2.5 py-1 text-[11.5px] text-[color:var(--color-ink-soft)]">
+                    <span key={r.id} className="rounded-full bg-[color:var(--color-surface-3)] px-2.5 py-1 text-[11.5px] text-[color:var(--color-ink-soft)]">
                       {r.user.firstName}
                     </span>
                   ))}

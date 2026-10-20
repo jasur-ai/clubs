@@ -104,7 +104,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
             key={c.id}
             href={`/admin/events?club=${c.slug}&filter=${filter}`}
             className={`rounded-full border px-3 py-1.5 text-[11.5px] font-semibold ${
-              selected?.id === c.id ? "border-[#0b1f33] bg-[#0b1f33] text-white" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]"
+              selected?.id === c.id ? "border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-paper)]" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]"
             }`}
           >
             {c.name}
@@ -115,7 +115,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
             <Link
               key={v}
               href={`/admin/events?club=${selected?.slug ?? ""}&filter=${v}`}
-              className={`rounded-[6px] px-2.5 py-1.5 text-[11px] font-medium ${filter === v ? "bg-[#eef2f7] text-[#104070]" : "text-[color:var(--color-muted)]"}`}
+              className={`rounded-[6px] px-2.5 py-1.5 text-[11px] font-medium ${filter === v ? "bg-[color:var(--color-surface-3)] text-[color:var(--color-link)]" : "text-[color:var(--color-muted)]"}`}
             >
               {l}
             </Link>
@@ -140,7 +140,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
                 <FormDialog label="Tahrirlash" title={e.title} variant="secondary">{eventForm(e)}</FormDialog>
                 <form action={deleteEventAction}>
                   <input type="hidden" name="id" value={e.id} />
-                  <button className="btn btn-ghost btn-sm text-[#8f3b3b]" aria-label="O‘chirish">
+                  <button className="btn btn-ghost btn-sm text-[color:var(--color-danger)]" aria-label="O‘chirish">
                     <Trash2 size={13} />
                   </button>
                 </form>

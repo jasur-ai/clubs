@@ -50,22 +50,22 @@ export function Panel({ title, meta, action, children, className }: { title?: st
 
 export function StatusPill({ status }: { status: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    NEW: { label: "Yangi", cls: "bg-[#fdf3e7] text-[#8a5a14]" },
-    IN_REVIEW: { label: "Ko‘rilmoqda", cls: "bg-[#eef2f7] text-[#3b5878]" },
-    APPROVED: { label: "Tasdiqlangan", cls: "bg-[#eef7f0] text-[#2f6d43]" },
-    REJECTED: { label: "Rad etilgan", cls: "bg-[#fbeeee] text-[#8f3b3b]" },
-    ACTIVE: { label: "Faol", cls: "bg-[#eef7f0] text-[#2f6d43]" },
-    BLOCKED: { label: "Bloklangan", cls: "bg-[#fbeeee] text-[#8f3b3b]" },
-    PENDING: { label: "Kutilmoqda", cls: "bg-[#fdf3e7] text-[#8a5a14]" },
-    PUBLISHED: { label: "E’lon qilingan", cls: "bg-[#eef7f0] text-[#2f6d43]" },
-    DRAFT: { label: "Qoralama", cls: "bg-[#f1f4f8] text-[#3b5878]" },
-    READING: { label: "O‘qilmoqda", cls: "bg-[#eef7f0] text-[#2f6d43]" },
-    FINISHED: { label: "Yakunlangan", cls: "bg-[#f1f4f8] text-[#3b5878]" },
-    CANCELLED: { label: "Bekor qilingan", cls: "bg-[#fbeeee] text-[#8f3b3b]" },
-    PLANNED: { label: "Rejalashtirilgan", cls: "bg-[#f1f4f8] text-[#3b5878]" },
-    ARCHIVED: { label: "Arxiv", cls: "bg-[#f1f4f8] text-[#3b5878]" },
+    NEW: { label: "Yangi", cls: "bg-[color:var(--color-warning-bg)] text-[color:var(--color-warning)]" },
+    IN_REVIEW: { label: "Ko‘rilmoqda", cls: "bg-[color:var(--color-surface-3)] text-[color:var(--color-ink-soft)]" },
+    APPROVED: { label: "Tasdiqlangan", cls: "bg-[color:var(--color-success-bg)] text-[color:var(--color-success)]" },
+    REJECTED: { label: "Rad etilgan", cls: "bg-[color:var(--color-danger-bg)] text-[color:var(--color-danger)]" },
+    ACTIVE: { label: "Faol", cls: "bg-[color:var(--color-success-bg)] text-[color:var(--color-success)]" },
+    BLOCKED: { label: "Bloklangan", cls: "bg-[color:var(--color-danger-bg)] text-[color:var(--color-danger)]" },
+    PENDING: { label: "Kutilmoqda", cls: "bg-[color:var(--color-warning-bg)] text-[color:var(--color-warning)]" },
+    PUBLISHED: { label: "E’lon qilingan", cls: "bg-[color:var(--color-success-bg)] text-[color:var(--color-success)]" },
+    DRAFT: { label: "Qoralama", cls: "bg-[color:var(--color-surface-3)] text-[color:var(--color-ink-soft)]" },
+    READING: { label: "O‘qilmoqda", cls: "bg-[color:var(--color-success-bg)] text-[color:var(--color-success)]" },
+    FINISHED: { label: "Yakunlangan", cls: "bg-[color:var(--color-surface-3)] text-[color:var(--color-ink-soft)]" },
+    CANCELLED: { label: "Bekor qilingan", cls: "bg-[color:var(--color-danger-bg)] text-[color:var(--color-danger)]" },
+    PLANNED: { label: "Rejalashtirilgan", cls: "bg-[color:var(--color-surface-3)] text-[color:var(--color-ink-soft)]" },
+    ARCHIVED: { label: "Arxiv", cls: "bg-[color:var(--color-surface-3)] text-[color:var(--color-ink-soft)]" },
   };
-  const s = map[status] ?? { label: status, cls: "bg-[#f1f4f8] text-[#3b5878]" };
+  const s = map[status] ?? { label: status, cls: "bg-[color:var(--color-surface-3)] text-[color:var(--color-ink-soft)]" };
   return <span className={cn("inline-flex rounded-full px-2 py-0.5 text-[10.5px] font-semibold", s.cls)}>{s.label}</span>;
 }
 

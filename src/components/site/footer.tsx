@@ -1,76 +1,107 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/site/logo";
+import { YoshlarIttifoqiLockup } from "@/components/brand/marks";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-[color:var(--color-line)] bg-white">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div>
-          <Logo />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-[color:var(--color-muted)]">
-            TDIU talabalar klublarining yagona platformasi: tadbirlar, kitobxonlik dasturi va muhokamalar.
-          </p>
-          <div className="mt-5 flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/tsue-emblem.png" alt="Toshkent davlat iqtisodiyot universiteti gerbi" width={38} height={38} loading="lazy" className="h-[38px] w-[38px]" />
-            <div className="text-[11px] leading-snug text-[color:var(--color-muted)]">
-              Toshkent davlat
-              <br />
-              iqtisodiyot universiteti
+    <footer className="band-dark grain mt-24">
+      <div aria-hidden className="contour-field opacity-40" />
+      <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-14 sm:px-6">
+        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1.1fr]">
+          <div>
+            <Logo invert />
+            <p className="mt-5 max-w-[290px] text-[13.5px] leading-relaxed text-white/55">
+              Toshkent davlat iqtisodiyot universiteti talabalar klublarining yagona platformasi — tadbirlar,
+              kitobxonlik va muhokamalar bir joyda.
+            </p>
+            <div className="mt-7">
+              <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/35">
+                Hamkor
+              </p>
+              <YoshlarIttifoqiLockup height={40} className="mt-2.5" />
             </div>
           </div>
-          <p className="mt-4 text-xs text-[color:var(--color-muted-soft)]">Yoshlar ittifoqi bilan hamkorlikda</p>
+
+          <FooterCol
+            title="Platforma"
+            links={[
+              ["Klublar", "/clubs"],
+              ["A’zo bo‘lish", "/join"],
+              ["Tadbirlar", "/events"],
+              ["Yangiliklar", "/news"],
+            ]}
+          />
+          <FooterCol
+            title="Book Club"
+            links={[
+              ["Klub sahifasi", "/clubs/book-club"],
+              ["Kutubxona", "/books"],
+              ["Bookonomics", "/clubs/book-club#loyihalar"],
+              ["Muhokamalar", "/app/discussions"],
+            ]}
+          />
+
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">Aloqa</p>
+            <ul className="mt-4 space-y-2.5 text-[13.5px] text-white/65">
+              <li className="leading-relaxed">
+                Toshkent, Islam Karimov ko‘chasi, 49
+              </li>
+              <li>
+                <a className="transition-colors hover:text-white" href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer">
+                  @tsuebookclub
+                </a>
+              </li>
+              <li>
+                <a className="transition-colors hover:text-white" href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer">
+                  @Tsue_clubs_bot
+                </a>
+              </li>
+              <li>
+                <a className="transition-colors hover:text-white" href="mailto:info@tsue.uz">
+                  info@tsue.uz
+                </a>
+              </li>
+            </ul>
+            <a
+              href="https://t.me/Tsue_clubs_bot"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-white/75 transition-colors hover:text-white"
+            >
+              Botni ochish <ArrowUpRight size={13} />
+            </a>
+          </div>
         </div>
-        <FooterCol
-          title="Platforma"
-          links={[
-            ["Klublar", "/clubs"],
-            ["A’zo bo‘lish", "/join"],
-            ["Tadbirlar", "/events"],
-            ["Yangiliklar", "/news"],
-          ]}
-        />
-        <FooterCol
-          title="Book Club"
-          links={[
-            ["Klub sahifasi", "/clubs/book-club"],
-            ["Kutubxona", "/books"],
-            ["Bookonomics", "/clubs/book-club#loyihalar"],
-            ["Muhokamalar", "/app/discussions"],
-          ]}
-        />
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">Aloqa</p>
-          <ul className="mt-4 space-y-2.5 text-sm text-[color:var(--color-ink-soft)]">
-            <li>Toshkent, Islam Karimov ko‘chasi, 49</li>
-            <li>
-              <a className="hover:text-[#104070]" href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer">
-                @tsuebookclub
-              </a>
-            </li>
-            <li>
-              <a className="hover:text-[#104070]" href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer">
-                @Tsue_clubs_bot
-              </a>
-            </li>
-            <li>
-              <a className="hover:text-[#104070]" href="mailto:info@tsue.uz">
-                info@tsue.uz
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="border-t border-[color:var(--color-line)]">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-[color:var(--color-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© 2026 TDIU Clubs. Barcha huquqlar himoyalangan.</p>
-          <div className="flex gap-5">
-            <Link href="/about" className="hover:text-[#104070]">
+
+        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/tsue-emblem.png"
+              alt="Toshkent davlat iqtisodiyot universiteti gerbi"
+              width={30}
+              height={30}
+              loading="lazy"
+              className="h-[30px] w-[30px] opacity-90"
+            />
+            <p className="text-[11.5px] leading-snug text-white/40">
+              Toshkent davlat iqtisodiyot universiteti
+              <br />
+              Yoshlar ittifoqi bilan hamkorlikda · 2026
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11.5px] text-white/45">
+            <Link href="/about" className="transition-colors hover:text-white">
               Platforma haqida
             </Link>
-            <Link href="/admin" className="hover:text-[#104070]">
+            <Link href="/admin" className="transition-colors hover:text-white">
               Boshqaruv
             </Link>
+            <a href="/api/health" className="transition-colors hover:text-white">
+              Tizim holati
+            </a>
           </div>
         </div>
       </div>
@@ -81,11 +112,11 @@ export function SiteFooter() {
 function FooterCol({ title, links }: { title: string; links: Array<[string, string]> }) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">{title}</p>
-      <ul className="mt-4 space-y-2.5 text-sm">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">{title}</p>
+      <ul className="mt-4 space-y-2.5 text-[13.5px]">
         {links.map(([label, href]) => (
           <li key={href}>
-            <Link href={href} className="text-[color:var(--color-ink-soft)] transition-colors hover:text-[#104070]">
+            <Link href={href} className="text-white/65 transition-colors hover:text-white">
               {label}
             </Link>
           </li>

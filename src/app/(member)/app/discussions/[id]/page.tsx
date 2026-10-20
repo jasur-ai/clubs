@@ -57,7 +57,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ id: str
                 {p.author.firstName} {p.author.lastName ?? ""}
               </span>
               {p.author.role !== "MEMBER" && (
-                <span className="rounded-full bg-[#eef2f6] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#104070]">
+                <span className="rounded-full bg-[#eef2f6] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[color:var(--color-link)]">
                   {p.author.role === "CLUB_ADMIN" ? "Rahbar" : "Admin"}
                 </span>
               )}

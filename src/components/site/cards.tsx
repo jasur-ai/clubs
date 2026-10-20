@@ -38,7 +38,7 @@ export function ClubCard({ club, className }: { club: ClubCardClub; className?: 
       <p className="mt-1.5 line-clamp-2 text-[13.5px] leading-relaxed text-[color:var(--color-muted)]">{club.summary}</p>
       <div className="mt-4 flex items-center justify-between border-t border-[color:var(--color-line)] pt-3 text-[12px] text-[color:var(--color-muted)]">
         <span className="inline-flex items-center gap-1.5">
-          <Users size={13} /> {club._count?.memberships ?? 0} a’zo
+          <Users size={13} /> {(club._count?.memberships ?? 0) > 0 ? `${club._count?.memberships} a’zo` : "Ochiq qabul"}
         </span>
         <span className="inline-flex items-center gap-1 font-semibold text-[color:var(--color-ink)] transition-colors group-hover:text-[var(--club-accent)]">
           Ochish <ArrowUpRight size={13} />
@@ -71,7 +71,7 @@ export function EventRow({ event, compact = false }: { event: EventCardEvent; co
       className="group flex gap-4 rounded-[14px] border border-[color:var(--color-line)] bg-white p-4 transition-all hover:border-[color:var(--color-line-strong)] hover:shadow-[var(--shadow-card)]"
     >
       <div
-        className="flex h-[64px] w-[58px] shrink-0 flex-col items-center justify-center rounded-[10px] border border-[color:var(--color-line)] bg-[#fbfcfd]"
+        className="flex h-[64px] w-[58px] shrink-0 flex-col items-center justify-center rounded-[10px] border border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]"
         aria-hidden
       >
         <span className="font-serif text-[22px] leading-none text-[color:var(--color-ink)]">{d.getDate()}</span>
@@ -159,9 +159,10 @@ export function NewsCard({ item, featured = false }: { item: NewsCardItem; featu
       <CoverArt
         from={item.coverFrom}
         to={item.coverTo}
-        title={item.title}
+        title={item.club?.name ?? "Klub hayoti"}
+        label="Yangilik"
         compact
-        className={cn("w-full", featured ? "sm:w-[46%] sm:min-h-[240px]" : "h-[168px]")}
+        className={cn("w-full", featured ? "sm:w-[46%] sm:min-h-[240px]" : "h-[132px]")}
       />
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
@@ -177,7 +178,7 @@ export function NewsCard({ item, featured = false }: { item: NewsCardItem; featu
           {item.title}
         </h3>
         <p className="mt-2 line-clamp-3 text-[13.5px] leading-relaxed text-[color:var(--color-muted)]">{item.excerpt}</p>
-        <span className="mt-auto pt-4 text-[12.5px] font-semibold text-[color:var(--color-ink)] group-hover:text-[#104070]">
+        <span className="mt-auto pt-4 text-[12.5px] font-semibold text-[color:var(--color-ink)] group-hover:text-[color:var(--color-link)]">
           Batafsil
         </span>
       </div>

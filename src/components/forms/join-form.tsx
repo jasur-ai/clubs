@@ -16,7 +16,7 @@ export function JoinForm({ clubs, defaultClub }: { clubs: Club[]; defaultClub?: 
   if (state.ok) {
     return (
       <div className="rounded-[16px] border border-[color:var(--color-line)] bg-white p-8 text-center">
-        <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+        <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-[color:var(--color-success-bg)] text-[color:var(--color-success)]">
           <CheckCircle2 size={22} />
         </span>
         <h2 className="mt-4 font-serif text-[24px]">Ariza yuborildi</h2>
@@ -89,7 +89,7 @@ export function JoinForm({ clubs, defaultClub }: { clubs: Club[]; defaultClub?: 
       )}
 
       {state.error && (
-        <div className="mt-4 flex items-start gap-2 rounded-[10px] border border-red-200 bg-red-50 px-3.5 py-2.5 text-[12.5px] text-red-800">
+        <div className="mt-4 flex items-start gap-2 rounded-[10px] border border-[color:var(--color-danger-line)] bg-[color:var(--color-danger-bg)] px-3.5 py-2.5 text-[12.5px] text-[color:var(--color-danger)]">
           <AlertCircle size={15} className="mt-0.5 shrink-0" />
           {state.error}
         </div>

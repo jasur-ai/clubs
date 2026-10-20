@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
+import { RevealObserver } from "@/components/site/motion";
 
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s · TDIU Clubs",
   },
   description:
-    "Toshkent davlat iqtisodiyot universiteti klublari: tadbirlar, kitobxonlik dasturi, muhokamalar va a'zolik uchun yagona platforma.",
+    "Toshkent davlat iqtisodiyot universiteti klublari: tadbirlar, kitobxonlik dasturi, muhokamalar va a'zolik uchun yagona platforma. O‘zbekiston Yoshlar ittifoqi bilan hamkorlikda.",
   applicationName: "TDIU Clubs",
   keywords: ["TDIU", "TSUE", "klublar", "Book Club", "talabalar", "tadbirlar", "Yoshlar ittifoqi"],
   authors: [{ name: "TDIU Yoshlar ittifoqi" }],
@@ -41,16 +42,30 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#104070",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f6f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#080c15" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
 };
 
+const themeScript = `(function(){try{var s=localStorage.getItem('tdiu-theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.classList.add('js');}catch(e){document.documentElement.dataset.theme='light';document.documentElement.classList.add('js');}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="uz" className={`${manrope.variable} ${fraunces.variable}`}>
-      <body>{children}</body>
+    <html
+      lang="uz"
+      data-theme="light"
+      suppressHydrationWarning
+      className={`${manrope.variable} ${fraunces.variable}`}
+    >
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <RevealObserver />
+        {children}
+      </body>
     </html>
   );
 }

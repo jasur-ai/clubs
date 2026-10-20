@@ -32,7 +32,7 @@ export default async function AdminClubsPage() {
                 <div className="flex items-center gap-2.5">
                   <ClubLogo name={c.name} logoUrl={c.logoUrl} accent={c.accent} size={32} rounded="rounded-[7px]" />
                   <p className="text-[13px] font-semibold">{c.name}</p>
-                  {!c.isActive && <span className="text-[10px] font-semibold text-[#8f3b3b]">nofaol</span>}
+                  {!c.isActive && <span className="text-[10px] font-semibold text-[color:var(--color-danger)]">nofaol</span>}
                 </div>
                 <p className="mt-0.5 text-[11px] text-[color:var(--color-muted)]">
                   {c._count.memberships} a’zo · {c._count.events} tadbir · {c._count.books} kitob · {c._count.news} yangilik
@@ -86,9 +86,9 @@ export default async function AdminClubsPage() {
             <div className="px-4 py-2.5">
               <p className="line-clamp-2 text-[11.5px] leading-relaxed text-[color:var(--color-muted)]">{c.summary}</p>
               <div className="mt-2 flex flex-wrap gap-2 text-[10.5px] text-[color:var(--color-muted)]">
-                <span className="rounded-full bg-[#f1f4f8] px-2 py-0.5">/{c.slug}</span>
-                {c.meetingDay && <span className="rounded-full bg-[#f1f4f8] px-2 py-0.5">{c.meetingDay}, {c.meetingTime}</span>}
-                {c.telegramUrl && <span className="rounded-full bg-[#f1f4f8] px-2 py-0.5">Telegram ulangan</span>}
+                <span className="rounded-full bg-[color:var(--color-surface-3)] px-2 py-0.5">/{c.slug}</span>
+                {c.meetingDay && <span className="rounded-full bg-[color:var(--color-surface-3)] px-2 py-0.5">{c.meetingDay}, {c.meetingTime}</span>}
+                {c.telegramUrl && <span className="rounded-full bg-[color:var(--color-surface-3)] px-2 py-0.5">Telegram ulangan</span>}
               </div>
             </div>
           </Panel>

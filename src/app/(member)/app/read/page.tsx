@@ -79,7 +79,7 @@ export default async function ReadPage() {
               return (
                 <li key={m.id} className="flex items-start gap-2.5">
                   {complete ? (
-                    <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#2f6d43]" />
+                    <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[color:var(--color-success)]" />
                   ) : (
                     <Circle size={15} className="mt-0.5 shrink-0 text-[color:var(--color-muted-soft)]" />
                   )}

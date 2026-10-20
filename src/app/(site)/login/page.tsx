@@ -52,7 +52,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
 
         <div className="mt-6 rounded-[14px] border border-[color:var(--color-line)] bg-white p-5">
           <h2 className="flex items-center gap-2 text-[13.5px] font-semibold">
-            <ShieldCheck size={15} className="text-[#104070]" /> Boshqaruv uchun
+            <ShieldCheck size={15} className="text-[color:var(--color-link)]" /> Boshqaruv uchun
           </h2>
           <p className="mt-1.5 text-[12.5px] leading-relaxed text-[color:var(--color-muted)]">
             Klub rahbari, muharrir va platforma administratori email va parol bilan kiradi.
@@ -65,16 +65,16 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
 
       <div className="space-y-4">
         {demoEnabled && (
-          <div className="rounded-[16px] border border-amber-200 bg-amber-50/60 p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-800">Demo kirish</p>
-            <p className="mt-1.5 text-[12.5px] leading-relaxed text-amber-900/80">
+          <div className="rounded-[16px] border border-[color:var(--color-warning-line)] bg-[color:var(--color-warning-bg)]/60 p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-warning)]">Demo kirish</p>
+            <p className="mt-1.5 text-[12.5px] leading-relaxed text-[color:var(--color-warning)]/80">
               Sandbox uchun. Parolni bilmasdan rollarni ko‘rish imkoniyati. Productionda o‘chiriladi.
             </p>
             <div className="mt-4 space-y-2">
               {demoAccounts.map((u) => (
                 <form key={u.email} action={demoLoginAction}>
                   <input type="hidden" name="email" value={u.email ?? ""} />
-                  <button className="flex w-full items-center justify-between rounded-[10px] border border-amber-200 bg-white px-3.5 py-2.5 text-left text-[12.5px] font-medium text-amber-950 hover:border-amber-400">
+                  <button className="flex w-full items-center justify-between rounded-[10px] border border-[color:var(--color-warning-line)] bg-white px-3.5 py-2.5 text-left text-[12.5px] font-medium text-[color:var(--color-warning)] hover:border-[color:var(--color-warning)]">
                     <span>
                       {u.firstName} ·{" "}
                       {u.role === "SUPER_ADMIN" ? "Platforma admini" : u.role === "CLUB_ADMIN" ? "Klub rahbari" : "Talaba"}

@@ -17,7 +17,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Mini-ilova navigatsiyasi"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--color-line)] bg-white/95 backdrop-blur-md"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--color-line)] bg-[color:var(--color-surface)]/95 backdrop-blur-md"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto grid max-w-[560px] grid-cols-4">
@@ -30,7 +30,7 @@ export function BottomNav() {
               href={item.href}
               className={cn(
                 "flex flex-col items-center gap-1 py-2.5 text-[10.5px] font-semibold transition-colors",
-                active ? "text-[color:var(--club-accent)]" : "text-[color:var(--color-muted)]",
+                active ? "text-[color:var(--club-accent-ink)]" : "text-[color:var(--color-muted)]",
               )}
               aria-current={active ? "page" : undefined}
             >

@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { AdminSidebar } from "@/components/admin/sidebar";
 import { Logo } from "@/components/site/logo";
 import { Avatar } from "@/components/ui/primitives";
+import { ThemeToggle } from "@/components/site/theme-toggle";
 
 export const metadata: Metadata = { title: { default: "Boshqaruv", template: "%s · Boshqaruv" }, robots: { index: false } };
 
@@ -21,8 +22,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   });
 
   return (
-    <div className="min-h-dvh bg-[#eef1f4]">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[236px] flex-col bg-[#0b1f33] lg:flex">
+    <div className="min-h-dvh bg-[color:var(--color-paper)]">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[236px] flex-col bg-[color:var(--color-plate)] lg:flex">
         <div className="border-b border-white/10 px-4 py-4">
           <Logo invert compact />
           <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-white/40">Boshqaruv paneli</p>
@@ -47,7 +48,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </aside>
 
       <div className="lg:pl-[236px]">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[color:var(--color-line)] bg-white/95 px-4 backdrop-blur-md sm:px-6">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[color:var(--color-line)] bg-[color:var(--color-surface)]/95 px-4 backdrop-blur-md sm:px-6">
           <div className="flex items-center gap-3 lg:hidden">
             <Logo compact />
           </div>
@@ -57,6 +58,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <span className="text-[12px] text-[color:var(--color-muted)]">Yoshlar ittifoqi</span>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link href="/app" className="btn btn-ghost btn-sm">Mini-ilova</Link>
             <Link href="/admin/join-requests" className="relative btn btn-secondary btn-sm">
               So‘rovlar

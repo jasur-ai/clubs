@@ -36,7 +36,7 @@ export default async function SettingsPage() {
             {env.map(([key, ok]) => (
               <div key={key} className="flex items-center justify-between px-4 py-2.5">
                 <code className="text-[11.5px] text-[color:var(--color-ink-soft)]">{key}</code>
-                <span className={`text-[10.5px] font-semibold ${ok ? "text-[#2f6d43]" : "text-[#8f3b3b]"}`}>{ok ? "o‘rnatilgan" : "yo‘q"}</span>
+                <span className={`text-[10.5px] font-semibold ${ok ? "text-[color:var(--color-success)]" : "text-[color:var(--color-danger)]"}`}>{ok ? "o‘rnatilgan" : "yo‘q"}</span>
               </div>
             ))}
           </div>

@@ -79,7 +79,7 @@ export default async function ReadingAdminPage({ searchParams }: { searchParams:
             key={c.id}
             href={`/admin/reading?club=${c.slug}`}
             className={`rounded-full border px-3 py-1.5 text-[11.5px] font-semibold ${
-              selected?.id === c.id ? "border-[#0b1f33] bg-[#0b1f33] text-white" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]"
+              selected?.id === c.id ? "border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-paper)]" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]"
             }`}
           >
             {c.name}
@@ -97,7 +97,7 @@ export default async function ReadingAdminPage({ searchParams }: { searchParams:
       <div className="space-y-3">
         {cycles.map((c) => (
           <Panel key={c.id} title={c.book.title} meta={c.book.author}>
-            <div className="flex flex-wrap items-center gap-2 border-b border-[color:var(--color-line)] bg-[#fafbfc] px-4 py-2">
+            <div className="flex flex-wrap items-center gap-2 border-b border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] px-4 py-2">
               <StatusPill status={c.status} />
               <span className="text-[11px] text-[color:var(--color-muted)]">
                 {c.startsAt ? formatDate(c.startsAt, "d MMM") : "—"} → {c.meetingAt ? formatDate(c.meetingAt, "d MMM, HH:mm") : "—"}

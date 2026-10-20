@@ -84,7 +84,7 @@ export default async function AppHome() {
               </div>
             </div>
           </div>
-          <Link href="/app/read" className="flex items-center justify-between border-t border-[color:var(--color-line)] bg-[#fbfcfd] px-4 py-2.5 text-[12px] font-semibold">
+          <Link href="/app/read" className="flex items-center justify-between border-t border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] px-4 py-2.5 text-[12px] font-semibold">
             <span>Progressni yangilash</span>
             <ArrowRight size={14} />
           </Link>
@@ -126,7 +126,7 @@ export default async function AppHome() {
                     </p>
                   </div>
                   {mine && (
-                    <span className="shrink-0 rounded-full bg-[#eef7f0] px-2 py-0.5 text-[10px] font-semibold text-[#2f6d43]">
+                    <span className="shrink-0 rounded-full bg-[#eef7f0] px-2 py-0.5 text-[10px] font-semibold text-[color:var(--color-success)]">
                       {mine.status === "GOING" ? "Boraman" : "Ehtimol"}
                     </span>
                   )}
@@ -160,7 +160,7 @@ export default async function AppHome() {
       </section>
 
       {club && (
-        <div className="flex items-center gap-3 rounded-[14px] bg-[#0b1f33] p-4 text-white">
+        <div className="flex items-center gap-3 rounded-[14px] bg-[color:var(--color-plate)] p-4 text-white">
           <Avatar first={user.firstName} last={user.lastName} src={user.photoUrl} size={34} />
           <div className="min-w-0 flex-1">
             <p className="truncate text-[12.5px] font-semibold">{club.name}</p>

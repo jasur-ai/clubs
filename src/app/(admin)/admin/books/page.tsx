@@ -43,7 +43,7 @@ export default async function AdminBooksPage({ searchParams }: { searchParams: P
             key={c.id}
             href={`/admin/books?club=${c.slug}`}
             className={`rounded-full border px-3 py-1.5 text-[11.5px] font-semibold ${
-              selected?.id === c.id ? "border-[#0b1f33] bg-[#0b1f33] text-white" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]"
+              selected?.id === c.id ? "border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-paper)]" : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)]"
             }`}
           >
             {c.name}
@@ -66,7 +66,7 @@ export default async function AdminBooksPage({ searchParams }: { searchParams: P
                   </FormDialog>
                   <form action={deleteBookAction}>
                     <input type="hidden" name="id" value={b.id} />
-                    <button className="btn btn-ghost btn-sm text-[#8f3b3b]" aria-label={`${b.title} ni o‘chirish`}>
+                    <button className="btn btn-ghost btn-sm text-[color:var(--color-danger)]" aria-label={`${b.title} ni o‘chirish`}>
                       <Trash2 size={13} />
                     </button>
                   </form>

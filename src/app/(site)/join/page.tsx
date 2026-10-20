@@ -52,7 +52,7 @@ export default async function JoinPage({ searchParams }: { searchParams: Promise
 function Step({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return (
     <li className="flex gap-3">
-      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--color-line)] bg-white text-[#104070]">
+      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--color-line)] bg-white text-[color:var(--color-link)]">
         {icon}
       </span>
       <div>

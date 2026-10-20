@@ -94,7 +94,7 @@ function FilterChip({ href, label, active }: { href: string; label: string; acti
       className={cn(
         "whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors",
         active
-          ? "border-[#104070] bg-[#104070] text-white"
+          ? "border-[#104070] bg-[color:var(--color-navy)] text-white"
           : "border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-line-strong)]",
       )}
     >

@@ -60,14 +60,14 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
       />
 
       <div className="hide-scrollbar fade-x mb-4 flex items-center gap-1.5 overflow-x-auto pb-1">
-        <a href="/admin/members" className={`rounded-full px-3 py-1.5 text-[11.5px] font-semibold ${!params.club ? "bg-[#0b1f33] text-white" : "bg-white text-[color:var(--color-ink-soft)] border border-[color:var(--color-line)]"}`}>
+        <a href="/admin/members" className={`rounded-full px-3 py-1.5 text-[11.5px] font-semibold ${!params.club ? "bg-[color:var(--color-ink)] text-[color:var(--color-paper)]" : "bg-white text-[color:var(--color-ink-soft)] border border-[color:var(--color-line)]"}`}>
           Barchasi
         </a>
         {clubs.map((c) => (
           <a
             key={c.slug}
             href={`/admin/members?club=${c.slug}`}
-            className={`rounded-full px-3 py-1.5 text-[11.5px] font-semibold ${params.club === c.slug ? "bg-[#0b1f33] text-white" : "bg-white text-[color:var(--color-ink-soft)] border border-[color:var(--color-line)]"}`}
+            className={`rounded-full px-3 py-1.5 text-[11.5px] font-semibold ${params.club === c.slug ? "bg-[color:var(--color-ink)] text-[color:var(--color-paper)]" : "bg-white text-[color:var(--color-ink-soft)] border border-[color:var(--color-line)]"}`}
           >
             {c.name}
           </a>
@@ -78,7 +78,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">
             <thead>
-              <tr className="border-b border-[color:var(--color-line)] bg-[#fafbfc] text-[10.5px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
+              <tr className="border-b border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] text-[10.5px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
                 <th className="px-4 py-2.5 font-semibold">Talaba</th>
                 <th className="px-4 py-2.5 font-semibold">Klub</th>
                 <th className="px-4 py-2.5 font-semibold">Rol</th>
@@ -89,7 +89,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
             </thead>
             <tbody>
               {memberships.map((m) => (
-                <tr key={m.id} className="border-b border-[color:var(--color-line)] last:border-0 hover:bg-[#fafbfc]">
+                <tr key={m.id} className="border-b border-[color:var(--color-line)] last:border-0 hover:bg-[color:var(--color-surface-2)]">
                   <td className="px-4 py-2.5">
                     <div className="flex items-center gap-2.5">
                       <Avatar first={m.user.firstName} last={m.user.lastName} src={m.user.photoUrl} size={28} />
@@ -168,7 +168,7 @@ async function PlatformRoles() {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[620px] text-left">
           <thead>
-            <tr className="border-b border-[color:var(--color-line)] bg-[#fafbfc] text-[10.5px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
+            <tr className="border-b border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] text-[10.5px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
               <th className="px-4 py-2.5 font-semibold">Foydalanuvchi</th>
               <th className="px-4 py-2.5 font-semibold">Klublar</th>
               <th className="px-4 py-2.5 font-semibold">Platforma roli</th>

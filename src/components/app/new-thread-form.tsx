@@ -16,7 +16,7 @@ export function NewThreadForm({ clubs }: { clubs: Array<{ id: string; name: stri
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0b1f33]/40 p-0 sm:items-center sm:p-4" onClick={() => setOpen(false)}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[color:var(--color-plate)]/40 p-0 sm:items-center sm:p-4" onClick={() => setOpen(false)}>
       <div className="w-full max-w-[480px] rounded-t-[18px] bg-white p-5 sm:rounded-[18px]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-[20px]">Yangi mavzu</h2>

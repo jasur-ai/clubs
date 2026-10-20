@@ -58,7 +58,7 @@ export default async function AdminDashboard() {
           return (
             <Link key={s.label} href={s.href} className="group rounded-[12px] border border-[color:var(--color-line)] bg-white p-4 transition-colors hover:border-[color:var(--color-line-strong)]">
               <div className="flex items-center justify-between">
-                <span className={`inline-flex h-8 w-8 items-center justify-center rounded-[8px] ${s.accent ? "bg-[#fdf3e7] text-[#8a5a14]" : "bg-[#eef2f7] text-[#104070]"}`}>
+                <span className={`inline-flex h-8 w-8 items-center justify-center rounded-[8px] ${s.accent ? "bg-[#fdf3e7] text-[color:var(--color-warning)]" : "bg-[color:var(--color-surface-3)] text-[color:var(--color-link)]"}`}>
                   <Icon size={15} />
                 </span>
                 <ArrowUpRight size={14} className="text-[color:var(--color-muted-soft)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -71,7 +71,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <Panel title="So‘nggi arizalar" action={<Link href="/admin/join-requests" className="text-[11.5px] font-semibold text-[#104070]">Barchasi</Link>}>
+        <Panel title="So‘nggi arizalar" action={<Link href="/admin/join-requests" className="text-[11.5px] font-semibold text-[color:var(--color-link)]">Barchasi</Link>}>
           {requests.map((r) => (
             <div key={r.id} className="flex items-center gap-3 border-b border-[color:var(--color-line)] px-4 py-3 last:border-0">
               <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: r.club.accent }} />

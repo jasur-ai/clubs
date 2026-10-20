@@ -81,7 +81,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 </div>
               </div>
               <h1 className="display mt-4 text-[40px] leading-[1.03] sm:text-[54px]">{club.name}</h1>
-              <p className="mt-3 font-serif text-[20px] leading-snug text-[color:var(--club-accent)]">{club.tagline}</p>
+              <p className="mt-3 font-serif text-[20px] leading-snug text-[color:var(--club-accent-ink)]">{club.tagline}</p>
               <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-[color:var(--color-muted)]">{club.summary}</p>
 
               <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-[color:var(--color-ink-soft)]">
@@ -152,7 +152,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <div className="flex items-center justify-between">
                   <span className="text-[color:var(--color-muted)]">Telegram</span>
                   {club.telegramUrl ? (
-                    <a href={club.telegramUrl} target="_blank" rel="noreferrer" className="font-semibold text-[color:var(--club-accent)]">
+                    <a href={club.telegramUrl} target="_blank" rel="noreferrer" className="font-semibold text-[color:var(--club-accent-ink)]">
                       @{club.telegramUrl.split("/").pop()}
                     </a>
                   ) : (
@@ -206,7 +206,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
 
       {/* current reading */}
       {isBookClub && cycle && (
-        <section className="border-y border-[color:var(--color-line)] bg-[#fbfcfd]">
+        <section className="border-y border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
           <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
             <SectionHeading
               eyebrow="Joriy o‘qish"
@@ -258,7 +258,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <ol className="mt-4 space-y-4">
                   {cycle.milestones.map((m, i) => (
                     <li key={m.id} className="flex gap-3">
-                      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[color:var(--club-accent)] text-[11px] font-semibold text-[color:var(--club-accent)]">
+                      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[color:var(--club-accent)] text-[11px] font-semibold text-[color:var(--club-accent-ink)]">
                         {i + 1}
                       </span>
                       <div>
@@ -355,7 +355,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
 
       {/* team */}
       {club.memberships.length > 0 && (
-        <section className="border-y border-[color:var(--color-line)] bg-[#fbfcfd]">
+        <section className="border-y border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
           <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
             <SectionHeading eyebrow="Jamoa" title="Klub rahbariyati" />
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
