@@ -11,7 +11,14 @@ export async function register() {
   if (process.env.SKIP_PALETTE_SYNC !== "1") {
     try {
       const { syncPalette } = await import("@/lib/palette-sync");
-      await syncPalette();
+      const changed = await syncPalette();
+      // A palette change invalidates anything Next prerendered with the old
+      // values; drop those entries so the first visitor can't receive stale
+      // markup that then mismatches on hydration.
+      if (changed > 0) {
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/", "layout");
+      }
     } catch (error) {
       console.error("[palette] sync failed", error);
     }
