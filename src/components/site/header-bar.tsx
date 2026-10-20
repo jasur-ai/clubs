@@ -20,9 +20,30 @@ export function HeaderBar({ authed }: { authed: boolean }) {
   const scrolled = useScrolled(10);
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -39,6 +60,11 @@ export function HeaderBar({ authed }: { authed: boolean }) {
 
   return (
     <header className="site-header" data-scrolled={scrolled} data-open={open}>
+      <span
+        aria-hidden
+        className="scroll-progress"
+        style={{ transform: `scaleX(${progress})` }}
+      />
       <div className="mx-auto flex h-[var(--header-h)] w-full max-w-[1180px] items-center justify-between gap-6 px-4 sm:px-6">
         <div className="flex items-center gap-9">
           <Logo />

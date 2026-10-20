@@ -88,6 +88,19 @@ export function YoshlarIttifoqiLockup({
   height?: number;
   label?: string;
 }) {
+  if (height < 44) {
+    // Small sizes: the emblem stays readable, the wordmark would not — show the emblem only.
+    return (
+      <span className={cn("inline-flex items-center gap-2.5", className)}>
+        <SwooshMark size={height} />
+        <span className="text-[10px] font-semibold uppercase leading-[1.35] tracking-[0.14em] text-white/60">
+          O‘zbekiston
+          <br />
+          Yoshlar ittifoqi
+        </span>
+      </span>
+    );
+  }
   return (
     <span className={cn("inline-flex items-center", className)} style={{ height }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}

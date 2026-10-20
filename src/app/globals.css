@@ -861,7 +861,7 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in oklab, var(--color-paper) 78%, transparent);
+  background: color-mix(in oklab, var(--color-paper) 82%, transparent);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-bottom: 1px solid transparent;
@@ -869,12 +869,26 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
 }
 .site-header[data-scrolled="true"] {
   border-bottom-color: var(--color-line);
-  background: color-mix(in oklab, var(--color-paper) 92%, transparent);
+  background: color-mix(in oklab, var(--color-paper) 96%, transparent);
   box-shadow: 0 14px 34px -30px rgb(11 20 38 / 0.55);
 }
 .site-header[data-open="true"] {
   background: var(--color-paper);
   border-bottom-color: var(--color-line);
+}
+
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1.5px;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: var(--brand-gradient);
+  opacity: 0.85;
+  pointer-events: none;
+  will-change: transform;
 }
 
 .menu-btn {
@@ -977,7 +991,21 @@ html[data-theme="dark"] .theme-ico-dark {
   transform: rotate(12deg);
 }
 @media (min-width: 1024px) {
-  .menu-btn {
+  .scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1.5px;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: var(--brand-gradient);
+  opacity: 0.85;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.menu-btn {
     display: none;
   }
 }
