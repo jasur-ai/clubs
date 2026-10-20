@@ -15,7 +15,7 @@ import { BookCard, NewsCard } from "@/components/site/cards";
 import { CoverArt } from "@/components/ui/cover-art";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { Badge, ProgressBar } from "@/components/ui/primitives";
-import { BrandRibbon, SwooshMark, YoshlarIttifoqiLockup } from "@/components/brand/marks";
+import { YoshlarIttifoqiLockup } from "@/components/brand/marks";
 import { Counter } from "@/components/site/motion";
 import { CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
 import { formatDate, relativeDate, timeRange } from "@/lib/format";
@@ -58,17 +58,6 @@ export default async function HomePage() {
       {/* ------------------------------------------------------------------ hero */}
       <section className="hero-shell grain relative border-b border-[color:var(--color-line)]">
         <div aria-hidden className="contour-field" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-[8%] -top-[10%] hidden h-[122%] w-[68%] sm:block"
-          style={{
-            maskImage: "linear-gradient(105deg, transparent 34%, #000 62%)",
-            WebkitMaskImage: "linear-gradient(105deg, transparent 34%, #000 62%)",
-            opacity: 0.85,
-          }}
-        >
-          <BrandRibbon className="h-full w-full" />
-        </div>
         <div aria-hidden className="bloom-blue -right-28 -top-32 h-[240px] w-[240px] opacity-70 drift sm:h-[420px] sm:w-[420px] sm:opacity-100" />
         <div aria-hidden className="bloom-green -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
 
@@ -343,10 +332,15 @@ export default async function HomePage() {
                   background: `radial-gradient(110% 90% at 100% 0%, ${featured.accent}22 0%, transparent 62%)`,
                 }}
               />
-              <SwooshMark
-                size={280}
-                className="pointer-events-none absolute -bottom-24 -right-16 opacity-[0.05] transition-opacity duration-700 group-hover:opacity-[0.09]"
-              />
+              {featured.logoUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={featured.logoUrl}
+                  alt=""
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-16 -right-10 w-[260px] opacity-[0.07] transition-opacity duration-700 group-hover:opacity-[0.12]"
+                />
+              ) : null}
               <div className="relative">
                 <div className="flex items-start justify-between">
                   <span className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
@@ -768,7 +762,7 @@ export default async function HomePage() {
                 <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/40">
                   Rasmiy loyiha
                 </p>
-                <YoshlarIttifoqiLockup height={52} className="mt-3" />
+                <YoshlarIttifoqiLockup height={72} className="mt-4" />
                 <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

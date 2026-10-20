@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/site/logo";
-import { YoshlarIttifoqiLockup } from "@/components/brand/marks";
+import { YiSignature } from "@/components/brand/marks";
 
 export function SiteFooter() {
   return (
@@ -19,7 +19,7 @@ export function SiteFooter() {
               <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/35">
                 Hamkor
               </p>
-              <YoshlarIttifoqiLockup height={40} className="mt-2.5" />
+              <YiSignature emblem={30} className="mt-2.5 text-white/55" />
             </div>
           </div>
 

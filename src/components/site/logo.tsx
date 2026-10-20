@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { SwooshMark } from "@/components/brand/marks";
+import { YiEmblem } from "@/components/brand/marks";
 
 export function Logo({
   className,
@@ -17,10 +17,12 @@ export function Logo({
       className={cn("group inline-flex items-center gap-2.5", className)}
       aria-label="TDIU Clubs — bosh sahifa"
     >
-      <SwooshMark
-        size={compact ? 26 : 30}
-        className="shrink-0 transition-transform duration-500 ease-out group-hover:-rotate-6"
-      />
+      <span
+        className="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[7px] bg-[#0d1646] transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+        style={{ width: compact ? 28 : 34, height: compact ? 28 : 34 }}
+      >
+        <YiEmblem style={{ height: compact ? 20 : 24, width: "auto" }} />
+      </span>
       <span className="flex flex-col whitespace-nowrap leading-none">
         <span
           className={cn(

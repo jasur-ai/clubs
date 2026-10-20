@@ -38,7 +38,13 @@ export const metadata: Metadata = {
     url: siteUrl,
   },
   robots: { index: true, follow: true },
-  icons: { icon: "/icon.svg" },
+  icons: {
+    icon: [
+      { url: "/brand/yi-icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/yi-icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/yi-icon-180.png", sizes: "180x180" }],
+  },
 };
 
 export const viewport: Viewport = {
