@@ -12,6 +12,16 @@ export function RevealObserver() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Keep the theme attribute authoritative across client-side route changes.
+    try {
+      const saved = localStorage.getItem("tdiu-theme");
+      const want = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const next = want ? "dark" : "light";
+      if (document.documentElement.dataset.theme !== next) document.documentElement.dataset.theme = next;
+    } catch {
+      /* storage blocked */
+    }
+
     const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.is-in)"));
     if (!nodes.length) return;
 
