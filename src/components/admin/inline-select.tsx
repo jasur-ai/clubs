@@ -27,7 +27,7 @@ export function InlineSelect({
       defaultValue={defaultValue}
       aria-label={label}
       onChange={() => ref.current?.form?.requestSubmit()}
-      className={className ?? "h-8 rounded-[6px] border border-[color:var(--color-line)] bg-white px-2 text-[11.5px] text-[color:var(--color-ink-soft)] focus:border-[#104070] focus:outline-none"}
+      className={className ?? "h-8 rounded-[6px] border border-[color:var(--color-line)] bg-white px-2 text-[11.5px] text-[color:var(--color-ink-soft)] focus:border-[#17804a] focus:outline-none"}
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>

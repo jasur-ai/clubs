@@ -66,14 +66,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
             <div>
               <div className="flex items-center gap-4">
-                <ClubLogo
-                  name={club.name}
-                  logoUrl={club.logoUrl}
-                  accent={club.accent}
-                  size={72}
-                  rounded="rounded-[14px]"
-                  className="shadow-[0_6px_20px_rgba(11,31,51,0.08)]"
-                />
+                <ClubLogo name={club.name} logoUrl={club.logoUrl} accent={club.accent} size={60} />
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="accent">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
                   <Badge tone="neutral">{club._count.memberships} a’zo</Badge>

@@ -81,7 +81,7 @@ export function JoinForm({ clubs, defaultClub }: { clubs: Club[]; defaultClub?: 
       </div>
 
       <label className="mt-5 flex items-start gap-3 text-[12.5px] leading-relaxed text-[color:var(--color-muted)]">
-        <input type="checkbox" name="consent" className="mt-0.5 h-4 w-4 accent-[#104070]" required />
+        <input type="checkbox" name="consent" className="mt-0.5 h-4 w-4 accent-[#17804a]" required />
         <span>Ma’lumotlarim klub a’zolik jarayoni uchun ishlatilishiga roziman.</span>
       </label>
       {state.fieldErrors?.consent && (

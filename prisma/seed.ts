@@ -39,8 +39,10 @@ async function main() {
   // stored in /public/clubs/<slug>.jpg. A club without artwork keeps the
   // typographic monogram, so the seed stays safe on a clean checkout.
   const logoFor = (slug: string) => {
-    const file = join(process.cwd(), "public", "clubs", `${slug}.jpg`);
-    return existsSync(file) ? `/clubs/${slug}.jpg` : null;
+    const png = join(process.cwd(), "public", "clubs", `${slug}.png`);
+    if (existsSync(png)) return `/clubs/${slug}.png`;
+    const jpg = join(process.cwd(), "public", "clubs", `${slug}.jpg`);
+    return existsSync(jpg) ? `/clubs/${slug}.jpg` : null;
   };
 
   const clubMap = new Map<string, string>();
@@ -203,8 +205,8 @@ async function main() {
       genre: "Satira",
       description:
         "Professor Preobrajenskiyning tajribasi natijasida oddiy it inson qiyofasiga kiradi. Asar ilm, axloq va mas’uliyat chegaralari haqida.",
-      from: "#1c3f66",
-      to: "#4b7aa8",
+      from: "#4a3a2c",
+      to: "#946e42",
     },
     {
       title: "Ikki eshik orasi",
@@ -225,8 +227,8 @@ async function main() {
       genre: "Povest",
       description:
         "Byurokratiya va tartibsizlik ichida yo‘qolgan inson haqidagi grotesk povest. Navbatdagi muhokama uchun tanlangan asar.",
-      from: "#3a2f4a",
-      to: "#6d5a8a",
+      from: "#4b3240",
+      to: "#8a5c66",
     },
     {
       title: "Sayyohi hindi",
@@ -245,8 +247,8 @@ async function main() {
       pages: 432,
       genre: "Roman",
       description: "Buyuk shoir hayoti va davri haqidagi tarixiy-biografik roman.",
-      from: "#104070",
-      to: "#2070d0",
+      from: "#3d4a2a",
+      to: "#7d8f4e",
     },
     {
       title: "Ufq trilogiyasi",
@@ -265,8 +267,8 @@ async function main() {
       pages: 560,
       genre: "Roman",
       description: "Zahiriddin Muhammad Bobur hayoti haqidagi roman.",
-      from: "#1f3f5a",
-      to: "#43769c",
+      from: "#2f4038",
+      to: "#6d8a74",
     },
     {
       title: "Sarob",
@@ -275,8 +277,8 @@ async function main() {
       pages: 320,
       genre: "Roman",
       description: "Yangi hayot qurilishi davridagi qarama-qarshiliklar haqida.",
-      from: "#3f4a5a",
-      to: "#71839b",
+      from: "#4a463c",
+      to: "#8a7f5f",
     },
     {
       title: "Otamdan qolgan dalalar",
@@ -295,8 +297,8 @@ async function main() {
       pages: 512,
       genre: "Drama",
       description: "Bilim va vasvasa, tanlov va javobgarlik haqidagi klassik asar.",
-      from: "#2a2a3a",
-      to: "#57577a",
+      from: "#38352b",
+      to: "#6f6a52",
     },
     {
       title: "Iqrornoma",
@@ -315,8 +317,8 @@ async function main() {
       pages: 800,
       genre: "Sarguzasht",
       description: "Adolat, qasos va sabr haqidagi mashhur roman.",
-      from: "#143a52",
-      to: "#2f6f92",
+      from: "#3a2f2a",
+      to: "#7a5f4a",
     },
     {
       title: "G‘arbiy frontda o‘zgarish yo‘q",
@@ -335,8 +337,8 @@ async function main() {
       pages: 352,
       genre: "Roman",
       description: "Xotira, yo‘qotish va insoniylik haqidagi falsafiy asar.",
-      from: "#2f3f5a",
-      to: "#5a759b",
+      from: "#43362a",
+      to: "#8a6a45",
     },
   ];
 
@@ -515,8 +517,8 @@ async function main() {
       endsAt: at(5, 15),
       location: "Asosiy kampus, 2-bino, 207-xona",
       capacity: 60,
-      from: "#1c3f66",
-      to: "#4b7aa8",
+      from: "#4a3a2c",
+      to: "#946e42",
       status: "PUBLISHED",
     },
     {
@@ -528,8 +530,8 @@ async function main() {
       startsAt: at(19, 14),
       location: "Asosiy kampus, 7-bino, 206-xona",
       capacity: 50,
-      from: "#3a2f4a",
-      to: "#6d5a8a",
+      from: "#4b3240",
+      to: "#8a5c66",
       status: "PUBLISHED",
     },
     {
@@ -553,8 +555,8 @@ async function main() {
       type: "contest",
       startsAt: at(6, 14),
       location: "Asosiy kampus, Zakovat zali",
-      from: "#104070",
-      to: "#2070d0",
+      from: "#3d4a2a",
+      to: "#7d8f4e",
       status: "PUBLISHED",
     },
     {
@@ -670,8 +672,8 @@ async function main() {
         "Bir oylik o‘qish yakunida talabalar asar qahramonlari va muallifning savollari atrofida ochiq suhbat o‘tkazdi.",
       body:
         "Book Clubning Bookonomics loyihasi doirasida Mixail Bulgakovning “It yurak” asari muhokama qilindi.\n\nSuhbat davomida ishtirokchilar asardagi ilm va mas’uliyat chegaralari, Preobrajenskiyning tanlovi va Sharikning taqdiri haqida fikr almashdilar. Muhokama oldindan e’lon qilingan uchta yo‘nalish bo‘yicha kichik guruhlarda davom etdi.\n\nKeyingi son uchun “Dyavoliada” tanlandi. Ro‘yxatdan o‘tish klub kanalida ochiq.",
-      from: "#1c3f66",
-      to: "#4b7aa8",
+      from: "#4a3a2c",
+      to: "#946e42",
       publishedAt: at(-2, 18),
     },
     {
@@ -703,8 +705,8 @@ async function main() {
         "Yangi o‘quv yili boshida klub jamoasi ochiq team building o‘tkazdi. Ishtirokchilar jamoaviy o‘yinlar va muhokamalarda qatnashdi.",
       body:
         "Book Club yangi o‘quv yilini ochiq team building bilan boshladi.\n\nAsosiy kampusning piknik zonasida o‘tkazilgan tadbirda 250 dan ortiq talaba qatnashdi. Ishtirokchilar jamoaviy o‘yinlar, kitob almashinuvi va tanishuv sessiyalarida ishtirok etdi.\n\nKlub har oy shunday ochiq tadbirlarni o‘tkazishni rejalashtirgan.",
-      from: "#104070",
-      to: "#2070d0",
+      from: "#3d4a2a",
+      to: "#7d8f4e",
       publishedAt: at(-29, 16),
     },
     {
@@ -714,7 +716,7 @@ async function main() {
       body:
         "Toshkent davlat iqtisodiyot universiteti Times Higher Education World University Rankings 2027 reytingida 651–700-o‘rin oralig‘ini egalladi.\n\nBu natija universitetning ilm-fan va ta’lim sohasidagi izchil ishlarining natijasidir. Book Club jamoasi universitet jamoasini tabriklaydi.",
       from: "#0b1f33",
-      to: "#104070",
+      to: "#3d4a2a",
       publishedAt: at(-12, 10),
     },
   ];

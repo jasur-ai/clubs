@@ -63,7 +63,7 @@ export function BookForm({ clubs, book, defaultClubId }: { clubs: Club[]; book?:
       <div className="grid grid-cols-2 gap-3">
         <div>
           <FieldLabel>Muqova — boshlanish</FieldLabel>
-          <input type="color" name="coverFrom" defaultValue="#104070" className="h-9 w-full rounded-[6px] border border-[color:var(--color-line)] bg-white px-1" />
+          <input type="color" name="coverFrom" defaultValue="#17804a" className="h-9 w-full rounded-[6px] border border-[color:var(--color-line)] bg-white px-1" />
         </div>
         <div>
           <FieldLabel>Muqova — tugash</FieldLabel>

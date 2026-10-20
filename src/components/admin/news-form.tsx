@@ -49,7 +49,7 @@ export function NewsForm({ clubs, item, lockedClubId }: { clubs: Club[]; item?: 
         </div>
         <div>
           <FieldLabel>Muqova rangi</FieldLabel>
-          <input type="color" name="coverFrom" defaultValue="#104070" className="h-9 w-full rounded-[6px] border border-[color:var(--color-line)] bg-white px-1" />
+          <input type="color" name="coverFrom" defaultValue="#17804a" className="h-9 w-full rounded-[6px] border border-[color:var(--color-line)] bg-white px-1" />
         </div>
       </div>
       <input type="hidden" name="coverTo" value="#2070D0" />

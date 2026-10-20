@@ -22,18 +22,19 @@
 
 /* Brand constants (never inverted) ---------------------------------------- */
 :root {
-  --brand-navy: #0f1b4c;
-  --color-plate: #0b1430;
-  --color-scrim: #0b1430;
-  --brand-navy-deep: #070e26;
-  --brand-blue: #2b5bd0;
-  --brand-blue-soft: #6f95ec;
-  --brand-green: #21a04c;
-  --brand-green-deep: #0c7a37;
-  /* Two gradients: the artwork's own green→blue sweep for rules and marks, and
-     a deeper royal cut for anything that takes white text. */
-  --brand-gradient: linear-gradient(100deg, #2f63da 0%, #2148ad 100%);
-  --brand-gradient-bright: linear-gradient(100deg, #21a04c 0%, #199a9c 48%, #2b5bd0 100%);
+  /* The official swoosh is green, white and deep navy. Blue is deliberately
+     absent from the interface: green carries the brand, warm neutrals carry
+     the page. */
+  --brand-navy: #0c2418;
+  --color-plate: #0a1a12;
+  --color-scrim: #0a1a12;
+  --brand-navy-deep: #06120c;
+  --brand-accent: #17804a;
+  --brand-accent-soft: #4cc57c;
+  --brand-green: #1e9e4f;
+  --brand-green-deep: #0f6b37;
+  --brand-gradient: linear-gradient(100deg, #12803f 0%, #0b5c2e 100%);
+  --brand-gradient-bright: linear-gradient(100deg, #1e9e4f 0%, #35a95c 55%, #7cc46a 100%);
   --header-h: 68px;
 }
 
@@ -43,24 +44,24 @@
 
   /* Light is a cool porcelain, not paper white — large fields carry a blue-grey
      tint so cards, colour and the green accent all have something to sit on. */
-  --color-paper: #e8edf4;
-  --color-paper-deep: #dee5ef;
+  --color-paper: #f1f3ee;
+  --color-paper-deep: #e6eae2;
   --color-surface: #ffffff;
-  --color-surface-2: #f3f6fa;
-  --color-surface-3: #e7ecf4;
+  --color-surface-2: #f6f8f3;
+  --color-surface-3: #e9ede5;
 
-  --color-ink: #0a1630;
-  --color-ink-soft: #1f2d47;
-  --color-muted: #54627a;
-  --color-muted-soft: #6e7c92;
+  --color-ink: #0c1712;
+  --color-ink-soft: #1e2c25;
+  --color-muted: #55645b;
+  --color-muted-soft: #7b8a80;
 
-  --color-line: #d9e1ec;
-  --color-line-strong: #c2cddc;
+  --color-line: #dfe5db;
+  --color-line-strong: #c8d1c5;
 
-  --color-navy: #0f1b4c;
-  --color-blue: #2b5bd0;
-  --color-green: #178a42;
-  --color-link: #1a3f96;
+  --color-navy: #0e3b24;
+  --color-accent: #17804a;
+  --color-green: #17804a;
+  --color-link: #0f6b37;
 
   --color-success: #136b41;
   --color-success-bg: #e9f6ee;
@@ -76,9 +77,9 @@
   --tint-base: #ffffff;
   --btn-primary-bg: var(--brand-gradient);
 
-  --shadow-card: 0 1px 1px rgb(10 22 48 / 0.04), 0 14px 32px -20px rgb(10 22 48 / 0.28);
-  --shadow-lift: 0 2px 3px rgb(10 22 48 / 0.05), 0 28px 54px -30px rgb(10 22 48 / 0.4);
-  --shadow-pop: 0 24px 70px -30px rgb(10 22 48 / 0.45);
+  --shadow-card: 0 1px 1px rgb(12 23 18 / 0.04), 0 14px 32px -20px rgb(12 23 18 / 0.26);
+  --shadow-lift: 0 2px 3px rgb(12 23 18 / 0.05), 0 28px 54px -30px rgb(12 23 18 / 0.38);
+  --shadow-pop: 0 24px 70px -30px rgb(12 23 18 / 0.42);
 
   --field-ring: color-mix(in oklab, var(--club-accent) 16%, transparent);
 }
@@ -87,24 +88,24 @@
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-paper: #080f22;
-  --color-paper-deep: #050a19;
-  --color-surface: #101a34;
-  --color-surface-2: #14203d;
-  --color-surface-3: #1a2748;
+  --color-paper: #0a110e;
+  --color-paper-deep: #070c09;
+  --color-surface: #111a16;
+  --color-surface-2: #15211b;
+  --color-surface-3: #1b2a22;
 
-  --color-ink: #eef2fa;
-  --color-ink-soft: #ccd7e9;
-  --color-muted: #96a4bd;
-  --color-muted-soft: #6b7b96;
+  --color-ink: #eef4ef;
+  --color-ink-soft: #cfdad3;
+  --color-muted: #98a69d;
+  --color-muted-soft: #6d7c73;
 
-  --color-line: #1e2b49;
-  --color-line-strong: #2c3c60;
+  --color-line: #1f2d26;
+  --color-line-strong: #2c3d33;
 
-  --color-navy: #16265e;
-  --color-blue: #7ea1f6;
-  --color-green: #4ec77f;
-  --color-link: #a9c2f8;
+  --color-navy: #123d27;
+  --color-accent: #4cc57c;
+  --color-green: #4cc57c;
+  --color-link: #8ed7a9;
 
   --color-success: #6fd79b;
   --color-success-bg: #0d2a1c;
@@ -116,8 +117,8 @@ html[data-theme="dark"] {
   --color-danger-bg: #2b1412;
   --color-danger-line: #4d2420;
 
-  --tint-base: #101a34;
-  --btn-primary-bg: linear-gradient(100deg, #3a6fe8 0%, #2a51bd 100%);
+  --tint-base: #111a16;
+  --btn-primary-bg: linear-gradient(100deg, #1a9a56 0%, #0f7a41 100%);
 
   --shadow-card: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 14px 34px -22px rgb(0 0 0 / 0.8);
   --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 30px 60px -30px rgb(0 0 0 / 0.9);
@@ -165,7 +166,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-blue);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -315,7 +316,7 @@ body {
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lift);
-  border-color: color-mix(in oklab, var(--color-blue) 26%, var(--color-line-strong));
+  border-color: color-mix(in oklab, var(--color-green) 28%, var(--color-line-strong));
 }
 
 .panel-dark {
@@ -323,9 +324,9 @@ body {
   isolation: isolate;
   overflow: hidden;
   background:
-    radial-gradient(120% 120% at 92% -10%, rgb(43 91 208 / 0.52) 0%, transparent 55%),
-    radial-gradient(90% 90% at 4% 110%, rgb(33 160 76 / 0.34) 0%, transparent 58%),
-    linear-gradient(150deg, #13275e 0%, #0d1a44 46%, #0a1430 100%);
+    radial-gradient(120% 120% at 92% -10%, rgb(30 158 79 / 0.3) 0%, transparent 55%),
+    radial-gradient(90% 90% at 4% 110%, rgb(30 158 79 / 0.16) 0%, transparent 58%),
+    linear-gradient(150deg, #123024 0%, #0c1f18 46%, #091610 100%);
   color: #f2f5fb;
 }
 
@@ -388,7 +389,7 @@ body {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.22),
     inset 0 -1px 0 rgb(0 0 0 / 0.12),
-    0 12px 26px -16px rgb(16 60 120 / 0.85);
+    0 12px 26px -16px rgb(10 70 36 / 0.85);
 }
 .btn-primary:hover {
   background-position: 72% 50%;
@@ -396,10 +397,10 @@ body {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.26),
     inset 0 -1px 0 rgb(0 0 0 / 0.12),
-    0 18px 34px -18px rgb(16 60 120 / 0.9);
+    0 18px 34px -18px rgb(10 70 36 / 0.9);
 }
 .btn-primary:focus-visible {
-  outline-color: var(--color-blue);
+  outline-color: var(--color-accent);
 }
 .btn-accent {
   background-image: var(--brand-gradient);
@@ -419,8 +420,8 @@ body {
   box-shadow: 0 1px 2px rgb(10 22 48 / 0.05);
 }
 .btn-secondary:hover {
-  border-color: color-mix(in oklab, var(--color-blue) 42%, var(--color-line-strong));
-  background: color-mix(in oklab, var(--color-blue) 5%, var(--color-surface));
+  border-color: color-mix(in oklab, var(--color-green) 40%, var(--color-line-strong));
+  background: color-mix(in oklab, var(--color-green) 6%, var(--color-surface));
   color: var(--color-link);
   transform: translateY(-1px);
   box-shadow: 0 8px 18px -14px rgb(10 22 48 / 0.5);
@@ -574,6 +575,21 @@ html[data-theme="dark"] .btn-telegram:hover {
 .textarea::placeholder {
   color: var(--color-muted-soft);
 }
+/* Native selects: replace the platform arrow with one hairline chevron so the
+   control matches the rest of the system. */
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.4rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%237b8a80' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  cursor: pointer;
+}
+html[data-theme="dark"] .select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%2398a69d' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
 .input:focus,
 .select:focus,
 .textarea:focus {
@@ -655,12 +671,12 @@ html[data-theme="dark"] .btn-telegram:hover {
     repeating-radial-gradient(
       ellipse 150% 118% at 106% -14%,
       transparent 0 44px,
-      color-mix(in oklab, var(--color-blue) 26%, transparent) 44px 45px
+      color-mix(in oklab, var(--color-green) 22%, transparent) 44px 45px
     ),
     repeating-radial-gradient(
       ellipse 130% 105% at -12% 112%,
       transparent 0 58px,
-      color-mix(in oklab, var(--color-green) 24%, transparent) 58px 59px
+      color-mix(in oklab, var(--color-green) 15%, transparent) 58px 59px
     );
   opacity: 0.5;
   mask-image: radial-gradient(140% 120% at 80% 0%, #000 10%, transparent 72%);
@@ -670,24 +686,24 @@ html[data-theme="dark"] .contour-field {
   opacity: 0.4;
 }
 
-.bloom-blue,
-.bloom-green {
+.bloom-a,
+.bloom-b {
   position: absolute;
   pointer-events: none;
   border-radius: 999px;
   filter: blur(70px);
 }
-.bloom-blue {
-  background: color-mix(in oklab, var(--color-blue) 30%, transparent);
+.bloom-a {
+  background: color-mix(in oklab, var(--color-green) 22%, transparent);
 }
-.bloom-green {
+.bloom-b {
   background: color-mix(in oklab, var(--color-green) 26%, transparent);
 }
-html[data-theme="dark"] .bloom-blue {
-  background: color-mix(in oklab, var(--color-blue) 34%, transparent);
-  opacity: 0.55;
+html[data-theme="dark"] .bloom-a {
+  background: color-mix(in oklab, var(--color-green) 26%, transparent);
+  opacity: 0.5;
 }
-html[data-theme="dark"] .bloom-green {
+html[data-theme="dark"] .bloom-b {
   background: color-mix(in oklab, var(--color-green) 28%, transparent);
   opacity: 0.5;
 }
@@ -713,26 +729,26 @@ html[data-theme="dark"] .grain::after,
   isolation: isolate;
   overflow: hidden;
   background:
-    radial-gradient(56% 52% at 88% -6%, color-mix(in oklab, var(--color-blue) 11%, transparent) 0%, transparent 62%),
-    radial-gradient(46% 52% at 2% 104%, color-mix(in oklab, var(--color-green) 9%, transparent) 0%, transparent 60%),
+    radial-gradient(56% 52% at 88% -6%, color-mix(in oklab, var(--color-green) 9%, transparent) 0%, transparent 62%),
+    radial-gradient(46% 52% at 2% 104%, color-mix(in oklab, var(--color-green) 7%, transparent) 0%, transparent 60%),
     linear-gradient(180deg, color-mix(in oklab, var(--color-surface) 34%, var(--color-paper)) 0%, var(--color-paper) 86%);
 }
 html[data-theme="dark"] .hero-shell {
   background:
-    radial-gradient(56% 52% at 88% -6%, rgb(43 91 208 / 0.34) 0%, transparent 62%),
-    radial-gradient(46% 52% at 2% 104%, rgb(33 160 76 / 0.22) 0%, transparent 60%),
-    linear-gradient(180deg, #0b1530 0%, var(--color-paper) 88%);
+    radial-gradient(56% 52% at 88% -6%, rgb(30 158 79 / 0.2) 0%, transparent 62%),
+    radial-gradient(46% 52% at 2% 104%, rgb(30 158 79 / 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, #0d1a14 0%, var(--color-paper) 88%);
 }
 
 .band-dark {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #eef2fa;
+  color: #edf5ef;
   background:
-    radial-gradient(110% 130% at 100% 0%, rgb(43 91 208 / 0.5) 0%, transparent 54%),
-    radial-gradient(90% 110% at 0% 100%, rgb(33 160 76 / 0.3) 0%, transparent 56%),
-    linear-gradient(160deg, #12255c 0%, #0c1940 55%, #091230 100%);
+    radial-gradient(110% 130% at 100% 0%, rgb(30 158 79 / 0.34) 0%, transparent 54%),
+    radial-gradient(90% 110% at 0% 100%, rgb(30 158 79 / 0.16) 0%, transparent 56%),
+    linear-gradient(160deg, #10291e 0%, #0b1d16 55%, #081410 100%);
 }
 .band-dark .contour-field {
   background-image:
@@ -773,10 +789,10 @@ html[data-theme="dark"] .hero-shell {
   overflow: hidden;
   color: #f3f8ff;
   background:
-    radial-gradient(100% 130% at 96% -12%, rgb(43 91 208 / 0.45) 0%, transparent 56%),
-    radial-gradient(90% 120% at -4% 112%, rgb(33 160 76 / 0.34) 0%, transparent 58%),
-    radial-gradient(140% 120% at 50% 50%, transparent 42%, rgb(6 20 40 / 0.3) 100%),
-    linear-gradient(140deg, #0a5740 0%, #094d63 44%, #10276b 100%);
+    radial-gradient(100% 130% at 96% -12%, rgb(30 158 79 / 0.42) 0%, transparent 56%),
+    radial-gradient(90% 120% at -4% 112%, rgb(110 168 70 / 0.24) 0%, transparent 58%),
+    radial-gradient(140% 120% at 50% 50%, transparent 42%, rgb(4 18 12 / 0.35) 100%),
+    linear-gradient(140deg, #0d5d33 0%, #0a4a2c 44%, #072f1f 100%);
 }
 .band-brand .contour-field {
   background-image:
@@ -827,7 +843,7 @@ html[data-theme="dark"] .hero-shell {
   height: 1px;
   background: linear-gradient(
     90deg,
-    color-mix(in oklab, var(--color-blue) 40%, transparent),
+    color-mix(in oklab, var(--color-green) 42%, transparent),
     color-mix(in oklab, var(--color-line) 90%, transparent) 32%,
     transparent 100%
   );
@@ -837,14 +853,14 @@ html[data-theme="dark"] .hero-shell {
    without a full dark band. */
 .wash {
   background:
-    radial-gradient(70% 90% at 100% 0%, color-mix(in oklab, var(--color-blue) 6%, transparent) 0%, transparent 60%),
-    radial-gradient(60% 80% at 0% 100%, color-mix(in oklab, var(--color-green) 5%, transparent) 0%, transparent 62%),
+    radial-gradient(70% 90% at 100% 0%, color-mix(in oklab, var(--color-green) 6%, transparent) 0%, transparent 60%),
+    radial-gradient(60% 80% at 0% 100%, color-mix(in oklab, var(--color-green) 4%, transparent) 0%, transparent 62%),
     var(--color-paper);
 }
 html[data-theme="dark"] .wash {
   background:
-    radial-gradient(70% 90% at 100% 0%, rgb(43 91 208 / 0.14) 0%, transparent 60%),
-    radial-gradient(60% 80% at 0% 100%, rgb(33 160 76 / 0.1) 0%, transparent 62%),
+    radial-gradient(70% 90% at 100% 0%, rgb(30 158 79 / 0.1) 0%, transparent 60%),
+    radial-gradient(60% 80% at 0% 100%, rgb(30 158 79 / 0.07) 0%, transparent 62%),
     var(--color-paper);
 }
 
@@ -856,9 +872,9 @@ html[data-theme="dark"] .wash {
   padding: 1px;
   background: linear-gradient(
     150deg,
-    color-mix(in oklab, var(--color-blue) 26%, var(--color-line)) 0%,
-    var(--color-line) 42%,
-    color-mix(in oklab, var(--color-green) 22%, var(--color-line)) 100%
+    color-mix(in oklab, var(--color-green) 34%, var(--color-line)) 0%,
+    var(--color-line) 46%,
+    color-mix(in oklab, var(--color-green) 18%, var(--color-line)) 100%
   );
   box-shadow: var(--shadow-pop);
 }
@@ -867,6 +883,19 @@ html[data-theme="dark"] .wash {
    ground the green needs a touch of lift to hold its edge. */
 html[data-theme="dark"] .yi-bare {
   filter: brightness(1.08) saturate(1.06);
+}
+
+/* Club emblems are shown at their own proportions with no frame. Each one ships
+   a lightened twin, so the dark theme swaps the ink instead of putting a white
+   tile behind it. */
+.club-emblem-dark {
+  display: none;
+}
+html[data-theme="dark"] .club-emblem-light {
+  display: none;
+}
+html[data-theme="dark"] .club-emblem-dark {
+  display: inline-block;
 }
 
 /* Motion ------------------------------------------------------------------ */
@@ -1118,8 +1147,8 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
     box-shadow 260ms ease;
 }
 .theme-toggle:hover {
-  border-color: color-mix(in oklab, var(--color-blue) 40%, var(--color-line-strong));
-  background: color-mix(in oklab, var(--color-blue) 6%, var(--color-surface-2));
+  border-color: color-mix(in oklab, var(--color-green) 42%, var(--color-line-strong));
+  background: color-mix(in oklab, var(--color-green) 7%, var(--color-surface-2));
 }
 .theme-toggle-thumb {
   position: absolute;
@@ -1131,7 +1160,7 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
   background: var(--brand-gradient);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.35),
-    0 6px 14px -6px rgb(16 60 120 / 0.75);
+    0 6px 14px -6px rgb(10 70 36 / 0.7);
   transition: transform 420ms cubic-bezier(0.32, 0.72, 0.24, 1);
 }
 html[data-theme="dark"] .theme-toggle-thumb {
