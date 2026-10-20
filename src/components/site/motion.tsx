@@ -84,6 +84,7 @@ export function Counter({
 
     const run = () => {
       started = true;
+      setShown(0);
       const t0 = performance.now();
       const tick = (now: number) => {
         const p = Math.min(1, (now - t0) / duration);
@@ -94,7 +95,8 @@ export function Counter({
       raf = requestAnimationFrame(tick);
     };
 
-    setShown(0);
+    // The final value stays visible until the counter is actually on screen,
+    // so a missed observer can never leave a real figure reading as zero.
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting && !started) {
