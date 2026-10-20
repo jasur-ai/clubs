@@ -241,5 +241,7 @@ export function BookRow({ book, meta }: { book: BookCardBook; meta?: string }) {
 }
 
 function fmtMonth(d: Date) {
-  return d.toLocaleDateString("uz-UZ", { month: "short" }).replace(".", "");
+  // Node and the browser format uz-UZ differently; date-fns keeps the server
+  // and client markup identical so hydration never mismatches.
+  return formatDate(d, "MMM").replace(".", "");
 }

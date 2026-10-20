@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/ui/primitives";
 import { getPastEvents, getUpcomingEvents } from "@/lib/queries";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Tadbirlar",
@@ -57,7 +58,7 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
                 <Link key={e.id} href={`/events/${e.id}`} className="block border-b border-[color:var(--color-line)] pb-3 last:border-0 last:pb-0">
                   <p className="line-clamp-2 text-[13px] font-medium text-[color:var(--color-ink)]">{e.title}</p>
                   <p className="mt-1 text-[11.5px] text-[color:var(--color-muted)]">
-                    {new Date(e.startsAt).toLocaleDateString("uz-UZ", { day: "numeric", month: "long" })} · {e.club.name}
+                    {formatDate(e.startsAt, "d MMMM")} · {e.club.name}
                   </p>
                 </Link>
               ))}
