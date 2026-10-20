@@ -52,7 +52,7 @@
   --color-ink: #0a1630;
   --color-ink-soft: #1f2d47;
   --color-muted: #54627a;
-  --color-muted-soft: #7f8da3;
+  --color-muted-soft: #6e7c92;
 
   --color-line: #d9e1ec;
   --color-line-strong: #c2cddc;
@@ -974,6 +974,18 @@ html.js .reveal.is-in {
   .drift {
     animation: none;
   }
+}
+
+/* Icons -------------------------------------------------------------------
+   Lucide ships with 2px strokes; at 13–16px that reads heavy next to Manrope.
+   1.8 keeps the glyphs crisp and matches the hairline weight of the frame.
+-------------------------------------------------------------------------- */
+svg.lucide {
+  stroke-width: 1.8;
+}
+.btn svg.lucide,
+.link-quiet svg.lucide {
+  stroke-width: 1.9;
 }
 
 /* Utility ----------------------------------------------------------------- */
