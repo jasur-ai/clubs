@@ -102,7 +102,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Zakovat klubi universitet ichida to‘liq liga tizimini yuritadi: jamoalar 1- va 2-ligaga bo‘lingan, har turdan so‘ng ballar va apellyatsiya natijalari e’lon qilinadi. Eng kuchli jamoalar shahar va respublika bosqichlarida universitet sharafini himoya qiladi.",
     category: "intellectual",
-    accent: "#3f5c34",
+    accent: "#1f4a33",
     coverStyle: "grid",
     telegramUrl: "https://t.me/zakovat_quiz_tdiu",
     instagramUrl: "https://instagram.com/tdiu_zakovat_klubi",
@@ -119,7 +119,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Debate Club rasmiy munozara formatida o‘yinlar o‘tkazadi. “Ma’rifat ulashib” loyihasi doirasida har hafta yangi mavzu bo‘yicha jamoalar bellashadi. Klub notiqlik, tanqidiy fikrlash va ingliz tilida bahslashish ko‘nikmalarini rivojlantiradi.",
     category: "intellectual",
-    accent: "#5a6b2c",
+    accent: "#23513a",
     coverStyle: "lines",
     telegramUrl: "https://t.me/TDIUdebatklubi",
     meetingDay: "Payshanba",
@@ -135,7 +135,7 @@ export const clubs: ClubSeed[] = [
     description:
       "WikiClub o‘zbekcha Vikipediyani rivojlantirishga hissa qo‘shadi. Klub a’zolari maqola yaratish, manbalar bilan ishlash va faktlarni tekshirishni o‘rganadi. WikiDars darslari har hafta asosiy kampusda bo‘lib o‘tadi.",
     category: "academic",
-    accent: "#2f5d50",
+    accent: "#2f5d45",
     coverStyle: "dots",
     telegramUrl: "https://t.me/tsue_wikiclub",
     meetingDay: "Shanba",
@@ -176,7 +176,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Speaking Club ingliz tilida erkin muloqot qilish uchun muhit yaratadi. SPEAK UP loyihasi ishtirokchilarning darajasini aniqlaydi, 4X IELTS esa volontyorlik asosida to‘rt yo‘nalish bo‘yicha tizimli tayyorgarlik beradi.",
     category: "academic",
-    accent: "#7a5a22",
+    accent: "#33573f",
     coverStyle: "arc",
     telegramUrl: "https://t.me/tsuespeaking",
     instagramUrl: "https://instagram.com/tsuespeaking",
@@ -199,7 +199,7 @@ export const clubs: ClubSeed[] = [
     description:
       "IT Club texnologiyaga qiziquvchi talabalarni jamlaydi: IDEATHON, startup workshop, Cyberkent musobaqasi, IT PARK va xalqaro ekspertlar bilan uchrashuvlar. Klub startap g‘oyasini prototipga aylantirishgacha kuzatib boradi.",
     category: "academic",
-    accent: "#2f5d45",
+    accent: "#2a5236",
     coverStyle: "dots",
     telegramUrl: "https://t.me/tsueitclub",
     instagramUrl: "https://instagram.com/tsueitclub",
@@ -221,7 +221,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Networking Community tadbirkorlar, mutaxassislar va bitiruvchilar bilan bevosita muloqot uchun maydon. Biznes-nonushta, davra suhbatlari va IELTS Summit kabi tadbirlar orqali talabalar kasbiy tarmog‘ini quradi.",
     category: "academic",
-    accent: "#4a4a42",
+    accent: "#44493c",
     coverStyle: "lines",
     telegramUrl: "https://t.me/tsue_networking",
     sortOrder: 7,
@@ -234,7 +234,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Art Club rasm chizish, illyustratsiya va dizayn bilan qiziquvchilarni birlashtiradi. Klub master-klasslar, ochiq tanlovlar va fakultetlar bilan hamkorlikdagi ijodiy loyihalarni tashkil qiladi.",
     category: "creative",
-    accent: "#8a3d6b",
+    accent: "#7a3348",
     coverStyle: "arc",
     telegramUrl: "https://t.me/tsueartclub",
     sortOrder: 8,
@@ -260,7 +260,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Mushoira klubi Oliy ta’lim vazirligi tashabbusi bilan tashkil etilgan. Klub she’r yozuvchilarni birlashtiradi, “Qalb satrlari” loyihasida ijod namunalarini saralab e’lon qiladi va boshqa universitetlar bilan adabiy kechalar o‘tkazadi.",
     category: "creative",
-    accent: "#6d5a2a",
+    accent: "#5a4a2c",
     coverStyle: "lines",
     telegramUrl: "https://t.me/Mushoira_clubi",
     sortOrder: 10,
@@ -300,7 +300,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Running Club har shanba ertalab Anhor bo‘ylab birgalikda yuguradi. Klub “Coke Mile” kabi noodatiy musobaqalar va boshqa universitetlar bilan hamkorlikdagi runlarni tashkil qiladi.",
     category: "sport",
-    accent: "#1f6b57",
+    accent: "#2b5540",
     coverStyle: "lines",
     telegramUrl: "https://t.me/TSUE_Running_club",
     instagramUrl: "https://instagram.com/TSUE_Running_club",
@@ -318,7 +318,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Cybersport Club kibersport turnirlarini tashkil qiladi: EA Sports FC saralash bosqichlari, Red Bull Wings Cup universitet ligasi va o‘yin kechalari. Klub jamoalari respublika miqyosidagi musobaqalarda qatnashadi.",
     category: "sport",
-    accent: "#5c3a46",
+    accent: "#4a3b28",
     coverStyle: "grid",
     telegramUrl: "https://t.me/cybersporttsue",
     instagramUrl: "https://instagram.com/tsue_cybersport",
@@ -358,7 +358,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Students’ Union talabalarning o‘zini o‘zi boshqarish organi. Talabalar manfaatlarini ifodalaydi, fakultetlar bilan ishlaydi va Open Air Cinema kabi yirik tadbirlarni uyushtiradi.",
     category: "social",
-    accent: "#3f5c34",
+    accent: "#1f4a33",
     coverStyle: "lines",
     telegramUrl: "https://t.me/tsuesu",
     instagramUrl: "https://instagram.com/tsue.su",
@@ -372,7 +372,7 @@ export const clubs: ClubSeed[] = [
     description:
       "Lider qizlar klubi talaba-qizlarning yetakchilik salohiyatini oshiradi: forumlar, motivatsion uchrashuvlar, ilm-fan va biznesdagi ayollar mavzusidagi loyihalar.",
     category: "social",
-    accent: "#7d3b5e",
+    accent: "#6b3247",
     coverStyle: "arc",
     telegramUrl: "https://t.me/lider_qizlar",
     sortOrder: 18,
@@ -385,7 +385,7 @@ export const clubs: ClubSeed[] = [
     description:
       "International Club xorijiy talabalar bilan muloqot, madaniyatlar almashinuvi va xalqaro tadbirlarni tashkil qiladi. Klub almashinuv dasturlari haqida amaliy ma’lumot beradi.",
     category: "social",
-    accent: "#6b3f2a",
+    accent: "#24513a",
     coverStyle: "dots",
     telegramUrl: "https://t.me/tsue_international",
     sortOrder: 19,

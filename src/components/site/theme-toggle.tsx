@@ -23,7 +23,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       /* private mode */
     }
     const meta = document.querySelector('meta[name="theme-color"]:not([media])');
-    if (meta) meta.setAttribute("content", next === "dark" ? "#080f22" : "#e8edf4");
+    if (meta) meta.setAttribute("content", next === "dark" ? "#0a0f0b" : "#efece3");
   }
 
   const label = theme === "dark" ? "Yorug‘ mavzuga o‘tish" : "Tungi mavzuga o‘tish";

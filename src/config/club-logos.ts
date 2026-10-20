@@ -1,6 +1,6 @@
 /**
- * Slugs whose emblem ships a lightened twin for the dark theme. Generated
- * from /public/clubs — keep in sync when a club emblem is replaced.
+ * Slugs whose emblem ships a lightened twin for the dark theme.
+ * Generated from /public/clubs — keep in step when an emblem is replaced.
  */
 export const CLUBS_WITH_DARK_EMBLEM = new Set<string>([
   "art-club",
@@ -13,6 +13,7 @@ export const CLUBS_WITH_DARK_EMBLEM = new Set<string>([
   "iqtisodchilar",
   "it-club",
   "lider-qizlar",
+  "mushoira",
   "networking",
   "rekordlar",
   "running-club",

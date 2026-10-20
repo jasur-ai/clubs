@@ -50,7 +50,7 @@ export default async function AdminNewsPage() {
                   <p className="text-[13px] font-semibold">{n.title}</p>
                   <StatusPill status={n.status} />
                   <span className="inline-flex items-center gap-1.5 text-[10.5px] text-[color:var(--color-muted)]">
-                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: n.club?.accent ?? "#17804a" }} />
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: n.club?.accent ?? "#1f4a33" }} />
                     {n.club?.name ?? "Umumiy"}
                   </span>
                 </div>

@@ -5,6 +5,18 @@
  * Every call is idempotent and failures are logged, never fatal.
  */
 export async function register() {
+  // Presentation data (accents, emblem paths, cover colours) is derived from
+  // the repository, not hand-managed in the database. Reconcile it on boot so a
+  // deploy can never ship a page that still points at the old palette.
+  if (process.env.SKIP_PALETTE_SYNC !== "1") {
+    try {
+      const { syncPalette } = await import("@/lib/palette-sync");
+      await syncPalette();
+    } catch (error) {
+      console.error("[palette] sync failed", error);
+    }
+  }
+
   if (process.env.DISABLE_TELEGRAM_BOOTSTRAP === "1") return;
 
   const token = process.env.TELEGRAM_BOT_TOKEN;

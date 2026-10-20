@@ -20,21 +20,21 @@
   --radius-xl: 26px;
 }
 
-/* Brand constants (never inverted) ---------------------------------------- */
+/* Brand constants (never inverted) ----------------------------------------
+   The official artwork is green, white and blue; the interface deliberately
+   keeps only the green. Everything chromatic here is a shade of that green,
+   with warm neutrals (linen, brass) carrying the rest of the hierarchy.
+------------------------------------------------------------------------- */
 :root {
-  /* The official swoosh is green, white and deep navy. Blue is deliberately
-     absent from the interface: green carries the brand, warm neutrals carry
-     the page. */
-  --brand-navy: #0c2418;
-  --color-plate: #0a1a12;
-  --color-scrim: #0a1a12;
-  --brand-navy-deep: #06120c;
-  --brand-accent: #17804a;
-  --brand-accent-soft: #4cc57c;
-  --brand-green: #1e9e4f;
-  --brand-green-deep: #0f6b37;
-  --brand-gradient: linear-gradient(100deg, #12803f 0%, #0b5c2e 100%);
-  --brand-gradient-bright: linear-gradient(100deg, #1e9e4f 0%, #35a95c 55%, #7cc46a 100%);
+  --brand-green: #21a04c;
+  --brand-green-deep: #0f6b39;
+  --brand-green-ink: #0b4527;
+  --brand-brass: #9a7434;
+  --brand-gradient: linear-gradient(100deg, #14713f 0%, #0f5c33 100%);
+  --brand-gradient-bright: linear-gradient(100deg, #21a04c 0%, #15754a 52%, #0f5c33 100%);
+
+  --color-plate: #0c1a12;
+  --color-scrim: #0a140d;
   --header-h: 68px;
 }
 
@@ -42,44 +42,46 @@
 :root {
   color-scheme: light;
 
-  /* Light is a cool porcelain, not paper white — large fields carry a blue-grey
-     tint so cards, colour and the green accent all have something to sit on. */
-  --color-paper: #f1f3ee;
-  --color-paper-deep: #e6eae2;
+  /* Warm linen rather than paper white: large fields keep a little colour so
+     white cards, green rules and photographic covers all have something to
+     sit on. */
+  --color-paper: #efece3;
+  --color-paper-deep: #e5e1d6;
   --color-surface: #ffffff;
-  --color-surface-2: #f6f8f3;
-  --color-surface-3: #e9ede5;
+  --color-surface-2: #f7f5ef;
+  --color-surface-3: #eae6db;
 
-  --color-ink: #0c1712;
-  --color-ink-soft: #1e2c25;
-  --color-muted: #55645b;
-  --color-muted-soft: #7b8a80;
+  --color-ink: #131d17;
+  --color-ink-soft: #26332b;
+  --color-muted: #5a655d;
+  --color-muted-soft: #7d877f;
 
-  --color-line: #dfe5db;
-  --color-line-strong: #c8d1c5;
+  --color-line: #ded9cb;
+  --color-line-strong: #c9c3b2;
 
-  --color-navy: #0e3b24;
-  --color-accent: #17804a;
-  --color-green: #17804a;
-  --color-link: #0f6b37;
+  --color-navy: #0f4a2c;
+  --color-blue: #14713f;
+  --color-green: #14713f;
+  --color-brass: #8a6a2f;
+  --color-link: #0f5c33;
 
   --color-success: #136b41;
-  --color-success-bg: #e9f6ee;
+  --color-success-bg: #e8f5ec;
   --color-success-line: #bfe2cd;
-  --color-warning: #8a5a0b;
-  --color-warning-bg: #fbf3e3;
-  --color-warning-line: #ecd7ae;
-  --color-danger: #a3251b;
-  --color-danger-bg: #fbeceb;
-  --color-danger-line: #f0c9c4;
+  --color-warning: #7d5a11;
+  --color-warning-bg: #faf3e2;
+  --color-warning-line: #e9d6ac;
+  --color-danger: #9a2f22;
+  --color-danger-bg: #fbebe8;
+  --color-danger-line: #efc8c1;
   --color-clay: #a8492f;
 
   --tint-base: #ffffff;
   --btn-primary-bg: var(--brand-gradient);
 
-  --shadow-card: 0 1px 1px rgb(12 23 18 / 0.04), 0 14px 32px -20px rgb(12 23 18 / 0.26);
-  --shadow-lift: 0 2px 3px rgb(12 23 18 / 0.05), 0 28px 54px -30px rgb(12 23 18 / 0.38);
-  --shadow-pop: 0 24px 70px -30px rgb(12 23 18 / 0.42);
+  --shadow-card: 0 1px 1px rgb(24 30 22 / 0.04), 0 14px 32px -22px rgb(24 30 22 / 0.3);
+  --shadow-lift: 0 2px 3px rgb(24 30 22 / 0.05), 0 28px 54px -32px rgb(24 30 22 / 0.42);
+  --shadow-pop: 0 24px 70px -32px rgb(24 30 22 / 0.5);
 
   --field-ring: color-mix(in oklab, var(--club-accent) 16%, transparent);
 }
@@ -88,28 +90,30 @@
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-paper: #0a110e;
-  --color-paper-deep: #070c09;
-  --color-surface: #111a16;
-  --color-surface-2: #15211b;
-  --color-surface-3: #1b2a22;
+  /* Forest night: charcoal with a green undertone, never blue-black. */
+  --color-paper: #0a0f0b;
+  --color-paper-deep: #060a07;
+  --color-surface: #121a14;
+  --color-surface-2: #172018;
+  --color-surface-3: #1d271f;
 
-  --color-ink: #eef4ef;
-  --color-ink-soft: #cfdad3;
-  --color-muted: #98a69d;
-  --color-muted-soft: #6d7c73;
+  --color-ink: #eef1ea;
+  --color-ink-soft: #ccd4c9;
+  --color-muted: #98a297;
+  --color-muted-soft: #6f7a70;
 
-  --color-line: #1f2d26;
-  --color-line-strong: #2c3d33;
+  --color-line: #232c25;
+  --color-line-strong: #333e35;
 
-  --color-navy: #123d27;
-  --color-accent: #4cc57c;
-  --color-green: #4cc57c;
-  --color-link: #8ed7a9;
+  --color-navy: #17472e;
+  --color-blue: #6fcb93;
+  --color-green: #6fcb93;
+  --color-brass: #c9a768;
+  --color-link: #8fd8ab;
 
   --color-success: #6fd79b;
-  --color-success-bg: #0d2a1c;
-  --color-success-line: #1d4a32;
+  --color-success-bg: #0d2a1a;
+  --color-success-line: #1d4a2f;
   --color-warning: #e8bd6d;
   --color-warning-bg: #2a2110;
   --color-warning-line: #4a3a19;
@@ -117,8 +121,8 @@ html[data-theme="dark"] {
   --color-danger-bg: #2b1412;
   --color-danger-line: #4d2420;
 
-  --tint-base: #111a16;
-  --btn-primary-bg: linear-gradient(100deg, #1a9a56 0%, #0f7a41 100%);
+  --tint-base: #121a14;
+  --btn-primary-bg: linear-gradient(100deg, #1f8f52 0%, #13703f 100%);
 
   --shadow-card: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 14px 34px -22px rgb(0 0 0 / 0.8);
   --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 30px 60px -30px rgb(0 0 0 / 0.9);
@@ -126,7 +130,7 @@ html[data-theme="dark"] {
 }
 
 :root {
-  --club-accent: #0d1646;
+  --club-accent: #14713f;
   --club-accent-soft: #e8eef5;
   --club-accent-ink: var(--club-accent);
 }
@@ -166,7 +170,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-green);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -316,7 +320,7 @@ body {
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lift);
-  border-color: color-mix(in oklab, var(--color-green) 28%, var(--color-line-strong));
+  border-color: color-mix(in oklab, var(--color-green) 26%, var(--color-line-strong));
 }
 
 .panel-dark {
@@ -324,9 +328,9 @@ body {
   isolation: isolate;
   overflow: hidden;
   background:
-    radial-gradient(120% 120% at 92% -10%, rgb(30 158 79 / 0.3) 0%, transparent 55%),
-    radial-gradient(90% 90% at 4% 110%, rgb(30 158 79 / 0.16) 0%, transparent 58%),
-    linear-gradient(150deg, #123024 0%, #0c1f18 46%, #091610 100%);
+    radial-gradient(120% 120% at 92% -10%, rgb(33 160 76 / 0.26) 0%, transparent 55%),
+    radial-gradient(90% 90% at 4% 110%, rgb(154 116 52 / 0.18) 0%, transparent 58%),
+    linear-gradient(150deg, #12301f 0%, #0d2418 46%, #08170f 100%);
   color: #f2f5fb;
 }
 
@@ -389,7 +393,7 @@ body {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.22),
     inset 0 -1px 0 rgb(0 0 0 / 0.12),
-    0 12px 26px -16px rgb(10 70 36 / 0.85);
+    0 12px 26px -16px rgb(16 60 120 / 0.85);
 }
 .btn-primary:hover {
   background-position: 72% 50%;
@@ -397,10 +401,10 @@ body {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.26),
     inset 0 -1px 0 rgb(0 0 0 / 0.12),
-    0 18px 34px -18px rgb(10 70 36 / 0.9);
+    0 18px 34px -18px rgb(16 60 120 / 0.9);
 }
 .btn-primary:focus-visible {
-  outline-color: var(--color-accent);
+  outline-color: var(--color-green);
 }
 .btn-accent {
   background-image: var(--brand-gradient);
@@ -420,8 +424,8 @@ body {
   box-shadow: 0 1px 2px rgb(10 22 48 / 0.05);
 }
 .btn-secondary:hover {
-  border-color: color-mix(in oklab, var(--color-green) 40%, var(--color-line-strong));
-  background: color-mix(in oklab, var(--color-green) 6%, var(--color-surface));
+  border-color: color-mix(in oklab, var(--color-green) 42%, var(--color-line-strong));
+  background: color-mix(in oklab, var(--color-green) 5%, var(--color-surface));
   color: var(--color-link);
   transform: translateY(-1px);
   box-shadow: 0 8px 18px -14px rgb(10 22 48 / 0.5);
@@ -456,23 +460,19 @@ body {
   transform: translateY(-1px);
 }
 .btn-telegram {
-  background: #ffffff;
-  color: #1577a8;
-  border-color: color-mix(in oklab, #229ed9 34%, var(--color-line-strong));
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-color: var(--color-line-strong);
 }
 .btn-telegram:hover {
-  background: color-mix(in oklab, #229ed9 8%, #ffffff);
-  border-color: #229ed9;
-  color: #0f6a97;
+  background: color-mix(in oklab, var(--color-green) 7%, var(--color-surface));
+  border-color: color-mix(in oklab, var(--color-green) 45%, var(--color-line-strong));
+  color: var(--color-link);
 }
 html[data-theme="dark"] .btn-telegram {
-  background: rgb(34 158 217 / 0.12);
-  color: #8fd4f4;
-  border-color: rgb(34 158 217 / 0.4);
-}
-html[data-theme="dark"] .btn-telegram:hover {
-  background: rgb(34 158 217 / 0.2);
-  border-color: rgb(34 158 217 / 0.7);
+  background: color-mix(in oklab, var(--color-green) 10%, var(--color-surface));
+  color: var(--color-ink);
+  border-color: color-mix(in oklab, var(--color-green) 30%, var(--color-line-strong));
 }
 .btn-pill {
   border-radius: 999px;
@@ -575,21 +575,6 @@ html[data-theme="dark"] .btn-telegram:hover {
 .textarea::placeholder {
   color: var(--color-muted-soft);
 }
-/* Native selects: replace the platform arrow with one hairline chevron so the
-   control matches the rest of the system. */
-.select {
-  appearance: none;
-  -webkit-appearance: none;
-  padding-right: 2.4rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%237b8a80' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.9rem center;
-  cursor: pointer;
-}
-html[data-theme="dark"] .select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%2398a69d' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
 .input:focus,
 .select:focus,
 .textarea:focus {
@@ -671,12 +656,12 @@ html[data-theme="dark"] .select {
     repeating-radial-gradient(
       ellipse 150% 118% at 106% -14%,
       transparent 0 44px,
-      color-mix(in oklab, var(--color-green) 22%, transparent) 44px 45px
+      color-mix(in oklab, var(--color-green) 24%, transparent) 44px 45px
     ),
     repeating-radial-gradient(
       ellipse 130% 105% at -12% 112%,
       transparent 0 58px,
-      color-mix(in oklab, var(--color-green) 15%, transparent) 58px 59px
+      color-mix(in oklab, var(--color-green) 24%, transparent) 58px 59px
     );
   opacity: 0.5;
   mask-image: radial-gradient(140% 120% at 80% 0%, #000 10%, transparent 72%);
@@ -686,24 +671,24 @@ html[data-theme="dark"] .contour-field {
   opacity: 0.4;
 }
 
-.bloom-a,
-.bloom-b {
+.bloom-blue,
+.bloom-green {
   position: absolute;
   pointer-events: none;
   border-radius: 999px;
   filter: blur(70px);
 }
-.bloom-a {
-  background: color-mix(in oklab, var(--color-green) 22%, transparent);
-}
-.bloom-b {
+.bloom-blue {
   background: color-mix(in oklab, var(--color-green) 26%, transparent);
 }
-html[data-theme="dark"] .bloom-a {
+.bloom-green {
   background: color-mix(in oklab, var(--color-green) 26%, transparent);
-  opacity: 0.5;
 }
-html[data-theme="dark"] .bloom-b {
+html[data-theme="dark"] .bloom-blue {
+  background: color-mix(in oklab, var(--color-green) 34%, transparent);
+  opacity: 0.55;
+}
+html[data-theme="dark"] .bloom-green {
   background: color-mix(in oklab, var(--color-green) 28%, transparent);
   opacity: 0.5;
 }
@@ -729,26 +714,26 @@ html[data-theme="dark"] .grain::after,
   isolation: isolate;
   overflow: hidden;
   background:
-    radial-gradient(56% 52% at 88% -6%, color-mix(in oklab, var(--color-green) 9%, transparent) 0%, transparent 62%),
-    radial-gradient(46% 52% at 2% 104%, color-mix(in oklab, var(--color-green) 7%, transparent) 0%, transparent 60%),
-    linear-gradient(180deg, color-mix(in oklab, var(--color-surface) 34%, var(--color-paper)) 0%, var(--color-paper) 86%);
+    radial-gradient(58% 54% at 88% -6%, color-mix(in oklab, var(--color-green) 13%, transparent) 0%, transparent 62%),
+    radial-gradient(44% 50% at 0% 104%, color-mix(in oklab, var(--brand-brass) 16%, transparent) 0%, transparent 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-surface) 42%, var(--color-paper)) 0%, var(--color-paper) 88%);
 }
 html[data-theme="dark"] .hero-shell {
   background:
-    radial-gradient(56% 52% at 88% -6%, rgb(30 158 79 / 0.2) 0%, transparent 62%),
-    radial-gradient(46% 52% at 2% 104%, rgb(30 158 79 / 0.12) 0%, transparent 60%),
-    linear-gradient(180deg, #0d1a14 0%, var(--color-paper) 88%);
+    radial-gradient(58% 54% at 88% -6%, rgb(33 160 76 / 0.26) 0%, transparent 62%),
+    radial-gradient(44% 50% at 0% 104%, rgb(154 116 52 / 0.16) 0%, transparent 60%),
+    linear-gradient(180deg, #0d1d14 0%, var(--color-paper) 90%);
 }
 
 .band-dark {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #edf5ef;
+  color: #eef2fa;
   background:
-    radial-gradient(110% 130% at 100% 0%, rgb(30 158 79 / 0.34) 0%, transparent 54%),
-    radial-gradient(90% 110% at 0% 100%, rgb(30 158 79 / 0.16) 0%, transparent 56%),
-    linear-gradient(160deg, #10291e 0%, #0b1d16 55%, #081410 100%);
+    radial-gradient(110% 130% at 100% 0%, rgb(33 160 76 / 0.24) 0%, transparent 54%),
+    radial-gradient(90% 110% at 0% 100%, rgb(154 116 52 / 0.14) 0%, transparent 56%),
+    linear-gradient(160deg, #102b1c 0%, #0b2014 55%, #07140d 100%);
 }
 .band-dark .contour-field {
   background-image:
@@ -789,10 +774,10 @@ html[data-theme="dark"] .hero-shell {
   overflow: hidden;
   color: #f3f8ff;
   background:
-    radial-gradient(100% 130% at 96% -12%, rgb(30 158 79 / 0.42) 0%, transparent 56%),
-    radial-gradient(90% 120% at -4% 112%, rgb(110 168 70 / 0.24) 0%, transparent 58%),
-    radial-gradient(140% 120% at 50% 50%, transparent 42%, rgb(4 18 12 / 0.35) 100%),
-    linear-gradient(140deg, #0d5d33 0%, #0a4a2c 44%, #072f1f 100%);
+    radial-gradient(100% 130% at 96% -12%, rgb(33 160 76 / 0.5) 0%, transparent 56%),
+    radial-gradient(90% 120% at -4% 112%, rgb(154 116 52 / 0.34) 0%, transparent 58%),
+    radial-gradient(140% 120% at 50% 50%, transparent 38%, rgb(4 16 10 / 0.42) 100%),
+    linear-gradient(140deg, #0d5c33 0%, #0a4a32 46%, #123a24 100%);
 }
 .band-brand .contour-field {
   background-image:
@@ -843,7 +828,7 @@ html[data-theme="dark"] .hero-shell {
   height: 1px;
   background: linear-gradient(
     90deg,
-    color-mix(in oklab, var(--color-green) 42%, transparent),
+    color-mix(in oklab, var(--color-green) 40%, transparent),
     color-mix(in oklab, var(--color-line) 90%, transparent) 32%,
     transparent 100%
   );
@@ -853,14 +838,14 @@ html[data-theme="dark"] .hero-shell {
    without a full dark band. */
 .wash {
   background:
-    radial-gradient(70% 90% at 100% 0%, color-mix(in oklab, var(--color-green) 6%, transparent) 0%, transparent 60%),
-    radial-gradient(60% 80% at 0% 100%, color-mix(in oklab, var(--color-green) 4%, transparent) 0%, transparent 62%),
+    radial-gradient(70% 90% at 100% 0%, color-mix(in oklab, var(--color-green) 7%, transparent) 0%, transparent 60%),
+    radial-gradient(60% 80% at 0% 100%, color-mix(in oklab, var(--brand-brass) 7%, transparent) 0%, transparent 62%),
     var(--color-paper);
 }
 html[data-theme="dark"] .wash {
   background:
-    radial-gradient(70% 90% at 100% 0%, rgb(30 158 79 / 0.1) 0%, transparent 60%),
-    radial-gradient(60% 80% at 0% 100%, rgb(30 158 79 / 0.07) 0%, transparent 62%),
+    radial-gradient(70% 90% at 100% 0%, rgb(33 160 76 / 0.12) 0%, transparent 60%),
+    radial-gradient(60% 80% at 0% 100%, rgb(154 116 52 / 0.08) 0%, transparent 62%),
     var(--color-paper);
 }
 
@@ -872,9 +857,9 @@ html[data-theme="dark"] .wash {
   padding: 1px;
   background: linear-gradient(
     150deg,
-    color-mix(in oklab, var(--color-green) 34%, var(--color-line)) 0%,
+    color-mix(in oklab, var(--brand-brass) 34%, var(--color-line)) 0%,
     var(--color-line) 46%,
-    color-mix(in oklab, var(--color-green) 18%, var(--color-line)) 100%
+    color-mix(in oklab, var(--color-green) 24%, var(--color-line)) 100%
   );
   box-shadow: var(--shadow-pop);
 }
@@ -885,9 +870,8 @@ html[data-theme="dark"] .yi-bare {
   filter: brightness(1.08) saturate(1.06);
 }
 
-/* Club emblems are shown at their own proportions with no frame. Each one ships
-   a lightened twin, so the dark theme swaps the ink instead of putting a white
-   tile behind it. */
+/* Club emblems swap to a lightened twin on the dark theme so a black mark
+   never disappears into the surface. */
 .club-emblem-dark {
   display: none;
 }
@@ -1147,8 +1131,8 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
     box-shadow 260ms ease;
 }
 .theme-toggle:hover {
-  border-color: color-mix(in oklab, var(--color-green) 42%, var(--color-line-strong));
-  background: color-mix(in oklab, var(--color-green) 7%, var(--color-surface-2));
+  border-color: color-mix(in oklab, var(--color-green) 40%, var(--color-line-strong));
+  background: color-mix(in oklab, var(--color-green) 6%, var(--color-surface-2));
 }
 .theme-toggle-thumb {
   position: absolute;
@@ -1160,7 +1144,7 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
   background: var(--brand-gradient);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.35),
-    0 6px 14px -6px rgb(10 70 36 / 0.7);
+    0 6px 14px -6px rgb(16 60 120 / 0.75);
   transition: transform 420ms cubic-bezier(0.32, 0.72, 0.24, 1);
 }
 html[data-theme="dark"] .theme-toggle-thumb {

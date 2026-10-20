@@ -6,12 +6,13 @@ import { YiSignature } from "@/components/brand/marks";
 export function SiteFooter() {
   return (
     <footer className="band-dark grain mt-16">
+      <div aria-hidden className="brand-rule absolute inset-x-0 top-0 opacity-90" />
       <div aria-hidden className="contour-field opacity-40" />
       <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1.1fr]">
           <div>
             <Logo invert />
-            <p className="mt-5 max-w-[290px] text-[13.5px] leading-relaxed text-white/55">
+            <p className="mt-5 max-w-[290px] text-[13.5px] leading-relaxed text-white/65">
               Toshkent davlat iqtisodiyot universiteti talabalar klublarining yagona platformasi — tadbirlar,
               kitobxonlik va muhokamalar bir joyda.
             </p>
@@ -43,8 +44,8 @@ export function SiteFooter() {
           />
 
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">Aloqa</p>
-            <ul className="mt-4 space-y-2.5 text-[13.5px] text-white/65">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Aloqa</p>
+            <ul className="mt-4 space-y-2.5 text-[13.5px] text-white/75">
               <li className="leading-relaxed">
                 Toshkent, Islam Karimov ko‘chasi, 49
               </li>
@@ -76,22 +77,11 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/tsue-emblem.png"
-              alt="Toshkent davlat iqtisodiyot universiteti gerbi"
-              width={30}
-              height={30}
-              loading="lazy"
-              className="h-[30px] w-[30px] opacity-90"
-            />
-            <p className="text-[11.5px] leading-snug text-white/40">
-              Toshkent davlat iqtisodiyot universiteti
-              <br />
-              Yoshlar ittifoqi bilan hamkorlikda · 2026
-            </p>
-          </div>
+          <p className="text-[11.5px] leading-snug text-white/45">
+            Toshkent davlat iqtisodiyot universiteti
+            <br />
+            Yoshlar ittifoqi bilan hamkorlikda · 2026
+          </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11.5px] text-white/45">
             <Link href="/about" className="transition-colors hover:text-white">
               Platforma haqida
@@ -112,7 +102,7 @@ export function SiteFooter() {
 function FooterCol({ title, links }: { title: string; links: Array<[string, string]> }) {
   return (
     <div>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">{title}</p>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">{title}</p>
       <ul className="mt-4 space-y-2.5 text-[13.5px]">
         {links.map(([label, href]) => (
           <li key={href}>

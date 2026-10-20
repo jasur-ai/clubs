@@ -5,70 +5,72 @@ type Props = {
   name: string;
   logoUrl?: string | null;
   accent?: string;
-  /** Height of the artwork in pixels. Width follows the emblem's own aspect. */
   size?: number;
   className?: string;
-  /** Kept for call-site compatibility: the artwork is never framed anymore. */
   rounded?: string;
 };
 
 /**
  * Club emblem.
  *
- * The artwork is shown bare and at its own proportions — no frame, no plate and
- * no padded square, which is what used to leave an empty gutter around narrow
- * lockups. Each emblem also ships a lightened twin (`<slug>-dark.png`) so the
- * dark theme can swap the ink instead of forcing a white tile behind it.
+ * The artwork is placed bare — no frame, no plate, no tile — and sized by its
+ * height, so a wide wordmark and a circular badge both stay legible instead of
+ * being squeezed into the same square. A soft shadow lifts the mark off the
+ * card without drawing a box around it.
  */
-export function ClubLogo({ name, logoUrl, accent = "#3f5c34", size = 44, className }: Props) {
-  if (!logoUrl) {
+export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, className, rounded }: Props) {
+  if (logoUrl) {
+    const slug = logoUrl.split("/").pop()?.replace(/\.(png|jpe?g)$/i, "") ?? "";
+    const darkSrc = CLUBS_WITH_DARK_EMBLEM.has(slug) ? logoUrl.replace(/\.(png|jpe?g)$/i, "-dark.png") : null;
+    const style = {
+      height: size,
+      width: "auto",
+      // wide wordmarks would push past the card edge at full height
+      maxWidth: size * 1.6,
+    } as const;
+    const base = "w-auto select-none object-contain";
+
     return (
-      <span
-        className={cn(
-          "inline-flex shrink-0 items-center justify-center rounded-[8px] font-serif text-white",
-          className,
-        )}
-        style={{ width: size, height: size, background: accent, fontSize: size * 0.42 }}
-        aria-hidden
-      >
-        {name.slice(0, 1)}
-      </span>
-    );
-  }
-
-  const slug = logoUrl.split("/").pop()?.replace(/\.(png|jpe?g)$/i, "") ?? "";
-  const darkSrc = CLUBS_WITH_DARK_EMBLEM.has(slug)
-    ? logoUrl.replace(/\.(png|jpe?g)$/i, "-dark.png")
-    : null;
-
-  return (
-    <span className="inline-flex shrink-0" aria-hidden>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={logoUrl}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        draggable={false}
-        className={cn(
-          "w-auto max-w-[132px] select-none object-contain",
-          darkSrc && "club-emblem-light",
-          className,
-        )}
-        style={{ height: size }}
-      />
-      {darkSrc ? (
-        // eslint-disable-next-line @next/next/no-img-element
+      <span className="inline-flex shrink-0" aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={darkSrc}
+          src={logoUrl}
           alt=""
           loading="lazy"
           decoding="async"
           draggable={false}
-          className={cn("club-emblem-dark w-auto max-w-[132px] select-none object-contain", className)}
-          style={{ height: size }}
+          className={cn(base, darkSrc && "club-emblem-light", className)}
+          style={style}
         />
-      ) : null}
+        {darkSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={darkSrc}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className={cn(base, "club-emblem-dark", className)}
+            style={style}
+          />
+        ) : null}
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={cn(
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden bg-[color:color-mix(in_oklab,var(--club-accent)_10%,transparent)]",
+        rounded ?? "rounded-[10px]",
+        className,
+      )}
+      style={{ width: size, height: size }}
+      aria-hidden
+    >
+      <span className="font-serif leading-none" style={{ color: accent, fontSize: size * 0.44 }}>
+        {name.slice(0, 1)}
+      </span>
     </span>
   );
 }

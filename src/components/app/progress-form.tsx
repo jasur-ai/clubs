@@ -25,7 +25,7 @@ export function ProgressForm({ cycleId, initial, pages }: { cycleId: string; ini
         step={5}
         value={percent}
         onChange={(e) => setPercent(Number(e.target.value))}
-        className="mt-4 w-full accent-[#17804a]"
+        className="mt-4 w-full accent-[#1f4a33]"
         aria-label="O‘qish foizi"
       />
       <div className="mt-1 flex justify-between text-[10px] text-[color:var(--color-muted)]">

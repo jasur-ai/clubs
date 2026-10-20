@@ -58,8 +58,8 @@ export default async function HomePage() {
       {/* ------------------------------------------------------------------ hero */}
       <section className="hero-shell grain relative border-b border-[color:var(--color-line)]">
         <div aria-hidden className="contour-field" />
-        <div aria-hidden className="bloom-a -right-28 -top-32 h-[240px] w-[240px] opacity-70 drift sm:h-[420px] sm:w-[420px] sm:opacity-100" />
-        <div aria-hidden className="bloom-b -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
+        <div aria-hidden className="bloom-blue -right-28 -top-32 h-[240px] w-[240px] opacity-70 drift sm:h-[420px] sm:w-[420px] sm:opacity-100" />
+        <div aria-hidden className="bloom-green -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
 
         <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-12 sm:px-6 lg:pt-16">
           <div className="grid items-center gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:gap-16">
@@ -68,9 +68,29 @@ export default async function HomePage() {
                 O‘zbekiston Yoshlar ittifoqi · TDIU
               </div>
 
+              {news[0] ? (
+                <Link
+                  href={`/news/${news[0].slug}`}
+                  className="rise group mt-6 inline-flex max-w-full items-center gap-2.5 rounded-full border border-[color:var(--color-line-strong)] bg-[color:var(--color-surface)] py-1.5 pl-2 pr-3.5 text-[12px] font-medium text-[color:var(--color-ink-soft)] shadow-[0_1px_2px_rgba(24,30,22,0.05)] transition-all duration-300 hover:border-[color:var(--color-green)] hover:text-[color:var(--color-ink)]"
+                  style={{ "--delay": "80ms" } as React.CSSProperties}
+                >
+                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--brand-green)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
+                    Yangilik
+                  </span>
+                  <span className="truncate">{news[0].title}</span>
+                  <span className="shrink-0 text-[color:var(--color-muted)] tabular-nums">
+                    {formatDate(news[0].publishedAt ?? news[0].createdAt, "d MMM")}
+                  </span>
+                  <ArrowRight
+                    size={13}
+                    className="shrink-0 text-[color:var(--color-muted)] transition-transform duration-300 group-hover:translate-x-0.5"
+                  />
+                </Link>
+              ) : null}
+
               <h1
-                className="display rise mt-5 text-[44px] leading-[0.95] text-[color:var(--color-ink)] sm:text-[60px] lg:text-[68px]"
-                style={{ "--delay": "110ms" } as React.CSSProperties}
+                className="display rise mt-6 text-[44px] leading-[0.95] text-[color:var(--color-ink)] sm:text-[60px] lg:text-[68px]"
+                style={{ "--delay": "140ms" } as React.CSSProperties}
               >
                 <span className="block">Universitetdagi</span>
                 <span className="block">har bir tashabbus</span>
@@ -249,7 +269,7 @@ export default async function HomePage() {
       {/* -------------------------------------------------------------- channels */}
       <section className="border-b border-[color:var(--color-line)]">
         <div className="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
-          <div className="grid divide-y divide-[color:var(--color-line)] sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+          <div className="grid gap-3 py-8 sm:grid-cols-2 lg:grid-cols-4">
             <Channel
               index="01"
               icon={<LayoutDashboard size={17} />}
@@ -382,8 +402,8 @@ export default async function HomePage() {
                     name={featured.name}
                     logoUrl={featured.logoUrl}
                     accent={featured.accent}
-                    size={72}
-                    className="relative max-w-[150px] drop-shadow-[0_16px_24px_rgba(0,0,0,0.45)]"
+                    size={92}
+                    className="relative drop-shadow-[0_14px_28px_rgba(0,0,0,0.45)]"
                   />
                   <div className="relative text-right sm:text-center">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
@@ -560,7 +580,7 @@ export default async function HomePage() {
                         <span className="flex items-center gap-2.5 text-white/80">
                           <span
                             className={`inline-flex h-4 w-4 items-center justify-center rounded-full border text-[9px] ${
-                              done ? "border-white bg-white text-[#0c1712]" : "border-white/25 text-white/30"
+                              done ? "border-white bg-white text-[#08102c]" : "border-white/25 text-white/30"
                             }`}
                             aria-hidden
                           >
@@ -769,17 +789,8 @@ export default async function HomePage() {
                   Rasmiy loyiha
                 </p>
                 <YoshlarIttifoqiLockup height={96} className="mt-4" />
-                <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/brand/tsue-emblem.png"
-                    alt="TDIU gerbi"
-                    width={28}
-                    height={28}
-                    loading="lazy"
-                    className="h-7 w-7 opacity-90"
-                  />
-                  <p className="text-[11px] leading-snug text-white/45">
+                <div className="mt-4 border-t border-white/12 pt-4">
+                  <p className="text-[11px] leading-relaxed text-white/55">
                     Toshkent davlat iqtisodiyot universiteti
                     <br />
                     Yoshlar masalalari bo‘yicha bo‘lim
@@ -842,18 +853,20 @@ function Channel({
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-      className="group relative flex items-start gap-4 px-1 py-6 transition-colors hover:bg-[color:var(--color-surface-2)] sm:px-5 lg:px-6"
+      className="group relative flex flex-col justify-between gap-6 rounded-[14px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color:color-mix(in_oklab,var(--color-green)_38%,var(--color-line))] hover:shadow-[var(--shadow-card)]"
     >
-      <span className="section-index mt-1">{index}</span>
-      <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] text-[color:var(--color-ink)] transition-colors group-hover:border-[color:var(--color-line-strong)]">
-        {icon}
+      <span className="flex items-start justify-between">
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[color:color-mix(in_oklab,var(--color-green)_9%,transparent)] text-[color:var(--color-green)] transition-colors duration-300 group-hover:bg-[color:var(--color-green)] group-hover:text-white">
+          {icon}
+        </span>
+        <span className="section-index">{index}</span>
       </span>
-      <span className="min-w-0 flex-1">
+      <span className="min-w-0">
         <span className="flex items-center gap-1.5 text-[13.5px] font-semibold text-[color:var(--color-ink)]">
           {title}
           <ArrowUpRight
             size={13}
-            className="text-[color:var(--color-muted-soft)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[color:var(--color-ink)]"
+            className="text-[color:var(--color-muted-soft)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[color:var(--color-green)]"
           />
         </span>
         <span className="mt-1 block text-[11.5px] leading-snug text-[color:var(--color-muted)]">{text}</span>

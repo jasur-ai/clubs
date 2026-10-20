@@ -156,7 +156,7 @@ const bookSchema = z.object({
   genre: z.string().optional(),
   language: z.string().default("uz"),
   description: z.string().min(10).max(2000),
-  coverFrom: z.string().default("#17804a"),
+  coverFrom: z.string().default("#104070"),
   coverTo: z.string().default("#2070D0"),
 });
 
@@ -318,7 +318,7 @@ const newsSchema = z.object({
   excerpt: z.string().min(10).max(300),
   body: z.string().min(20).max(20000),
   status: z.string().default("DRAFT"),
-  coverFrom: z.string().default("#17804a"),
+  coverFrom: z.string().default("#104070"),
   coverTo: z.string().default("#2070D0"),
 });
 
@@ -428,7 +428,7 @@ export async function updateClubAction(formData: FormData) {
       meetingDay: String(formData.get("meetingDay") ?? "") || null,
       meetingTime: String(formData.get("meetingTime") ?? "") || null,
       location: String(formData.get("location") ?? "") || null,
-      accent: String(formData.get("accent") ?? "#17804a"),
+      accent: String(formData.get("accent") ?? "#104070"),
     },
   });
   await audit(user.id, "club.update", "Club", id);

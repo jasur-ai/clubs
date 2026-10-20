@@ -42,10 +42,10 @@ export function AdminSidebar({ pending, isSuper }: { pending: number; isSuper: b
               href={item.href}
               className={cn(
                 "flex items-center gap-2.5 rounded-[8px] px-2.5 py-2 text-[12.5px] font-medium transition-colors",
-                active ? "bg-[color:var(--color-surface-3)] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" : "text-white/60 hover:bg-white/10 hover:text-white",
+                active ? "bg-white text-[#0a1630] shadow-[0_2px_8px_rgba(0,0,0,0.25)]" : "text-white/60 hover:bg-white/10 hover:text-white",
               )}
             >
-              <Icon size={15} className={active ? "text-[color:var(--color-accent)]" : ""} />
+              <Icon size={15} className={active ? "text-[color:var(--color-link)]" : ""} />
               <span className="flex-1">{item.label}</span>
               {item.badgeKey === "requests" && pending > 0 && (
                 <span className="rounded-full bg-[#a8492f] px-1.5 py-0.5 text-[10px] font-bold text-white">{pending}</span>
