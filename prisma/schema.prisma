@@ -53,7 +53,7 @@ model Club {
   summary      String
   description  String
   category     String // intellectual | academic | creative | sport | social | travel
-  accent       String   @default("#104070")
+  accent       String   @default("#3d4a2a")
   logoUrl      String? // club's own emblem, seeded from /public/clubs/<slug>.jpg
   coverStyle   String   @default("grid") // visual variant for generated covers
   telegramUrl  String?
@@ -129,8 +129,8 @@ model Book {
   language    String   @default("uz")
   description String
   genre       String?
-  coverFrom   String   @default("#104070")
-  coverTo     String   @default("#2070D0")
+  coverFrom   String   @default("#3d4a2a")
+  coverTo     String   @default("#7d8f4e")
   sourceUrl   String?
   createdAt   DateTime @default(now())
 
@@ -234,8 +234,8 @@ model Event {
   endsAt      DateTime?
   location    String
   capacity    Int?
-  coverFrom   String      @default("#104070")
-  coverTo     String      @default("#2070D0")
+  coverFrom   String      @default("#3d4a2a")
+  coverTo     String      @default("#7d8f4e")
   status      String      @default("DRAFT") // DRAFT | PUBLISHED | CANCELLED | FINISHED
   createdAt   DateTime    @default(now())
 
@@ -266,8 +266,8 @@ model News {
   title       String
   excerpt     String
   body        String
-  coverFrom   String     @default("#104070")
-  coverTo     String     @default("#2070D0")
+  coverFrom   String     @default("#3d4a2a")
+  coverTo     String     @default("#7d8f4e")
   status      String     @default("DRAFT") // DRAFT | PUBLISHED
   publishedAt DateTime?
   createdAt   DateTime   @default(now())

@@ -78,7 +78,34 @@ try {
       covers += 1;
     }
   }
-  if (recoloured || covers) console.log(`[seed] recoloured ${recoloured} club accents and ${covers} book covers`);
+  // News covers live on the same palette; they are edited in the admin console,
+  // so only the known blue defaults are swept.
+  const news = await db.news.findMany({ select: { id: true, coverFrom: true, coverTo: true } });
+  let newsCovers = 0;
+  for (const n of news) {
+    const from = COVER_SWAP[n.coverFrom] ?? (blueish(n.coverFrom) ? "#4a3a2c" : null);
+    const to = COVER_SWAP[n.coverTo] ?? (blueish(n.coverTo) ? "#946e42" : null);
+    if (from || to) {
+      await db.news.update({ where: { id: n.id }, data: { coverFrom: from ?? n.coverFrom, coverTo: to ?? n.coverTo } });
+      newsCovers += 1;
+    }
+  }
+
+  // Events carry the same two colours for their cover art.
+  const events = await db.event.findMany({ select: { id: true, coverFrom: true, coverTo: true } });
+  let eventCovers = 0;
+  for (const e of events) {
+    const from = COVER_SWAP[e.coverFrom] ?? (blueish(e.coverFrom) ? "#3d4a2a" : null);
+    const to = COVER_SWAP[e.coverTo] ?? (blueish(e.coverTo) ? "#7d8f4e" : null);
+    if (from || to) {
+      await db.event.update({ where: { id: e.id }, data: { coverFrom: from ?? e.coverFrom, coverTo: to ?? e.coverTo } });
+      eventCovers += 1;
+    }
+  }
+  if (recoloured || covers || newsCovers || eventCovers)
+    console.log(
+      `[seed] recoloured ${recoloured} club accents, ${covers} book, ${newsCovers} news and ${eventCovers} event covers`,
+    );
 } finally {
   await db.$disconnect();
 }
