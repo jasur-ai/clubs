@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EventRow } from "@/components/site/cards";
+import { CalendarSubscribe } from "@/components/site/calendar-subscribe";
 import { SectionHeading } from "@/components/ui/primitives";
 import { getPastEvents, getUpcomingEvents } from "@/lib/queries";
 import { db } from "@/lib/db";
@@ -28,7 +29,8 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
       <SectionHeading
         eyebrow="Taqvim"
         title="Tadbirlar"
-        description="Barcha klublar tadbirlari bir joyda. RSVP qilish uchun hisobingizga kiring."
+        description="Barcha klublar tadbirlari bir joyda. Bir marta obuna bo‘ling — yangi tadbirlar telefoningiz taqvimiga o‘zi tushadi."
+        action={<CalendarSubscribe club={params.club} compact />}
       />
 
       <div className="hide-scrollbar mt-8 flex gap-2 overflow-x-auto border-b border-[color:var(--color-line)] pb-5">

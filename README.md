@@ -52,8 +52,10 @@ placeholder grid.
 | Member Mini App | `/app` | Reading progress, discussions, RSVP, profile — Telegram-first |
 | Admin console | `/admin` | Requests, members, library, reading cycles, events, news, settings |
 | Search | `/qidiruv?q=` | One field across clubs, library, events and news; ⌘K palette everywhere |
+| Help | `/yordam` | Short guide: joining, calendar, search, bookmarks, admin exports |
 | Saved | `/saqlangan` | Device-local bookmarks for clubs, books, events and news — no account needed |
-| Calendar | `/api/events/[id]/ics`, `/api/events/ics?ids=` | Single event or a whole shortlist, with a two-hour reminder |
+| Calendar | `/api/events/[id]/ics`, `/api/events/ics?ids=`, `/api/events/feed.ics` | Single event, a shortlist, or a subscription that keeps updating |
+| Link previews | `/api/og` | 1200×630 Open Graph card for every club, event and news item |
 | Admin export | `/api/admin/export?type=` | CSV for members, join requests and event participants |
 | Bot webhook | `/api/telegram` | Commands, deep links, web-app entry point |
 
@@ -66,8 +68,13 @@ with the system preference as the default.
 The backdrop is a contour field: concentric elliptical arcs in the same sweep as the Yoshlar
 ittifoqi swoosh, plus soft colour bloom and a fine paper grain — no grid, no gradient clichés.
 Motion is layered on top: IntersectionObserver scroll reveals, a count-up on the live figures,
-hover lift on cards, an animated mobile sheet and a route transition — all disabled under
-`prefers-reduced-motion`.
+hover lift on cards, an animated mobile sheet, a route transition, and a circular theme reveal
+that grows from the toggle itself (View Transitions API, with a colour cross-fade fallback) —
+all disabled under `prefers-reduced-motion`.
+
+Club emblems are never recoloured: the same file is used in both themes, and on dark surfaces a
+hairline halo separates dark ink from the background. The benchmark behind the current feature set
+is written up in `docs/club-website-benchmarks.md`.
 
 Brand assets in `public/brand/`: `yoshlar-ittifoqi-mark.png` (official lockup, knocked out to
 transparency for dark surfaces) and `yoshlar-ittifoqi.png` (full artwork).

@@ -4,6 +4,8 @@ import { managedClubIds } from "@/lib/auth";
 import { requireStaffPage } from "@/lib/session";
 import { db } from "@/lib/db";
 import { PageHeader, Panel, StatusPill } from "@/components/admin/ui";
+import { BarList, ColumnChart } from "@/components/admin/analytics";
+import { formatDate as fmt } from "@/lib/format";
 import { formatDate, timeRange } from "@/lib/format";
 
 export const metadata = { title: "Boshqaruv paneli" };
@@ -37,6 +39,50 @@ export default async function AdminDashboard() {
     db.auditLog.findMany({ orderBy: { createdAt: "desc" }, take: 6, include: { actor: { select: { firstName: true, lastName: true } } } }),
   ]);
 
+  // ---- analytics -----------------------------------------------------------
+  const from = new Date();
+  from.setHours(0, 0, 0, 0);
+  from.setDate(from.getDate() - 13);
+
+  const [recentRequests, clubMembers, rsvpByEvent] = await Promise.all([
+    db.joinRequest.findMany({
+      where: { createdAt: { gte: from }, ...whereClub },
+      select: { createdAt: true },
+    }),
+    db.membership.groupBy({
+      by: ["clubId"],
+      where: { status: "ACTIVE", ...whereClub },
+      _count: true,
+    }),
+    db.event.findMany({
+      where: { startsAt: { gte: new Date() }, status: "PUBLISHED", ...whereClub },
+      orderBy: { startsAt: "asc" },
+      take: 5,
+      select: { title: true, _count: { select: { rsvps: true } } },
+    }),
+  ]);
+
+  const dayBuckets = Array.from({ length: 14 }, (_, index) => {
+    const day = new Date(from);
+    day.setDate(from.getDate() + index);
+    const next = new Date(day);
+    next.setDate(day.getDate() + 1);
+    const value = recentRequests.filter((request) => request.createdAt >= day && request.createdAt < next).length;
+    return { label: fmt(day, "d MMM"), value, hint: `${fmt(day, "d MMM")} — ${value} ariza` };
+  });
+
+  const clusterNames = await db.club.findMany({
+    where: scope === "all" ? { isActive: true } : { id: { in: scope } },
+    select: { id: true, name: true, accent: true },
+  });
+  const clubRows = clubMembers
+    .map((row) => {
+      const club = clusterNames.find((item) => item.id === row.clubId);
+      return { label: club?.name ?? "—", value: row._count, accent: club?.accent ?? null };
+    })
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 6);
+
   const stats = [
     { label: "Kutilayotgan so‘rov", value: pending, icon: Inbox, href: "/admin/join-requests", accent: pending > 0 },
     { label: "Faol a’zolar", value: members, icon: Users, href: "/admin/members" },
@@ -68,6 +114,33 @@ export default async function AdminDashboard() {
             </Link>
           );
         })}
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        <Panel title="Arizalar oqimi" meta="So‘nggi 14 kun">
+          <div className="p-4">
+            <ColumnChart
+              title="Kunlik arizalar"
+              meta={`${recentRequests.length} ta · 14 kun`}
+              points={dayBuckets}
+              unit="ariza"
+            />
+          </div>
+        </Panel>
+        <Panel title="Klublar kesimi" meta={`${clubRows.reduce((sum, row) => sum + row.value, 0)} a’zo`}>
+          <div className="p-4">
+            <BarList title="Faol a’zolar" rows={clubRows} empty="Hozircha a’zo yo‘q" />
+          </div>
+        </Panel>
+        <Panel title="Tadbirlarga qiziqish" meta="Yaqin 5 tadbir">
+          <div className="p-4">
+            <BarList
+              title="RSVP"
+              rows={rsvpByEvent.map((event) => ({ label: event.title, value: event._count.rsvps }))}
+              empty="Hozircha RSVP yo‘q"
+            />
+          </div>
+        </Panel>
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">

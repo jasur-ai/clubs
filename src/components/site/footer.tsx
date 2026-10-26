@@ -32,6 +32,7 @@ export function SiteFooter() {
               ["Tadbirlar", "/events"],
               ["Yangiliklar", "/news"],
               ["Saqlanganlar", "/saqlangan"],
+              ["Yordam", "/yordam"],
             ]}
           />
           <FooterCol

@@ -8,8 +8,15 @@ import { db } from "@/lib/db";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const item = await db.news.findUnique({ where: { slug } });
-  return item ? { title: item.title, description: item.excerpt } : { title: "Yangilik topilmadi" };
+  const item = await db.news.findUnique({ where: { slug }, include: { club: { select: { name: true } } } });
+  if (!item) return { title: "Yangilik topilmadi" };
+  const card = `/api/og?title=${encodeURIComponent(item.title)}&eyebrow=${encodeURIComponent(item.club?.name ?? "Yangiliklar")}&meta=${encodeURIComponent(formatDate(item.publishedAt ?? item.createdAt, "d MMMM yyyy"))}`;
+  return {
+    title: item.title,
+    description: item.excerpt,
+    openGraph: { title: item.title, description: item.excerpt, type: "article", images: [{ url: card, width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title: item.title, description: item.excerpt, images: [card] },
+  };
 }
 
 export default async function NewsItemPage({ params }: { params: Promise<{ slug: string }> }) {

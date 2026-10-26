@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { CLUBS_WITH_DARK_EMBLEM } from "@/config/club-logos";
 
 type Props = {
   name: string;
@@ -15,23 +14,22 @@ type Props = {
  *
  * The artwork is placed bare — no frame, no plate, no tile — and sized by its
  * height, so a wide wordmark and a circular badge both stay legible instead of
- * being squeezed into the same square. A soft shadow lifts the mark off the
- * card without drawing a box around it.
+ * being squeezed into the same square.
+ *
+ * The same file is used in both themes: recolouring a club's own emblem is a
+ * brand violation, so the mark keeps its real colours and a hairline halo does
+ * the work of separating dark ink from a dark surface.
  */
 export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, className, rounded }: Props) {
   if (logoUrl) {
-    const slug = logoUrl.split("/").pop()?.replace(/\.(png|jpe?g)$/i, "") ?? "";
-    const darkSrc = CLUBS_WITH_DARK_EMBLEM.has(slug) ? logoUrl.replace(/\.(png|jpe?g)$/i, "-dark.png") : null;
     const style = {
       height: size,
       width: "auto",
       // wide wordmarks would push past the card edge at full height
       maxWidth: size * 1.6,
     } as const;
-    const base = "w-auto select-none object-contain";
-
     return (
-      <span className="inline-flex shrink-0" aria-hidden>
+      <span className="club-emblem inline-flex shrink-0" aria-hidden>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={logoUrl}
@@ -39,21 +37,9 @@ export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, classNa
           loading="lazy"
           decoding="async"
           draggable={false}
-          className={cn(base, darkSrc && "club-emblem-light", className)}
+          className={cn("w-auto select-none object-contain", className)}
           style={style}
         />
-        {darkSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={darkSrc}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-            className={cn(base, "club-emblem-dark", className)}
-            style={style}
-          />
-        ) : null}
       </span>
     );
   }

@@ -8,7 +8,9 @@ import { EventRow, BookRow } from "@/components/site/cards";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Avatar, Badge, ProgressBar, SectionHeading } from "@/components/ui/primitives";
 import { ClubLogo } from "@/components/ui/club-logo";
+import { CalendarSubscribe } from "@/components/site/calendar-subscribe";
 import { SaveButton } from "@/components/site/save-button";
+import { ShareButton } from "@/components/site/share-button";
 import { formatDate } from "@/lib/format";
 import { getChannelFeed, channelUsername } from "@/lib/channel-feed";
 import { db } from "@/lib/db";
@@ -19,10 +21,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const club = await getClubBySlug(slug);
   if (!club) return { title: "Klub topilmadi" };
+  const category = CATEGORY_LABELS[club.category as ClubCategory] ?? "Klub";
+  const card = `/api/og?title=${encodeURIComponent(club.name)}&eyebrow=${encodeURIComponent(category)}&meta=${encodeURIComponent(club.tagline)}`;
   return {
     title: club.name,
     description: club.summary,
-    openGraph: { title: club.name, description: club.summary },
+    openGraph: { title: club.name, description: club.tagline, images: [{ url: card, width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title: club.name, description: club.tagline, images: [card] },
   };
 }
 
@@ -43,10 +48,27 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
     db.club.findMany({
       where: { isActive: true, slug: { not: slug } },
       orderBy: { sortOrder: "asc" },
-      take: 3,
-      select: { slug: true, name: true, summary: true, category: true, accent: true, logoUrl: true, coverStyle: true },
+      select: { slug: true, name: true, summary: true, category: true, accent: true, logoUrl: true, coverStyle: true, _count: { select: { memberships: true } } },
     }),
   ]);
+
+  // Recommendation first, then everything else: a student reading the Debate Club
+  // page is more likely to care about another speaking club than a random one.
+  const related = [...partners]
+    .sort((a, b) => {
+      const sameA = a.category === club.category ? 0 : 1;
+      const sameB = b.category === club.category ? 0 : 1;
+      return sameA - sameB || b._count.memberships - a._count.memberships;
+    })
+    .slice(0, 3);
+
+  const leaders = await db.membership.findMany({
+    where: { clubId: club.id, status: "ACTIVE" },
+    orderBy: [{ user: { points: "desc" } }],
+    take: 5,
+    select: { id: true, role: true, user: { select: { firstName: true, lastName: true, points: true } } },
+  });
+  const topPoints = Math.max(1, ...leaders.map((leader) => leader.user.points));
 
   const channel = channelUsername(club.telegramUrl);
   const feed = channel ? await getChannelFeed(channel, 3) : [];
@@ -66,19 +88,34 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
 
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
             <div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <ClubLogo
                   name={club.name}
                   logoUrl={club.logoUrl}
                   accent={club.accent}
                   size={72}
                   rounded="rounded-[14px]"
-                  className="shadow-[0_6px_20px_rgba(11,31,51,0.08)]"
                 />
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="accent">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
                   <Badge tone="neutral">{club._count.memberships} a’zo</Badge>
                   {isBookClub && <Badge tone="navy">Bookonomics</Badge>}
+                </div>
+                <div className="ml-auto flex items-center gap-2">
+                  <SaveButton
+                    kind="club"
+                    id={club.id}
+                    title={club.name}
+                    meta={club.tagline ?? undefined}
+                    href={`/clubs/${club.slug}`}
+                    compact
+                  />
+                  <ShareButton
+                    title={`${club.name} — TDIU Clubs`}
+                    text={club.tagline}
+                    path={`/clubs/${club.slug}`}
+                    compact
+                  />
                 </div>
               </div>
               <h1 className="display mt-4 text-[40px] leading-[1.03] sm:text-[54px]">{club.name}</h1>
@@ -114,14 +151,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <Link href="/app" className="btn btn-secondary btn-lg">
                   <MessageSquare size={15} /> Mini-ilova
                 </Link>
-                <SaveButton
-                  kind="club"
-                  id={club.id}
-                  title={club.name}
-                  meta={club.tagline ?? undefined}
-                  href={`/clubs/${club.slug}`}
-                  className="save-btn-lg"
-                />
+
               </div>
             </div>
 
@@ -306,7 +336,12 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
         <SectionHeading
           eyebrow="Taqvim"
           title="Klub tadbirlari"
-          action={<Link href="/events" className="btn btn-ghost btn-sm">Barchasi <ArrowRight size={14} /></Link>}
+          action={
+            <div className="flex flex-wrap items-center gap-2">
+              <CalendarSubscribe club={club.slug} compact />
+              <Link href="/events" className="btn btn-ghost btn-sm">Barchasi <ArrowRight size={14} /></Link>
+            </div>
+          }
         />
         <div className="mt-6 grid gap-3 lg:grid-cols-2">
           {events.map((e) => (
@@ -367,20 +402,59 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
         <section className="border-y border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
           <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
             <SectionHeading eyebrow="Jamoa" title="Klub rahbariyati" />
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {club.memberships.map((m) => (
-                <div key={m.id} className="flex items-center gap-3 rounded-[12px] border border-[color:var(--color-line)] bg-white p-4">
-                  <Avatar first={m.user.firstName} last={m.user.lastName} size={40} />
-                  <div className="min-w-0">
-                    <p className="truncate text-[13.5px] font-semibold">
-                      {m.user.firstName} {m.user.lastName}
-                    </p>
-                    <p className="text-[11.5px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
-                      {m.role === "PRESIDENT" ? "Prezident" : "Menejer"}
-                    </p>
+            <div className="mt-6 grid gap-6 lg:grid-cols-[1.55fr_1fr]">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {club.memberships.map((m) => (
+                  <div key={m.id} className="flex items-center gap-3 rounded-[12px] border border-[color:var(--color-line)] bg-white p-4">
+                    <Avatar first={m.user.firstName} last={m.user.lastName} size={40} />
+                    <div className="min-w-0">
+                      <p className="truncate text-[13.5px] font-semibold">
+                        {m.user.firstName} {m.user.lastName}
+                      </p>
+                      <p className="text-[11.5px] uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
+                        {m.role === "PRESIDENT" ? "Prezident" : "Menejer"}
+                      </p>
+                    </div>
                   </div>
+                ))}
+              </div>
+
+              {leaders.length > 0 && (
+                <div className="rounded-[14px] border border-[color:var(--color-line)] bg-white p-4">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                      Faol a’zolar
+                    </p>
+                    <span className="text-[11px] text-[color:var(--color-muted-soft)]">ball</span>
+                  </div>
+                  <ol className="mt-3 space-y-2.5">
+                    {leaders.map((leader, index) => (
+                      <li key={leader.id} className="flex items-center gap-2.5">
+                        <span className="w-4 text-[11px] font-semibold tabular-nums text-[color:var(--color-muted-soft)]">
+                          {index + 1}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[12.5px] font-medium text-[color:var(--color-ink)]">
+                            {leader.user.firstName} {leader.user.lastName ?? ""}
+                          </span>
+                          <span className="mt-1 block h-[4px] overflow-hidden rounded-full bg-[color:var(--color-surface-3)]">
+                            <span
+                              className="block h-full rounded-full"
+                              style={{
+                                width: `${Math.max(6, Math.round((leader.user.points / topPoints) * 100))}%`,
+                                background: club.accent,
+                              }}
+                            />
+                          </span>
+                        </span>
+                        <span className="w-8 text-right text-[11.5px] font-semibold tabular-nums text-[color:var(--color-ink-soft)]">
+                          {leader.user.points}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
@@ -390,7 +464,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
       <section className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
         <SectionHeading eyebrow="Yana" title="Boshqa klublar" action={<Link href="/clubs" className="btn btn-ghost btn-sm">Katalog <ArrowRight size={14} /></Link>} />
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {partners.map((p) => (
+          {related.map((p) => (
             <Link
               key={p.slug}
               href={`/clubs/${p.slug}`}
