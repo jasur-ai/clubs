@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CoverArt } from "@/components/ui/cover-art";
+import { SaveButton } from "@/components/site/save-button";
 import { formatDate } from "@/lib/format";
 import { db } from "@/lib/db";
 
@@ -52,7 +53,18 @@ export default async function NewsItemPage({ params }: { params: Promise<{ slug:
 
       <div className="prose-editorial mt-8 whitespace-pre-line">{item.body}</div>
 
-      <div className="mt-10 flex items-center justify-between border-t border-[color:var(--color-line)] pt-5 text-[12px] text-[color:var(--color-muted)]">
+      <div className="mt-8 flex flex-wrap items-center gap-2">
+        <SaveButton
+          kind="news"
+          id={item.id}
+          title={item.title}
+          meta={item.club?.name ?? undefined}
+          href={`/news/${item.slug}`}
+          compact
+        />
+      </div>
+
+      <div className="mt-8 flex items-center justify-between border-t border-[color:var(--color-line)] pt-5 text-[12px] text-[color:var(--color-muted)]">
         <span>{item.author ? `${item.author.firstName} ${item.author.lastName ?? ""}` : "TDIU Clubs"}</span>
         <Link href="/news" className="font-semibold text-[color:var(--color-ink)]">Barcha yangiliklar</Link>
       </div>

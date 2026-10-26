@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Menu, Search, X } from "lucide-react";
+import { ArrowUpRight, Bookmark, Menu, Search, X } from "lucide-react";
 import { Logo } from "@/components/site/logo";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { SearchTrigger } from "@/components/site/command-palette";
 import { useScrolled } from "@/components/site/motion";
+import { useBookmarkCount } from "@/lib/bookmarks";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -22,6 +23,7 @@ export function HeaderBar({ authed }: { authed: boolean }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const savedCount = useBookmarkCount();
 
   useEffect(() => {
     setOpen(false);
@@ -89,6 +91,16 @@ export function HeaderBar({ authed }: { authed: boolean }) {
             <ArrowUpRight size={12} />
           </a>
           <SearchTrigger className="hidden sm:inline-flex" />
+          <span className="hidden sm:inline-flex">
+            <Link
+              href="/saqlangan"
+              aria-label={savedCount > 0 ? `Saqlanganlar — ${savedCount} ta` : "Saqlanganlar"}
+              className="saved-header-btn"
+            >
+              <Bookmark size={15} strokeWidth={1.9} />
+              {savedCount > 0 && <span className="saved-badge">{savedCount > 9 ? "9+" : savedCount}</span>}
+            </Link>
+          </span>
           <span aria-hidden className="mx-1 hidden h-4 w-px bg-[color:var(--color-line)] md:block" />
           <ThemeToggle />
           <div className="hidden items-center gap-2 sm:flex">
@@ -151,6 +163,18 @@ export function HeaderBar({ authed }: { authed: boolean }) {
                 {authed ? "Kabinet" : "Kirish"}
               </Link>
             </div>
+            <Link
+              href="/saqlangan"
+              tabIndex={open ? 0 : -1}
+              className="flex items-center justify-between rounded-[10px] border border-[color:var(--color-line)] px-4 py-3 text-[13px] text-[color:var(--color-ink-soft)]"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Bookmark size={14} strokeWidth={1.9} /> Saqlanganlar
+              </span>
+              <span className="text-[11.5px] text-[color:var(--color-muted)]">
+                {savedCount > 0 ? `${savedCount} ta` : "Bo‘sh"}
+              </span>
+            </Link>
             <a
               href="https://t.me/Tsue_clubs_bot"
               target="_blank"

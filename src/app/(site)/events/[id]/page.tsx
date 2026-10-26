@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CalendarDays, CalendarPlus, Clock, MapPin, Users } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Badge, ProgressBar } from "@/components/ui/primitives";
+import { SaveButton } from "@/components/site/save-button";
 import { formatDate, timeRange } from "@/lib/format";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
@@ -111,6 +112,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
           <div className="grid gap-2">
+            <SaveButton
+              kind="event"
+              id={event.id}
+              title={event.title}
+              meta={`${formatDate(event.startsAt, "d MMM · HH:mm")} · ${event.location}`}
+              href={`/events/${event.id}`}
+            />
             <a
               href={`/api/events/${event.id}/ics`}
               className="btn btn-secondary w-full"

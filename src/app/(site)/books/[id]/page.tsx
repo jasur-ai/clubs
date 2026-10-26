@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CalendarDays, MapPin, MessageSquare } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Badge } from "@/components/ui/primitives";
+import { SaveButton } from "@/components/site/save-button";
 import { formatDate } from "@/lib/format";
 import { db } from "@/lib/db";
 
@@ -114,6 +115,13 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
             <Link href="/app/read" className="btn btn-secondary">
               O‘qishni davom etish
             </Link>
+            <SaveButton
+              kind="book"
+              id={book.id}
+              title={book.title}
+              meta={book.author ?? undefined}
+              href={`/books/${book.id}`}
+            />
           </div>
         </div>
       </div>

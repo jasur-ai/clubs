@@ -8,6 +8,7 @@ import { EventRow, BookRow } from "@/components/site/cards";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Avatar, Badge, ProgressBar, SectionHeading } from "@/components/ui/primitives";
 import { ClubLogo } from "@/components/ui/club-logo";
+import { SaveButton } from "@/components/site/save-button";
 import { formatDate } from "@/lib/format";
 import { getChannelFeed, channelUsername } from "@/lib/channel-feed";
 import { db } from "@/lib/db";
@@ -113,6 +114,14 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <Link href="/app" className="btn btn-secondary btn-lg">
                   <MessageSquare size={15} /> Mini-ilova
                 </Link>
+                <SaveButton
+                  kind="club"
+                  id={club.id}
+                  title={club.name}
+                  meta={club.tagline ?? undefined}
+                  href={`/clubs/${club.slug}`}
+                  className="save-btn-lg"
+                />
               </div>
             </div>
 

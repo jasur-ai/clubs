@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Bookmark,
   BookOpen,
   CalendarDays,
   ArrowRight,
@@ -17,6 +18,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useBookmarkCount } from "@/lib/bookmarks";
 import { cn } from "@/lib/utils";
 
 type Hit = {
@@ -83,6 +85,7 @@ export function CommandPalette() {
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
+  const savedCount = useBookmarkCount();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -161,8 +164,16 @@ export function CommandPalette() {
   );
 
   /** Flat, keyboard-navigable list. Group headers are derived from this order. */
+  const quick = useMemo<Entry[]>(
+    () =>
+      savedCount > 0
+        ? [...QUICK, { key: "q-saved", href: "/saqlangan", title: "Saqlanganlar", meta: `${savedCount} ta xatcho‘p`, icon: Bookmark }]
+        : QUICK,
+    [savedCount],
+  );
+
   const entries: Entry[] = useMemo(() => {
-    if (!searching) return QUICK;
+    if (!searching) return quick;
     return sortedHits.map((hit) => ({
       key: `${hit.type}-${hit.id}`,
       href: hit.href,
@@ -170,7 +181,7 @@ export function CommandPalette() {
       meta: hit.meta,
       icon: TYPE_META[hit.type].icon,
     }));
-  }, [sortedHits, searching]);
+  }, [quick, sortedHits, searching]);
 
   const groupStarts = useMemo(() => {
     const map = new Map<number, Hit["type"]>();

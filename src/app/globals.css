@@ -1183,6 +1183,138 @@ html[data-theme="dark"] .theme-toggle:hover .ico-sun {
   }
 }
 
+/* Bookmarks --------------------------------------------------------------- */
+.save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 9px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+.save-btn:hover {
+  border-color: color-mix(in oklab, var(--color-green) 42%, var(--color-line-strong));
+  background: var(--color-surface-2);
+}
+.save-btn.is-saved {
+  border-color: color-mix(in oklab, var(--color-green) 34%, var(--color-line-strong));
+  background: color-mix(in oklab, var(--color-green) 9%, var(--color-surface));
+  color: var(--color-green);
+}
+.save-btn-lg {
+  height: 46px;
+  padding: 0 18px;
+  border-radius: 11px;
+  font-size: 13.5px;
+}
+.save-btn-compact {
+  height: 32px;
+  padding: 0 11px;
+  font-size: 12.5px;
+  border-radius: 8px;
+}
+.save-btn-icon {
+  display: inline-flex;
+}
+.save-btn.is-pop .save-btn-icon {
+  animation: save-pop 420ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.save-icon-btn {
+  display: inline-flex;
+  height: 28px;
+  width: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--color-surface) 88%, transparent);
+  color: var(--color-muted);
+  backdrop-filter: blur(4px);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+.save-icon-btn:hover {
+  border-color: color-mix(in oklab, var(--color-green) 40%, var(--color-line));
+  color: var(--color-ink);
+  transform: translateY(-1px);
+}
+.save-icon-btn.is-saved {
+  border-color: color-mix(in oklab, var(--color-green) 38%, var(--color-line));
+  background: color-mix(in oklab, var(--color-green) 12%, var(--color-surface));
+  color: var(--color-green);
+}
+.saved-header-btn {
+  position: relative;
+  display: inline-flex;
+  height: 31px;
+  width: 31px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-muted);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    background-color 180ms ease;
+}
+.saved-header-btn:hover {
+  border-color: var(--color-line-strong);
+  color: var(--color-ink);
+}
+.saved-header-btn .saved-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  box-shadow: 0 0 0 2px var(--color-paper);
+}
+.saved-badge {
+  display: inline-flex;
+  height: 15px;
+  min-width: 15px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-green);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+@keyframes save-pop {
+  0% {
+    transform: scale(1);
+  }
+  38% {
+    transform: scale(1.28);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .save-btn.is-pop .save-btn-icon {
+    animation: none;
+  }
+}
+
 /* Command palette --------------------------------------------------------- */
 @keyframes palette-in {
   from {
