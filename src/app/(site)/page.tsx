@@ -27,6 +27,7 @@ import {
   getUpcomingEvents,
 } from "@/lib/queries";
 import { db } from "@/lib/db";
+import { addDays, startOfDay } from "date-fns";
 
 export const revalidate = 60;
 
@@ -47,6 +48,16 @@ export default async function HomePage() {
   ]);
 
   const books = await db.book.findMany({ orderBy: { createdAt: "asc" }, take: 6 });
+
+  const weekEvents = await db.event.findMany({
+    where: {
+      status: "PUBLISHED",
+      startsAt: { gte: startOfDay(new Date()), lt: addDays(startOfDay(new Date()), 7) },
+    },
+    orderBy: { startsAt: "asc" },
+    take: 4,
+    select: { id: true, title: true, startsAt: true },
+  });
 
   const featured = bookClub ?? clubs[0];
   const rest = clubs.filter((c) => c.id !== featured?.id).slice(0, 3);
@@ -240,6 +251,37 @@ export default async function HomePage() {
                 </div>
               ) : null}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------- this week */}
+      <section aria-label="Bu hafta" className="border-b border-[color:var(--color-line)] bg-[color:var(--color-surface)]">
+        <div className="mx-auto flex w-full max-w-[1180px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4 sm:px-6">
+          <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+            <CalendarDays size={13} /> Bu hafta
+          </span>
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px]">
+            {weekEvents.length === 0 ? (
+              <span className="text-[color:var(--color-muted)]">Kelasi yetti kunda tadbir yo‘q.</span>
+            ) : (
+              weekEvents.slice(0, 3).map((event) => (
+                <Link key={event.id} href={`/events/${event.id}`} className="group inline-flex items-center gap-2">
+                  <span className="text-[color:var(--color-muted)]">{formatDate(event.startsAt, "d MMM")}</span>
+                  <span className="text-[color:var(--color-ink-soft)] transition-colors group-hover:text-[color:var(--color-link)]">
+                    {event.title}
+                  </span>
+                </Link>
+              ))
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Link href="/topish" className="link-quiet text-[12.5px] font-semibold">
+              Menga mos klub <ArrowUpRight size={12} />
+            </Link>
+            <Link href="/haftalik" className="btn btn-ghost btn-sm">
+              Haftalik jadval
+            </Link>
           </div>
         </div>
       </section>

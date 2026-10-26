@@ -31,6 +31,8 @@ export function SiteFooter() {
               ["A’zo bo‘lish", "/join"],
               ["Tadbirlar", "/events"],
               ["Yangiliklar", "/news"],
+              ["Bu hafta", "/haftalik"],
+              ["Reyting", "/reyting"],
               ["Saqlanganlar", "/saqlangan"],
             ]}
           />
@@ -38,6 +40,8 @@ export function SiteFooter() {
             title="Book Club"
             links={[
               ["Klub sahifasi", "/clubs/book-club"],
+              ["Menga mos klub", "/topish"],
+              ["Solishtirish", "/clubs/solishtirish"],
               ["Kutubxona", "/books"],
               ["Bookonomics", "/clubs/book-club#loyihalar"],
               ["Muhokamalar", "/app/discussions"],

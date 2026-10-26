@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { clamp } from "@/lib/utils";
+import { notifyUser } from "@/lib/notify";
 
 async function currentUser(next = "/app") {
   const user = await getSession();
@@ -94,6 +95,14 @@ export async function createPostAction(formData: FormData) {
   revalidatePath(`/app/discussions/${threadId}`);
 }
 
+/**
+ * RSVP with capacity and an automatic waiting list.
+ *
+ * Taking a place is the whole point of an RSVP; telling a student "to‘la" and
+ * losing them is worse than a waitlist. When the hall is full the request lands
+ * on the waitlist, and the moment somebody cancels the first person in line is
+ * promoted and notified — no admin has to watch the numbers by hand.
+ */
 export async function rsvpAction(formData: FormData) {
   const user = await currentUser("/app/events");
   const eventId = String(formData.get("eventId") ?? "");
@@ -101,15 +110,76 @@ export async function rsvpAction(formData: FormData) {
 
   if (!["GOING", "MAYBE", "CANCELLED"].includes(status)) throw new Error("Noto‘g‘ri status");
 
+  const event = await db.event.findUnique({
+    where: { id: eventId },
+    select: { id: true, title: true, capacity: true, club: { select: { slug: true } } },
+  });
+  if (!event) throw new Error("Tadbir topilmadi");
+
+  const previous = await db.eventRsvp.findUnique({
+    where: { eventId_userId: { eventId, userId: user.id } },
+    select: { status: true },
+  });
+
+  let next = status;
+  if (status === "GOING" && event.capacity) {
+    const going = await db.eventRsvp.count({ where: { eventId, status: "GOING" } });
+    if (going >= event.capacity && previous?.status !== "GOING") next = "WAITLIST";
+  }
+
   await db.eventRsvp.upsert({
     where: { eventId_userId: { eventId, userId: user.id } },
-    update: { status },
-    create: { eventId, userId: user.id, status },
+    update: { status: next },
+    create: { eventId, userId: user.id, status: next },
   });
+
+  // A freed place goes to the head of the queue, oldest request first.
+  if (previous?.status === "GOING" && next !== "GOING" && event.capacity) {
+    const firstInLine = await db.eventRsvp.findFirst({
+      where: { eventId, status: "WAITLIST" },
+      orderBy: { createdAt: "asc" },
+    });
+    if (firstInLine) {
+      await db.eventRsvp.update({ where: { id: firstInLine.id }, data: { status: "GOING" } });
+      await notifyUser(
+        firstInLine.userId,
+        "Navbatdagi joy bo‘shadi",
+        `“${event.title}” tadbirida sizga joy ajratildi.`,
+        `/events/${eventId}`,
+      );
+    }
+  }
 
   revalidatePath(`/events/${eventId}`);
   revalidatePath("/app/events");
   revalidatePath("/events");
+  revalidatePath("/app");
+}
+
+/** Post-event rating: one per member, editable, 1–5. */
+export async function submitFeedbackAction(formData: FormData) {
+  const user = await currentUser("/app/events");
+  const eventId = String(formData.get("eventId") ?? "");
+  const rating = clamp(Math.round(Number(formData.get("rating") ?? 0) || 0), 1, 5);
+  const comment = String(formData.get("comment") ?? "").trim().slice(0, 400) || null;
+
+  const event = await db.event.findUnique({
+    where: { id: eventId },
+    select: { id: true, title: true, startsAt: true, clubId: true },
+  });
+  if (!event) throw new Error("Tadbir topilmadi");
+  if (event.startsAt > new Date()) throw new Error("Tadbir hali boshlanmagan");
+
+  await db.eventFeedback.upsert({
+    where: { eventId_userId: { eventId, userId: user.id } },
+    update: { rating, comment },
+    create: { eventId, userId: user.id, rating, comment },
+  });
+
+  await db.user.update({ where: { id: user.id }, data: { points: { increment: 3 } } });
+
+  revalidatePath(`/events/${eventId}`);
+  revalidatePath("/app/events");
 }
 
 export async function markNotificationsReadAction() {

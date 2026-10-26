@@ -31,15 +31,16 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  memberships  Membership[]
-  joinRequests JoinRequest[] @relation("JoinRequestUser")
-  progress     ReadingProgress[]
-  threads      DiscussionThread[]
-  posts        Post[]
-  rsvps        EventRsvp[]
-  news         News[]
+  memberships   Membership[]
+  joinRequests  JoinRequest[]      @relation("JoinRequestUser")
+  progress      ReadingProgress[]
+  threads       DiscussionThread[]
+  posts         Post[]
+  rsvps         EventRsvp[]
+  news          News[]
   notifications Notification[]
-  auditLogs    AuditLog[]
+  auditLogs     AuditLog[]
+  EventFeedback EventFeedback[]
 
   @@index([role])
 }
@@ -79,12 +80,12 @@ model Club {
 }
 
 model Membership {
-  id       String           @id @default(cuid())
+  id       String   @id @default(cuid())
   userId   String
   clubId   String
-  role     String           @default("MEMBER") // PRESIDENT | MANAGER | MEMBER
-  status   String           @default("ACTIVE") // ACTIVE | PENDING | BLOCKED
-  joinedAt DateTime         @default(now())
+  role     String   @default("MEMBER") // PRESIDENT | MANAGER | MEMBER
+  status   String   @default("ACTIVE") // ACTIVE | PENDING | BLOCKED
+  joinedAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
@@ -94,7 +95,7 @@ model Membership {
 }
 
 model JoinRequest {
-  id         String            @id @default(cuid())
+  id         String   @id @default(cuid())
   clubId     String
   userId     String?
   fullName   String
@@ -104,10 +105,10 @@ model JoinRequest {
   phone      String
   telegram   String
   motivation String?
-  status     String            @default("NEW") // NEW | IN_REVIEW | APPROVED | REJECTED
+  status     String   @default("NEW") // NEW | IN_REVIEW | APPROVED | REJECTED
   note       String?
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   club Club  @relation(fields: [clubId], references: [id], onDelete: Cascade)
   user User? @relation("JoinRequestUser", fields: [userId], references: [id], onDelete: SetNull)
@@ -141,19 +142,19 @@ model Book {
 }
 
 model ReadingCycle {
-  id          String     @id @default(cuid())
-  clubId      String
-  bookId      String
-  status      String     @default("PLANNED") // PLANNED | READING | FINISHED | ARCHIVED
-  startsAt    DateTime?
-  endsAt      DateTime?
-  meetingAt   DateTime?
-  location    String?
-  focus       String? // discussion focus, newline separated
-  createdAt   DateTime   @default(now())
+  id        String    @id @default(cuid())
+  clubId    String
+  bookId    String
+  status    String    @default("PLANNED") // PLANNED | READING | FINISHED | ARCHIVED
+  startsAt  DateTime?
+  endsAt    DateTime?
+  meetingAt DateTime?
+  location  String?
+  focus     String? // discussion focus, newline separated
+  createdAt DateTime  @default(now())
 
-  club       Club             @relation(fields: [clubId], references: [id], onDelete: Cascade)
-  book       Book             @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  club       Club               @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  book       Book               @relation(fields: [bookId], references: [id], onDelete: Cascade)
   milestones Milestone[]
   progress   ReadingProgress[]
   threads    DiscussionThread[]
@@ -187,22 +188,22 @@ model ReadingProgress {
 }
 
 model DiscussionThread {
-  id        String     @id @default(cuid())
+  id        String   @id @default(cuid())
   clubId    String
   cycleId   String?
   authorId  String?
   title     String
   body      String
-  kind      String     @default("DISCUSSION") // DISCUSSION | QUESTION | ANNOUNCEMENT
-  isPinned  Boolean    @default(false)
-  isLocked  Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  kind      String   @default("DISCUSSION") // DISCUSSION | QUESTION | ANNOUNCEMENT
+  isPinned  Boolean  @default(false)
+  isLocked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  club  Club          @relation(fields: [clubId], references: [id], onDelete: Cascade)
-  cycle ReadingCycle? @relation(fields: [cycleId], references: [id], onDelete: SetNull)
-  author User?        @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  posts Post[]
+  club   Club          @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  cycle  ReadingCycle? @relation(fields: [cycleId], references: [id], onDelete: SetNull)
+  author User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  posts  Post[]
 
   @@index([clubId, createdAt])
 }
@@ -225,32 +226,34 @@ model Post {
 // ---------------------------------------------------------------------------
 
 model Event {
-  id          String      @id @default(cuid())
+  id          String    @id @default(cuid())
   clubId      String
   title       String
   description String
-  type        String      @default("meetup") // meetup | workshop | contest | trip | sport
+  type        String    @default("meetup") // meetup | workshop | contest | trip | sport
   startsAt    DateTime
   endsAt      DateTime?
   location    String
   capacity    Int?
-  coverFrom   String      @default("#104070")
-  coverTo     String      @default("#2070D0")
-  status      String      @default("DRAFT") // DRAFT | PUBLISHED | CANCELLED | FINISHED
-  createdAt   DateTime    @default(now())
+  coverFrom   String    @default("#104070")
+  coverTo     String    @default("#2070D0")
+  status      String    @default("DRAFT") // DRAFT | PUBLISHED | CANCELLED | FINISHED
+  createdAt   DateTime  @default(now())
 
-  club  Club        @relation(fields: [clubId], references: [id], onDelete: Cascade)
-  rsvps EventRsvp[]
+  club     Club            @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  rsvps    EventRsvp[]
+  feedback EventFeedback[]
 
   @@index([clubId, startsAt])
 }
 
 model EventRsvp {
-  id        String     @id @default(cuid())
-  eventId   String
-  userId    String
-  status    String     @default("GOING") // GOING | MAYBE | CANCELLED
-  createdAt DateTime   @default(now())
+  id         String    @id @default(cuid())
+  eventId    String
+  userId     String
+  status     String    @default("GOING") // GOING | MAYBE | WAITLIST | CANCELLED
+  createdAt  DateTime  @default(now())
+  attendedAt DateTime?
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -259,24 +262,40 @@ model EventRsvp {
 }
 
 model News {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   clubId      String?
   authorId    String?
-  slug        String     @unique
+  slug        String    @unique
   title       String
   excerpt     String
   body        String
-  coverFrom   String     @default("#104070")
-  coverTo     String     @default("#2070D0")
-  status      String     @default("DRAFT") // DRAFT | PUBLISHED
+  coverFrom   String    @default("#104070")
+  coverTo     String    @default("#2070D0")
+  status      String    @default("DRAFT") // DRAFT | PUBLISHED
   publishedAt DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   club   Club? @relation(fields: [clubId], references: [id], onDelete: SetNull)
   author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([status, publishedAt])
+}
+
+// Post-event rating. One per member per event; drives the club's public score.
+model EventFeedback {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
 }
 
 model Notification {

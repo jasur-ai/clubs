@@ -14,6 +14,8 @@ import {
   Newspaper,
   Search,
   SearchX,
+  Sparkles,
+  Trophy,
   UserPlus,
   Users,
   X,
@@ -50,6 +52,9 @@ const GROUP_ORDER: Hit["type"][] = ["club", "book", "event", "news"];
 
 const QUICK: Entry[] = [
   { key: "q-clubs", href: "/clubs", title: "Klublar katalogi", meta: "22 yo‘nalish", icon: Compass },
+  { key: "q-fit", href: "/topish", title: "Menga mos klub", meta: "4 savol · 1 daqiqa", icon: Sparkles },
+  { key: "q-week", href: "/haftalik", title: "Bu hafta", meta: "Yetti kunlik jadval", icon: CalendarDays },
+  { key: "q-ratings", href: "/reyting", title: "Reyting", meta: "Eng faol talabalar", icon: Trophy },
   { key: "q-book", href: "/clubs/book-club", title: "Book Club", meta: "Kitobxonlik dasturi", icon: BookOpen },
   { key: "q-library", href: "/books", title: "Kutubxona", meta: "Bookonomics ro‘yxati", icon: Library },
   { key: "q-join", href: "/join", title: "A’zo bo‘lish", meta: "Ariza bir daqiqada", icon: UserPlus },

@@ -56,9 +56,9 @@ export default async function MemberLayout({ children }: { children: React.React
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <Link
-                href="/app/profile"
+                href="/app/bildirishnomalar"
                 className="relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]"
-                aria-label="Bildirishnomalar"
+                aria-label={unread > 0 ? `Bildirishnomalar — ${unread} ta o‘qilmagan` : "Bildirishnomalar"}
               >
                 <Bell size={15} />
                 {unread > 0 && (

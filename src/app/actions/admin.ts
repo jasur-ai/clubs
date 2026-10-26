@@ -438,6 +438,38 @@ export async function updateClubAction(formData: FormData) {
 
 /* ------------------------------------------------------------- xabarnoma */
 
+/* ------------------------------------------------------------------ davomat */
+
+/**
+ * Attendance mark for one RSVP. Club leads run the door with a phone in hand;
+ * a single tap has to be enough, and the same row has to be undoable when the
+ * tap was wrong.
+ */
+export async function toggleAttendanceAction(formData: FormData) {
+  const user = await requireStaff();
+  const rsvpId = String(formData.get("rsvpId") ?? "");
+
+  const rsvp = await db.eventRsvp.findUnique({
+    where: { id: rsvpId },
+    include: { event: { select: { id: true, clubId: true } } },
+  });
+  if (!rsvp) throw new Error("Ro‘yxat topilmadi");
+  await assertClub(user, rsvp.event.clubId);
+
+  const attendedAt = rsvp.attendedAt ? null : new Date();
+  await db.eventRsvp.update({ where: { id: rsvpId }, data: { attendedAt } });
+
+  if (attendedAt) {
+    await db.user.update({ where: { id: rsvp.userId }, data: { points: { increment: 10 } } });
+  } else {
+    await db.user.update({ where: { id: rsvp.userId }, data: { points: { decrement: 10 } } });
+  }
+
+  await audit(user.id, "ATTENDANCE", "EventRsvp", rsvpId, attendedAt ? "checked-in" : "checked-out");
+  revalidatePath(`/admin/events/${rsvp.event.id}/davomat`);
+  revalidatePath("/admin/events");
+}
+
 export async function broadcastAction(formData: FormData) {
   const user = await requireStaff();
   if (user.role !== "SUPER_ADMIN") throw new Error("Faqat platforma administratori");

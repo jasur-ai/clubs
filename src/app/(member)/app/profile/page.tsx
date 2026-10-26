@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Send, Trophy } from "lucide-react";
+import { ArrowUpRight, LogOut, Send, Trophy } from "lucide-react";
 import { requireUserPage } from "@/lib/session";
 import { db } from "@/lib/db";
 import { logoutAction } from "@/app/actions/auth";
@@ -98,6 +98,15 @@ export default async function ProfilePage() {
           </div>
         </div>
       )}
+
+      <div className="grid grid-cols-2 gap-2">
+        <Link href="/app/arizalar" className="flex items-center justify-between rounded-[11px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3.5 py-3 text-[12.5px] font-medium">
+          Arizalarim <ArrowUpRight size={13} className="text-[color:var(--color-muted)]" />
+        </Link>
+        <Link href="/app/bildirishnomalar" className="flex items-center justify-between rounded-[11px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3.5 py-3 text-[12.5px] font-medium">
+          Xabarlar <ArrowUpRight size={13} className="text-[color:var(--color-muted)]" />
+        </Link>
+      </div>
 
       <div className="rounded-[14px] border border-[color:var(--color-line)] bg-white">
         <div className="flex items-center justify-between border-b border-[color:var(--color-line)] px-4 py-2.5">

@@ -150,6 +150,9 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
                 </p>
               </div>
               <div className="flex gap-2">
+                <Link href={`/admin/events/${e.id}/davomat`} className="btn btn-secondary btn-sm">
+                  Davomat
+                </Link>
                 <FormDialog label="Tahrirlash" title={e.title} variant="secondary">{eventForm(e)}</FormDialog>
                 <form action={deleteEventAction}>
                   <input type="hidden" name="id" value={e.id} />

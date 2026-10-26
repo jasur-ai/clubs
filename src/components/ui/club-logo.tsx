@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CLUBS_WITH_DARK_EMBLEM } from "@/config/club-logos";
+import { CLUBS_WITH_INK_EMBLEM } from "@/config/club-logos";
 
 type Props = {
   name: string;
@@ -17,18 +17,21 @@ type Props = {
  * height, so a wide wordmark and a circular badge both stay legible instead of
  * being squeezed into the same square. A soft shadow lifts the mark off the
  * card without drawing a box around it.
+ *
+ * One image, one set of colours: the emblem is identical in light and dark
+ * themes. Dark ink marks receive a light halo in the dark theme so they stay
+ * readable; nothing is recoloured, inverted or tinted.
  */
 export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, className, rounded }: Props) {
   if (logoUrl) {
     const slug = logoUrl.split("/").pop()?.replace(/\.(png|jpe?g)$/i, "") ?? "";
-    const darkSrc = CLUBS_WITH_DARK_EMBLEM.has(slug) ? logoUrl.replace(/\.(png|jpe?g)$/i, "-dark.png") : null;
+    const ink = CLUBS_WITH_INK_EMBLEM.has(slug);
     const style = {
       height: size,
       width: "auto",
       // wide wordmarks would push past the card edge at full height
       maxWidth: size * 1.6,
     } as const;
-    const base = "w-auto select-none object-contain";
 
     return (
       <span className="inline-flex shrink-0" aria-hidden>
@@ -39,21 +42,9 @@ export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, classNa
           loading="lazy"
           decoding="async"
           draggable={false}
-          className={cn(base, darkSrc && "club-emblem-light", className)}
+          className={cn("club-emblem w-auto select-none object-contain", ink && "club-emblem--ink", className)}
           style={style}
         />
-        {darkSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={darkSrc}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-            className={cn(base, "club-emblem-dark", className)}
-            style={style}
-          />
-        ) : null}
       </span>
     );
   }

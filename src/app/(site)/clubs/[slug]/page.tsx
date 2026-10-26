@@ -9,6 +9,7 @@ import { CoverArt } from "@/components/ui/cover-art";
 import { Avatar, Badge, ProgressBar, SectionHeading } from "@/components/ui/primitives";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { SaveButton } from "@/components/site/save-button";
+import { ShareButton } from "@/components/site/share-button";
 import { formatDate } from "@/lib/format";
 import { getChannelFeed, channelUsername } from "@/lib/channel-feed";
 import { db } from "@/lib/db";
@@ -42,7 +43,8 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
     isBookClub ? getCommunityProgress(club.id) : Promise.resolve({ average: 0, readers: 0 }),
     db.club.findMany({
       where: { isActive: true, slug: { not: slug } },
-      orderBy: { sortOrder: "asc" },
+      // same direction first — "more like this" is the question the reader is asking
+      orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
       take: 3,
       select: { slug: true, name: true, summary: true, category: true, accent: true, logoUrl: true, coverStyle: true },
     }),
@@ -102,6 +104,9 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 </span>
               </div>
 
+              {/* Primary actions stay on one line; secondary ones (save, share,
+                  compare) sit below as a quieter group so the eye lands on
+                  "A’zo bo‘lish" first. */}
               <div className="mt-7 flex flex-wrap gap-3">
                 <Link href={`/join?club=${club.slug}`} className="btn btn-accent btn-lg">
                   A’zo bo‘lish <ArrowRight size={16} />
@@ -114,14 +119,25 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <Link href="/app" className="btn btn-secondary btn-lg">
                   <MessageSquare size={15} /> Mini-ilova
                 </Link>
+              </div>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
                 <SaveButton
                   kind="club"
                   id={club.id}
                   title={club.name}
                   meta={club.tagline ?? undefined}
                   href={`/clubs/${club.slug}`}
-                  className="save-btn-lg"
+                  compact
                 />
+                <ShareButton
+                  title={club.name}
+                  text={club.tagline}
+                  href={`/clubs/${club.slug}`}
+                  className="save-btn-compact"
+                />
+                <Link href={`/clubs/solishtirish?clubs=${club.slug}`} className="save-btn save-btn-compact">
+                  Solishtirish
+                </Link>
               </div>
             </div>
 
@@ -388,7 +404,20 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
 
       {/* related */}
       <section className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
-        <SectionHeading eyebrow="Yana" title="Boshqa klublar" action={<Link href="/clubs" className="btn btn-ghost btn-sm">Katalog <ArrowRight size={14} /></Link>} />
+        <SectionHeading
+          eyebrow="Yana"
+          title="O‘xshash klublar"
+          action={
+            <div className="flex gap-2">
+              <Link href={`/clubs/solishtirish?clubs=${club.slug}`} className="btn btn-ghost btn-sm">
+                Solishtirish
+              </Link>
+              <Link href="/clubs" className="btn btn-ghost btn-sm">
+                Katalog <ArrowRight size={14} />
+              </Link>
+            </div>
+          }
+        />
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {partners.map((p) => (
             <Link

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CoverArt } from "@/components/ui/cover-art";
 import { SaveButton } from "@/components/site/save-button";
+import { ShareButton } from "@/components/site/share-button";
 import { formatDate } from "@/lib/format";
 import { db } from "@/lib/db";
 
@@ -62,6 +63,7 @@ export default async function NewsItemPage({ params }: { params: Promise<{ slug:
           href={`/news/${item.slug}`}
           compact
         />
+        <ShareButton title={item.title} text={item.excerpt ?? undefined} href={`/news/${item.slug}`} compact />
       </div>
 
       <div className="mt-8 flex items-center justify-between border-t border-[color:var(--color-line)] pt-5 text-[12px] text-[color:var(--color-muted)]">

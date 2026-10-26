@@ -6,6 +6,7 @@ import { getPastEvents, getUpcomingEvents } from "@/lib/queries";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/format";
+import { CalendarPlus } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Tadbirlar",
@@ -29,6 +30,16 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
         eyebrow="Taqvim"
         title="Tadbirlar"
         description="Barcha klublar tadbirlari bir joyda. RSVP qilish uchun hisobingizga kiring."
+        action={
+          <div className="flex flex-wrap gap-2">
+            <Link href="/haftalik" className="btn btn-ghost btn-sm">
+              Bu hafta
+            </Link>
+            <a href={params.club ? `/api/calendar.ics?club=${params.club}` : "/api/calendar.ics"} className="btn btn-secondary btn-sm">
+              <CalendarPlus size={14} /> Taqvimga obuna
+            </a>
+          </div>
+        }
       />
 
       <div className="hide-scrollbar mt-8 flex gap-2 overflow-x-auto border-b border-[color:var(--color-line)] pb-5">

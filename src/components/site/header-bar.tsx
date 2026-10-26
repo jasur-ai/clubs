@@ -73,7 +73,7 @@ export function HeaderBar({ authed }: { authed: boolean }) {
           <Logo />
           <nav className="hidden items-center gap-7 lg:flex" aria-label="Asosiy navigatsiya">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} className="nav-link" data-active={isActive(l.href)}>
+              <Link key={l.href} href={l.href} className="nav-link" data-active={isActive(l.href)} aria-current={isActive(l.href) ? "page" : undefined}>
                 {l.label}
               </Link>
             ))}
