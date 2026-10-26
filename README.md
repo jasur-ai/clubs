@@ -31,6 +31,10 @@ directory and can be switched on one by one — the data model is multi-club fro
 | --- | --- |
 | ![Mini App dark](docs/screenshots/mini-app-dark.jpg) | ![Sign in](docs/screenshots/login.jpg) |
 
+| Unified search — ⌘K palette | Saved pages (device-local) |
+| --- | --- |
+| ![Search](docs/screenshots/search.jpg) | ![Saved](docs/screenshots/saved.jpg) |
+
 Each club keeps its own emblem, pulled from its Telegram channel and served locally
 (`public/clubs/<slug>.jpg`), so the directory reads as the real club network rather than a
 placeholder grid.
@@ -47,11 +51,15 @@ placeholder grid.
 | Join | `/join?club=slug` | Membership application, routed to the club lead |
 | Member Mini App | `/app` | Reading progress, discussions, RSVP, profile — Telegram-first |
 | Admin console | `/admin` | Requests, members, library, reading cycles, events, news, settings |
+| Search | `/qidiruv?q=` | One field across clubs, library, events and news; ⌘K palette everywhere |
+| Saved | `/saqlangan` | Device-local bookmarks for clubs, books, events and news — no account needed |
+| Calendar | `/api/events/[id]/ics`, `/api/events/ics?ids=` | Single event or a whole shortlist, with a two-hour reminder |
+| Admin export | `/api/admin/export?type=` | CSV for members, join requests and event participants |
 | Bot webhook | `/api/telegram` | Commands, deep links, web-app entry point |
 
-Design language: O'zbekiston Yoshlar ittifoqi palette — deep navy `#0d1646`, youth green
-`#1e9e4f`, institutional blue `#2458d6` — on warm paper `#f7f6f2`, with each club keeping its own
-accent. Fraunces for editorial headlines, Manrope for UI. Light and dark themes share one set of
+Design language: O'zbekiston Yoshlar ittifoqi green — `#21a04c` with deep `#0f6b39` and ink
+`#0b4527`, brass `#9a7434` — on warm paper `#efece3`, with each club keeping its own accent. No
+blue appears anywhere in the interface. Fraunces for editorial headlines, Manrope for UI. Light and dark themes share one set of
 semantic tokens (`html[data-theme]`), toggled from the header and remembered in `localStorage`
 with the system preference as the default.
 
@@ -62,7 +70,7 @@ hover lift on cards, an animated mobile sheet and a route transition — all dis
 `prefers-reduced-motion`.
 
 Brand assets in `public/brand/`: `yoshlar-ittifoqi-mark.png` (official lockup, knocked out to
-transparency for dark surfaces), `yoshlar-ittifoqi.png` (full artwork), `tsue-emblem.png`.
+transparency for dark surfaces) and `yoshlar-ittifoqi.png` (full artwork).
 
 ## Stack
 

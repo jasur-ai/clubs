@@ -137,8 +137,8 @@ an admin action.
 
 ## 8. Design system
 
-Tokens live in `src/app/globals.css`: navy `#104070`, blue `#2070d0`, paper `#f6f7f8`, ink
-`#0b1f33`, muted greys, clay `#a8492f`. Type: Fraunces (editorial), Manrope (UI). Radii
+Tokens live in `src/app/globals.css`: brand green `#21a04c` with deep `#0f6b39` and ink `#0b4527`,
+brass `#9a7434`, warm paper `#efece3`, ink `#131d17`, clay `#a8492f`. Blue is not used anywhere. Type: Fraunces (editorial), Manrope (UI). Radii
 6/10/14/20. One accent variable per club (`--club-accent`) themes buttons, badges and progress.
 
 Covers are generated, not photographed: `CoverArt` renders deterministic SVG/CSS patterns from

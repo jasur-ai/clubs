@@ -99,8 +99,9 @@ Adopted: server-side validation in `src/lib/telegram.ts`, a bootstrap component 
 - TSUE's public site is a single-page application; there is no machine-readable club directory,
   so the club registry in `src/config/clubs.ts` is the source of truth and is verified against
   each club's Telegram channel.
-- The university brand is navy blue; orange `#ff4500` appears as a secondary accent on the
-  homepage. We use navy and blue as the primary system and reserve the warm accent for the Book
-  Club, so the platform reads as institutional rather than as a separate brand.
+- The umbrella brand is O'zbekiston Yoshlar ittifoqi, whose own logo pairs a green swoosh with a
+  white wordmark. We therefore run a green-and-warm-neutral system, keep the official logo
+  untouched, and let each club carry its own accent — blue is deliberately absent so the identity
+  reads as the youth union rather than as the university's navy.
 - Language: Uzbek is the default for every surface; Russian and English are supported at the data
   level (`Book.language`) and can be added to the UI without schema changes.
