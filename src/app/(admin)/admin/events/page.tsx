@@ -95,7 +95,20 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
       <PageHeader
         title="Tadbirlar"
         description="Tadbir e’lon qilinganda sayt va mini-ilovada ko‘rinadi, RSVP darhol ochiladi."
-        action={selected ? <FormDialog label="Tadbir qo‘shish" title="Yangi tadbir" description={selected.name}>{eventForm()}</FormDialog> : null}
+        action={
+          <div className="flex items-center gap-2">
+            {selected && (
+              <a
+                href={`/api/admin/export?type=rsvps&club=${selected.slug}`}
+                className="btn btn-secondary btn-sm"
+                title="Ishtirokchilarni CSV fayl sifatida yuklab olish"
+              >
+                Ishtirokchilar CSV
+              </a>
+            )}
+            {selected ? <FormDialog label="Tadbir qo‘shish" title="Yangi tadbir" description={selected.name}>{eventForm()}</FormDialog> : null}
+          </div>
+        }
       />
 
       <div className="hide-scrollbar fade-x mb-4 flex items-center gap-1.5 overflow-x-auto pb-1">

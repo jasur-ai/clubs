@@ -51,11 +51,20 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         title="A’zolar"
         description="Rol va holatni bir bosishda o‘zgartiring. O‘zgarish darhol mini-ilovada aks etadi."
         action={
-          <form action="/admin/members" className="flex gap-2">
-            {params.club && <input type="hidden" name="club" value={params.club} />}
-            <input name="q" defaultValue={params.q ?? ""} placeholder="Ism yoki username" className="input h-8 w-48 text-[12px]" />
-            <button className="btn btn-secondary btn-sm">Qidirish</button>
-          </form>
+          <div className="flex items-center gap-2">
+            <form action="/admin/members" className="flex gap-2">
+              {params.club && <input type="hidden" name="club" value={params.club} />}
+              <input name="q" defaultValue={params.q ?? ""} placeholder="Ism yoki username" className="input h-8 w-48 text-[12px]" />
+              <button className="btn btn-secondary btn-sm">Qidirish</button>
+            </form>
+            <a
+              href={`/api/admin/export?type=members${params.club ? `&club=${params.club}` : ""}`}
+              className="btn btn-secondary btn-sm"
+              title="Jadvalni CSV fayl sifatida yuklab olish"
+            >
+              CSV
+            </a>
+          </div>
         }
       />
 

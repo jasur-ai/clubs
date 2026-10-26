@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Bookmark, BookOpen, CalendarDays, Newspaper, Trash2, Users } from "lucide-react";
+import { ArrowUpRight, Bookmark, BookOpen, CalendarDays, CalendarPlus, Newspaper, Trash2, Users } from "lucide-react";
 import {
   clearBookmarks,
   readBookmarks,
@@ -31,6 +31,8 @@ export function SavedList() {
     setReady(true);
     return subscribeBookmarks(() => setItems(readBookmarks()));
   }, []);
+
+  const eventIds = useMemo(() => items.filter((item) => item.kind === "event").map((item) => item.id), [items]);
 
   const groups = useMemo(
     () =>
@@ -69,13 +71,25 @@ export function SavedList() {
         <p className="text-[13px] text-[color:var(--color-muted)]">
           <span className="font-semibold text-[color:var(--color-ink)]">{items.length}</span> ta sahifa saqlangan
         </p>
-        <button
-          type="button"
-          onClick={() => clearBookmarks()}
-          className="text-[12px] font-medium text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-danger)]"
-        >
-          Hammasini o‘chirish
-        </button>
+        <div className="flex items-center gap-4">
+          {eventIds.length > 0 && (
+            <a
+              href={`/api/events/ics?ids=${encodeURIComponent(eventIds.join(","))}`}
+              download
+              className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[color:var(--color-ink-soft)] transition-colors hover:text-[color:var(--color-link)]"
+            >
+              <CalendarPlus size={13} strokeWidth={1.9} />
+              Tadbirlarni taqvimga
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={() => clearBookmarks()}
+            className="text-[12px] font-medium text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-danger)]"
+          >
+            Hammasini o‘chirish
+          </button>
+        </div>
       </div>
 
       <div className="mt-7 flex flex-col gap-9">

@@ -53,11 +53,20 @@ export default async function JoinRequestsPage({ searchParams }: { searchParams:
         title="A’zolik so‘rovlari"
         description="Har bir arizani bir bosishda tasdiqlang. Tasdiqlanganda talaba avtomatik klub a’zosiga aylanadi va mini-ilova ochiladi."
         action={
-          status === "NEW" && requests.length > 0 ? (
-            <form action={approveAllJoinRequestsAction}>
-              <button className="btn btn-secondary btn-sm">Barchasini tasdiqlash ({requests.length})</button>
-            </form>
-          ) : null
+          <div className="flex items-center gap-2">
+            {status === "NEW" && requests.length > 0 && (
+              <form action={approveAllJoinRequestsAction}>
+                <button className="btn btn-secondary btn-sm">Barchasini tasdiqlash ({requests.length})</button>
+              </form>
+            )}
+            <a
+              href={`/api/admin/export?type=join${params.club ? `&club=${params.club}` : ""}`}
+              className="btn btn-secondary btn-sm"
+              title="Arizalarni CSV fayl sifatida yuklab olish"
+            >
+              CSV
+            </a>
+          </div>
         }
       />
 
