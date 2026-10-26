@@ -1383,6 +1383,13 @@ html[data-theme="dark"] .theme-toggle:hover .ico-sun {
   background: var(--brand-gradient-bright);
   animation: palette-bar 1.15s cubic-bezier(0.45, 0.1, 0.4, 0.9) infinite;
 }
+.palette-fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 26px;
+  background: linear-gradient(to top, var(--color-surface), transparent);
+  pointer-events: none;
+}
 .palette-label {
   font-size: 9.8px;
   font-weight: 700;

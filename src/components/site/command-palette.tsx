@@ -86,6 +86,7 @@ export function CommandPalette() {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const savedCount = useBookmarkCount();
+  const [atBottom, setAtBottom] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -236,6 +237,13 @@ export function CommandPalette() {
     el?.scrollIntoView({ block: "nearest" });
   }, [active]);
 
+  /** The fade only shows while there is more content below the fold. */
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 8);
+  }, [entries.length, open]);
+
   if (!open) return null;
 
   return (
@@ -291,7 +299,15 @@ export function CommandPalette() {
         </div>
 
         {/* results */}
-        <div ref={listRef} className="max-h-[52vh] overflow-y-auto overscroll-contain p-2">
+        <div className="relative">
+        <div
+          ref={listRef}
+          onScroll={(event) => {
+            const el = event.currentTarget;
+            setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 8);
+          }}
+          className="max-h-[52vh] overflow-y-auto overscroll-contain p-2"
+        >
           {searching && loading && hits.length === 0 ? (
             <div className="space-y-2 p-1.5">
               {[0, 1, 2].map((i) => (
@@ -431,6 +447,8 @@ export function CommandPalette() {
               )}
             </>
           )}
+        </div>
+          {!atBottom && <span aria-hidden className="palette-fade" />}
         </div>
 
         <div className="flex items-center justify-between gap-3 border-t border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] px-4 py-2 text-[10.5px] text-[color:var(--color-muted)]">
