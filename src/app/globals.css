@@ -1182,3 +1182,162 @@ html[data-theme="dark"] .theme-toggle:hover .ico-sun {
     display: none;
   }
 }
+
+/* Command palette --------------------------------------------------------- */
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes palette-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes palette-bar {
+  0% {
+    left: -38%;
+    opacity: 0.35;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0.35;
+  }
+}
+@keyframes skeleton-sweep {
+  from {
+    background-position: -180px 0;
+  }
+  to {
+    background-position: 220px 0;
+  }
+}
+.palette-panel {
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.5) inset,
+    0 2px 4px rgb(24 30 22 / 0.06),
+    0 42px 96px -44px rgb(10 15 11 / 0.72);
+}
+[data-theme="dark"] .palette-panel {
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.04) inset,
+    0 2px 4px rgb(0 0 0 / 0.3),
+    0 46px 110px -46px rgb(0 0 0 / 0.9);
+}
+.palette-topline {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--brand-gradient-bright);
+  opacity: 0.92;
+}
+.palette-progress {
+  position: absolute;
+  bottom: -1px;
+  height: 2px;
+  width: 38%;
+  border-radius: 2px;
+  background: var(--brand-gradient-bright);
+  animation: palette-bar 1.15s cubic-bezier(0.45, 0.1, 0.4, 0.9) infinite;
+}
+.palette-label {
+  font-size: 9.8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.palette-panel input:focus-visible,
+.palette-panel input:focus {
+  outline: none;
+}
+.palette-row {
+  transition:
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+.palette-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--color-green);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+.palette-row:hover {
+  background: var(--color-surface-2);
+}
+.palette-row.is-active {
+  background: var(--color-surface-2);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+.palette-row.is-active::before {
+  opacity: 1;
+  transform: none;
+}
+.palette-tile {
+  display: inline-flex;
+  height: 32px;
+  width: 32px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--color-surface-3);
+  color: var(--color-ink-soft);
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.palette-row.is-active .palette-tile {
+  background: color-mix(in oklab, var(--color-green) 14%, transparent);
+  color: var(--color-green);
+}
+.palette-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-size: 9.5px;
+  line-height: 1;
+}
+.skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-surface-2) 0%,
+    var(--color-surface-3) 45%,
+    var(--color-surface-2) 100%
+  );
+  background-size: 220px 100%;
+  background-repeat: no-repeat;
+  animation: skeleton-sweep 1.1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .palette-progress,
+  .skeleton {
+    animation: none;
+  }
+}

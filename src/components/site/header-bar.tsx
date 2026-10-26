@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, Search, X } from "lucide-react";
 import { Logo } from "@/components/site/logo";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { SearchTrigger } from "@/components/site/command-palette";
 import { useScrolled } from "@/components/site/motion";
 import { cn } from "@/lib/utils";
 
@@ -87,6 +88,7 @@ export function HeaderBar({ authed }: { authed: boolean }) {
             Telegram
             <ArrowUpRight size={12} />
           </a>
+          <SearchTrigger className="hidden sm:inline-flex" />
           <span aria-hidden className="mx-1 hidden h-4 w-px bg-[color:var(--color-line)] md:block" />
           <ThemeToggle />
           <div className="hidden items-center gap-2 sm:flex">
@@ -113,6 +115,18 @@ export function HeaderBar({ authed }: { authed: boolean }) {
       {/* mobile sheet */}
       <div className={cn("mobile-sheet lg:hidden", open && "is-open")} aria-hidden={!open}>
         <div className="mx-auto flex h-full w-full max-w-[1180px] flex-col px-5 pb-8 pt-2">
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              window.dispatchEvent(new Event("clubs:search"));
+            }}
+            tabIndex={open ? 0 : -1}
+            className="mb-3 flex items-center gap-2.5 rounded-[11px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3.5 py-2.5 text-left text-[13px] text-[color:var(--color-muted)]"
+          >
+            <Search size={15} />
+            Qidirish — klub, kitob, tadbir
+          </button>
           <nav className="flex flex-col" aria-label="Mobil navigatsiya">
             {links.map((l, i) => (
               <Link

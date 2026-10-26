@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
+import { CalendarDays, CalendarPlus, Clock, MapPin, Users } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Badge, ProgressBar } from "@/components/ui/primitives";
 import { formatDate, timeRange } from "@/lib/format";
@@ -110,11 +110,20 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               </div>
             )}
           </div>
-          {event.club.telegramUrl && (
-            <a href={event.club.telegramUrl} target="_blank" rel="noreferrer" className="btn btn-secondary w-full">
-              Klub kanali
+          <div className="grid gap-2">
+            <a
+              href={`/api/events/${event.id}/ics`}
+              className="btn btn-secondary w-full"
+              download
+            >
+              <CalendarPlus size={15} /> Taqvimga qo‘shish
             </a>
-          )}
+            {event.club.telegramUrl && (
+              <a href={event.club.telegramUrl} target="_blank" rel="noreferrer" className="btn btn-ghost w-full">
+                Klub kanali
+              </a>
+            )}
+          </div>
         </aside>
       </div>
     </div>
