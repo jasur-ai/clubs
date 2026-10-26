@@ -421,24 +421,6 @@ body {
     inset 0 -1px 0 rgb(0 0 0 / 0.12),
     0 18px 34px -18px rgb(16 60 120 / 0.9);
 }
-.btn-primary.skip-link {
-  position: absolute;
-  left: 50%;
-  top: 8px;
-  z-index: 200;
-  translate: -50% -200%;
-  border-radius: 8px;
-  background: var(--color-ink);
-  color: var(--color-paper);
-  padding: 8px 14px;
-  font-size: 12.5px;
-  font-weight: 600;
-  transition: translate 180ms ease;
-}
-.skip-link:focus-visible {
-  translate: -50% 0;
-}
-
 :focus-visible {
   outline-color: var(--color-green);
 }
@@ -1224,6 +1206,32 @@ html[data-theme="dark"] .theme-toggle:hover .ico-sun {
 @media (min-width: 1024px) {
   .menu-btn {
     display: none;
+  }
+}
+
+/* Help / FAQ -------------------------------------------------------------- */
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::marker {
+  content: "";
+}
+.faq .faq-body {
+  animation: faq-in 220ms ease both;
+}
+@keyframes faq-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq .faq-body {
+    animation: none;
   }
 }
 

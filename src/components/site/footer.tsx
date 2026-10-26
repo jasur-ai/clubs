@@ -34,6 +34,7 @@ export function SiteFooter() {
               ["Bu hafta", "/haftalik"],
               ["Reyting", "/reyting"],
               ["Saqlanganlar", "/saqlangan"],
+              ["Yordam", "/yordam"],
             ]}
           />
           <FooterCol

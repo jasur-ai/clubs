@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, CalendarClock, MapPin, Send, Users } from "lucide-react";
+import { ArrowUpRight, CalendarClock, MapPin, Plus, Send, Users, X } from "lucide-react";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
 import { getDiscoveryClubs } from "@/lib/discovery";
@@ -122,12 +122,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
         <table className="w-full min-w-[640px] border-collapse">
           <thead>
             <tr>
-              <th className="w-40 border-b border-[color:var(--color-line)] pb-3 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+              <th className="sticky left-0 z-[1] w-28 border-b border-[color:var(--color-line)] bg-[color:var(--color-paper)] pb-3 pr-3 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)] sm:w-40">
                 Mezon
               </th>
               {options.map((club) => (
                 <th key={club.id} className="border-b border-[color:var(--color-line)] px-4 pb-3 text-left align-bottom">
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-1.5">
                     <div className="flex flex-col gap-2">
                       <ClubLogo name={club.name} logoUrl={club.logoUrl} accent={club.accent} size={38} />
                       <Link
@@ -141,9 +141,10 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
                       <Link
                         href={withoutClub(club.slug)}
                         aria-label={`${club.name} ni solishtirishdan olib tashlash`}
-                        className="rounded-[6px] px-1.5 py-0.5 text-[11px] text-[color:var(--color-muted-soft)] transition-colors hover:bg-[color:var(--color-surface-2)] hover:text-[color:var(--color-danger)]"
+                        title="Solishtirishdan olib tashlash"
+                        className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[color:var(--color-muted-soft)] transition-colors hover:bg-[color:var(--color-surface-2)] hover:text-[color:var(--color-danger)]"
                       >
-                        Olib tashlash
+                        <X size={13} />
                       </Link>
                     )}
                   </div>
@@ -151,38 +152,26 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
               ))}
               {options.length < 3 && (
                 <th className="border-b border-[color:var(--color-line)] px-4 pb-3 text-left align-bottom">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex h-[38px] w-[38px] items-center justify-center rounded-[9px] border border-dashed border-[color:var(--color-line-strong)] text-[color:var(--color-muted-soft)]">
-                      +
-                    </span>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
-                      Qo‘shish
-                    </p>
-                  </div>
-                  <div className="mt-2 grid gap-1">
-                    {all
-                      .filter((club) => !options.some((option) => option.slug === club.slug))
-                      .slice(0, 6)
-                      .map((club) => (
-                        <Link
-                          key={club.id}
-                          href={withClub(club.slug)}
-                          className="rounded-[7px] px-2 py-1 text-[12.5px] text-[color:var(--color-ink-soft)] transition-colors hover:bg-[color:var(--color-surface-2)]"
-                        >
-                          + {club.name}
-                        </Link>
-                      ))}
-                  </div>
+                  <a
+                    href="#qoshish"
+                    className="inline-flex h-[38px] w-[38px] items-center justify-center rounded-[9px] border border-dashed border-[color:var(--color-line-strong)] text-[color:var(--color-muted-soft)] transition-colors hover:border-[color:var(--color-green)] hover:text-[color:var(--color-green)]"
+                    aria-label="Solishtirishga klub qo‘shish"
+                  >
+                    <Plus size={16} />
+                  </a>
+                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                    Qo‘shish
+                  </p>
                 </th>
               )}
             </tr>
           </thead>
           <tbody>
-            {ROWS.map((row, index) => (
-              <tr key={row.label} className={cn(index % 2 === 1 && "bg-[color:color-mix(in_oklab,var(--color-surface-2)_60%,transparent)]")}>
+            {ROWS.map((row) => (
+              <tr key={row.label}>
                 <th
                   scope="row"
-                  className="border-b border-[color:var(--color-line)] py-3 pr-4 text-left align-top text-[12px] font-medium text-[color:var(--color-muted)]"
+                  className="sticky left-0 z-[1] border-b border-[color:var(--color-line)] bg-[color:var(--color-paper)] py-3 pr-3 text-left align-top text-[12px] font-medium text-[color:var(--color-muted)]"
                 >
                   {row.label}
                 </th>
@@ -198,7 +187,10 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
               </tr>
             ))}
             <tr>
-              <th scope="row" className="py-5 pr-4 text-left text-[12px] font-medium text-[color:var(--color-muted)]">
+              <th
+                scope="row"
+                className="sticky left-0 z-[1] bg-[color:var(--color-paper)] py-5 pr-3 text-left text-[12px] font-medium text-[color:var(--color-muted)]"
+              >
                 Harakat
               </th>
               {options.map((club) => (
@@ -226,6 +218,32 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
           </tbody>
         </table>
       </div>
+
+      {options.length < 3 ? (
+        <section id="qoshish" className="mt-10 scroll-mt-24 border-t border-[color:var(--color-line)] pt-6">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+              Klub qo‘shish
+            </h2>
+            <span className="text-[11.5px] text-[color:var(--color-muted-soft)]">{options.length} / 3 tanlandi</span>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {all
+              .filter((club) => !options.some((option) => option.slug === club.slug))
+              .slice(0, 10)
+              .map((club) => (
+                <Link
+                  key={club.id}
+                  href={withClub(club.slug)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3 py-1.5 text-[12.5px] text-[color:var(--color-ink-soft)] transition-colors hover:border-[color:var(--color-green)] hover:text-[color:var(--color-ink)]"
+                >
+                  <Plus size={13} className="text-[color:var(--color-muted-soft)]" />
+                  {club.name}
+                </Link>
+              ))}
+          </div>
+        </section>
+      ) : null}
 
       <Link href="/clubs" className="link-quiet mt-8 inline-flex text-[13px]">
         Katalogga qaytish <ArrowUpRight size={13} />

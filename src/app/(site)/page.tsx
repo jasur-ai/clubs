@@ -73,8 +73,8 @@ export default async function HomePage() {
         <div aria-hidden className="bloom-green -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
 
         <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-12 sm:px-6 lg:pt-16">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:gap-16">
-            <div>
+          <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:gap-16">
+            <div className="min-w-0">
               <div className="rise eyebrow" style={{ "--delay": "40ms" } as React.CSSProperties}>
                 O‘zbekiston Yoshlar ittifoqi · TDIU
               </div>
@@ -152,7 +152,7 @@ export default async function HomePage() {
             </div>
 
             {/* live panel */}
-            <div className="relative rise [animation-delay:220ms]">
+            <div className="relative rise min-w-0 [animation-delay:220ms]">
               {cycle ? (
                 <div
                   className="relative overflow-hidden rounded-[20px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-5 shadow-[var(--shadow-pop)]"

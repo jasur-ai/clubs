@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EventRow } from "@/components/site/cards";
+import { CalendarSubscribe } from "@/components/site/calendar-subscribe";
 import { SectionHeading } from "@/components/ui/primitives";
 import { getPastEvents, getUpcomingEvents } from "@/lib/queries";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/format";
-import { CalendarPlus } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Tadbirlar",
@@ -35,9 +35,7 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
             <Link href="/haftalik" className="btn btn-ghost btn-sm">
               Bu hafta
             </Link>
-            <a href={params.club ? `/api/calendar.ics?club=${params.club}` : "/api/calendar.ics"} className="btn btn-secondary btn-sm">
-              <CalendarPlus size={14} /> Taqvimga obuna
-            </a>
+            <CalendarSubscribe club={params.club} compact />
           </div>
         }
       />
