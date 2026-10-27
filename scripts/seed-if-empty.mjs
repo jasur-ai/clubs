@@ -17,3 +17,8 @@ try {
 } finally {
   await db.$disconnect();
 }
+
+// Demo deployments opt in to a full club network on every boot (idempotent).
+if (process.env.DEMO_NETWORK === "1") {
+  execFileSync("node", ["scripts/demo-network.mjs"], { stdio: "inherit" });
+}
