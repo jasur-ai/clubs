@@ -5,22 +5,20 @@ import { YiSignature } from "@/components/brand/marks";
 
 export function SiteFooter() {
   return (
-    <footer className="band-dark grain mt-16">
-      <div aria-hidden className="brand-rule absolute inset-x-0 top-0 opacity-90" />
-      <div aria-hidden className="contour-field opacity-40" />
-      <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-14 sm:px-6">
+    <footer className="mt-3 border-t-2 border-[color:var(--color-ink)] bg-[color:var(--color-paper)]">
+      <div className="relative mx-auto w-full max-w-[1240px] px-4 pb-8 pt-10 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1.1fr]">
           <div>
-            <Logo invert />
-            <p className="mt-5 max-w-[290px] text-[13.5px] leading-relaxed text-white/65">
-              Toshkent davlat iqtisodiyot universiteti talabalar klublarining yagona platformasi — tadbirlar,
-              kitobxonlik va muhokamalar bir joyda.
+            <Logo />
+            <p className="mt-4 max-w-[290px] text-[12.5px] leading-relaxed text-[color:var(--color-muted)]">
+              Toshkent davlat iqtisodiyot universiteti talabalar klublarining yagona platformasi —
+              tadbirlar, kitobxonlik va muhokamalar bir joyda.
             </p>
-            <div className="mt-7">
-              <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/35">
+            <div className="mt-6 border-t border-[color:var(--color-line)] pt-3">
+              <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-muted-soft)]">
                 Hamkor
               </p>
-              <YiSignature emblem={30} className="mt-2.5 text-white/55" />
+              <YiSignature emblem={26} className="mt-2 text-[color:var(--color-ink-soft)]" />
             </div>
           </div>
 
@@ -51,23 +49,23 @@ export function SiteFooter() {
           />
 
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Aloqa</p>
-            <ul className="mt-4 space-y-2.5 text-[13.5px] text-white/75">
+            <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">Aloqa</p>
+            <ul className="mt-3.5 space-y-2 text-[12.5px] text-[color:var(--color-ink-soft)]">
               <li className="leading-relaxed">
                 Toshkent, Islam Karimov ko‘chasi, 49
               </li>
               <li>
-                <a className="transition-colors hover:text-white" href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer">
+                <a className="transition-colors hover:text-[color:var(--color-ink)]" href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer">
                   @tsuebookclub
                 </a>
               </li>
               <li>
-                <a className="transition-colors hover:text-white" href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer">
+                <a className="transition-colors hover:text-[color:var(--color-ink)]" href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer">
                   @Tsue_clubs_bot
                 </a>
               </li>
               <li>
-                <a className="transition-colors hover:text-white" href="mailto:info@tsue.uz">
+                <a className="transition-colors hover:text-[color:var(--color-ink)]" href="mailto:info@tsue.uz">
                   info@tsue.uz
                 </a>
               </li>
@@ -76,27 +74,27 @@ export function SiteFooter() {
               href="https://t.me/Tsue_clubs_bot"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-white/75 transition-colors hover:text-white"
+              className="gz-link mt-4 text-[12px] font-semibold"
             >
               Botni ochish <ArrowUpRight size={13} />
             </a>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[11.5px] leading-snug text-white/45">
+        <div className="mt-10 flex flex-col gap-3 border-t border-[color:var(--color-line)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[11px] leading-snug text-[color:var(--color-muted)]">
             Toshkent davlat iqtisodiyot universiteti
             <br />
             Yoshlar ittifoqi bilan hamkorlikda · 2026
           </p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11.5px] text-white/45">
-            <Link href="/about" className="transition-colors hover:text-white">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] text-[color:var(--color-muted)]">
+            <Link href="/about" className="transition-colors hover:text-[color:var(--color-ink)]">
               Platforma haqida
             </Link>
-            <Link href="/admin" className="transition-colors hover:text-white">
+            <Link href="/admin" className="transition-colors hover:text-[color:var(--color-ink)]">
               Boshqaruv
             </Link>
-            <a href="/api/health" className="transition-colors hover:text-white">
+            <a href="/api/health" className="transition-colors hover:text-[color:var(--color-ink)]">
               Tizim holati
             </a>
           </div>
@@ -109,11 +107,11 @@ export function SiteFooter() {
 function FooterCol({ title, links }: { title: string; links: Array<[string, string]> }) {
   return (
     <div>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">{title}</p>
-      <ul className="mt-4 space-y-2.5 text-[13.5px]">
+      <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">{title}</p>
+      <ul className="mt-3.5 space-y-2 text-[12.5px]">
         {links.map(([label, href]) => (
           <li key={href}>
-            <Link href={href} className="text-white/65 transition-colors hover:text-white">
+            <Link href={href} className="text-[color:var(--color-ink-soft)] transition-colors hover:text-[color:var(--color-ink)]">
               {label}
             </Link>
           </li>

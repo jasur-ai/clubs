@@ -13,11 +13,13 @@
   --font-serif: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  --radius-xs: 5px;
-  --radius-sm: 9px;
-  --radius-md: 13px;
-  --radius-lg: 18px;
-  --radius-xl: 26px;
+  /* A printed page has corners. Radius is reserved for controls that are
+     genuinely round (the theme switch, status dots) — never for content. */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
 }
 
 /* Brand constants (never inverted) ----------------------------------------
@@ -45,19 +47,21 @@
   /* Warm linen rather than paper white: large fields keep a little colour so
      white cards, green rules and photographic covers all have something to
      sit on. */
-  --color-paper: #efece3;
-  --color-paper-deep: #e5e1d6;
-  --color-surface: #ffffff;
-  --color-surface-2: #f7f5ef;
-  --color-surface-3: #eae6db;
+  --color-paper: #f4f1e8;
+  --color-paper-deep: #e8e3d5;
+  --color-surface: #fffdf8;
+  --color-surface-2: #f8f5ec;
+  --color-surface-3: #ece7d9;
 
-  --color-ink: #131d17;
-  --color-ink-soft: #26332b;
-  --color-muted: #5a655d;
-  --color-muted-soft: #7d877f;
+  /* Ink is a printed black with a green undertone, not a soft grey. Two tones
+     is enough: what is written, and what is not. */
+  --color-ink: #16180f;
+  --color-ink-soft: #2c3026;
+  --color-muted: #5b6053;
+  --color-muted-soft: #83887a;
 
-  --color-line: #ded9cb;
-  --color-line-strong: #c9c3b2;
+  --color-line: #d8d3c1;
+  --color-line-strong: #b8b19d;
 
   --color-navy: #0f4a2c;
   --color-blue: #14713f;
@@ -81,9 +85,9 @@
   --tint-base: #ffffff;
   --btn-primary-bg: var(--brand-gradient);
 
-  --shadow-card: 0 1px 1px rgb(24 30 22 / 0.035), 0 10px 24px -20px rgb(24 30 22 / 0.26);
-  --shadow-lift: 0 2px 3px rgb(24 30 22 / 0.045), 0 22px 44px -30px rgb(24 30 22 / 0.38);
-  --shadow-pop: 0 24px 60px -34px rgb(24 30 22 / 0.45);
+  --shadow-card: 0 1px 0 rgb(22 24 15 / 0.04);
+  --shadow-lift: 0 2px 0 rgb(22 24 15 / 0.05), 0 18px 30px -28px rgb(22 24 15 / 0.35);
+  --shadow-pop: 0 30px 60px -40px rgb(22 24 15 / 0.5);
   /* A book on a table: tight and dark at the contact edge, wide and faint
      underneath. Two shadows, not one, is what makes it read as an object. */
   --shadow-book: 0 1px 1px rgb(12 22 15 / 0.22), 0 2px 5px rgb(12 22 15 / 0.12),
@@ -1270,40 +1274,36 @@ html[data-theme="dark"] .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
    thumb marks the one you are in, so the control explains itself without a
    tooltip.
 -------------------------------------------------------------------------- */
+/* The switch is a printed two-cell tab: the active half is inked, the other is
+   empty. It moves like a slider, not like a toggle. */
 .theme-toggle {
   position: relative;
   display: inline-flex;
-  align-items: center;
-  width: 64px;
-  height: 34px;
-  padding: 3px;
-  border-radius: 999px;
-  border: 1px solid var(--color-line);
-  background: var(--color-surface-2);
-  transition:
-    border-color 220ms ease,
-    background-color 320ms ease,
-    box-shadow 260ms ease;
+  align-items: stretch;
+  width: 56px;
+  height: 30px;
+  padding: 0;
+  border-radius: 0;
+  border: 1px solid var(--color-line-strong);
+  background: transparent;
+  transition: border-color 220ms ease, background-color 320ms ease;
 }
 .theme-toggle:hover {
-  border-color: color-mix(in oklab, var(--color-green) 40%, var(--color-line-strong));
-  background: color-mix(in oklab, var(--color-green) 6%, var(--color-surface-2));
+  border-color: var(--color-ink);
 }
 .theme-toggle-thumb {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 26px;
-  height: 26px;
-  border-radius: 999px;
-  background: var(--brand-gradient);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.35),
-    0 6px 14px -6px rgb(16 60 120 / 0.75);
+  top: 0;
+  left: 0;
+  width: 27px;
+  height: 28px;
+  border-radius: 0;
+  background: var(--color-ink);
+  box-shadow: none;
   transition: transform 420ms cubic-bezier(0.32, 0.72, 0.24, 1);
 }
 html[data-theme="dark"] .theme-toggle-thumb {
-  transform: translateX(30px);
+  transform: translateX(27px);
 }
 .theme-toggle svg {
   position: relative;
@@ -1319,7 +1319,7 @@ html[data-theme="dark"] .theme-toggle-thumb {
 }
 html[data-theme="light"] .theme-toggle .ico-sun,
 html[data-theme="dark"] .theme-toggle .ico-moon {
-  color: #ffffff;
+  color: var(--color-paper);
 }
 html[data-theme="light"] .theme-toggle .ico-moon,
 html[data-theme="dark"] .theme-toggle .ico-sun {
@@ -1441,13 +1441,13 @@ html[data-theme="dark"] .theme-toggle:hover .ico-sun {
 .saved-header-btn {
   position: relative;
   display: inline-flex;
-  height: 31px;
-  width: 31px;
+  height: 30px;
+  width: 30px;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-line);
-  border-radius: 10px;
-  background: var(--color-surface);
+  border-radius: 0;
+  background: transparent;
   color: var(--color-muted);
   transition:
     border-color 180ms ease,
@@ -1840,4 +1840,461 @@ html[data-theme-anim="on"]::view-transition-new(root) {
 }
 :root[data-theme="dark"] .news-media {
   background-color: color-mix(in oklab, var(--color-surface-2) 88%, var(--color-surface));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GAZETTE — the page as a printed bulletin
+   ---------------------------------------------------------------------------
+   Two rules govern everything below.
+
+   1. Rules, not boxes. A newspaper separates with a 1-pixel line that runs
+      edge to edge; it never puts a section inside a rounded card. One card on
+      a page is a decision; twenty are a template.
+
+   2. Scale, not weight. Hierarchy comes from the distance between 104px and
+      10px, not from making everything semibold at 15px.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --gz-measure: 1240px;
+  --gz-gutter: clamp(18px, 4vw, 34px);
+  --gz-block: #101a12;
+  --gz-block-ink: #f1ede1;
+  --gz-block-muted: #a8b3a5;
+  --gz-block-line: rgb(241 237 225 / 0.16);
+}
+html[data-theme="dark"] {
+  --gz-block: #16241a;
+  --gz-block-ink: #eff2e9;
+  --gz-block-muted: #9fae9c;
+  --gz-block-line: rgb(239 242 233 / 0.14);
+}
+
+.gz-wrap {
+  width: 100%;
+  max-width: var(--gz-measure);
+  margin-inline: auto;
+  padding-inline: var(--gz-gutter);
+}
+
+/* --- nameplate ----------------------------------------------------------- */
+.gz-nameplate {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 14px;
+  padding-block: 11px 9px;
+  border-top: 3px solid var(--color-ink);
+  border-bottom: 1px solid var(--color-ink);
+}
+.gz-nameplate__title {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.gz-nameplate__sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+  text-transform: none;
+  font-weight: 400;
+}
+.gz-edition {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0 18px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.gz-edition span + span::before {
+  content: "·";
+  margin-right: 18px;
+  color: var(--color-line-strong);
+}
+
+/* --- section: margin rail + body ---------------------------------------- */
+.gz-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 26px;
+  padding-block: clamp(46px, 6vw, 82px);
+  border-top: 1px solid var(--color-ink);
+}
+@media (min-width: 900px) {
+  .gz-section {
+    grid-template-columns: 172px minmax(0, 1fr);
+    gap: clamp(26px, 4vw, 58px);
+  }
+}
+.gz-rail {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 900px) {
+  .gz-rail {
+    position: sticky;
+    top: calc(var(--header-h) + 22px);
+    align-self: start;
+    display: block;
+  }
+}
+.gz-rail__num {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.gz-rail__label {
+  display: block;
+  margin-top: 9px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+.gz-rail__meta {
+  display: block;
+  margin-top: 5px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+/* --- type scale ---------------------------------------------------------- */
+.gz-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(38px, 5.6vw, 84px);
+  line-height: 0.96;
+  letter-spacing: -0.028em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+.gz-display em {
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+.gz-h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(27px, 3.4vw, 44px);
+  line-height: 1.03;
+  letter-spacing: -0.018em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+.gz-h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(19px, 1.9vw, 24px);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.gz-kicker {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+.gz-lede {
+  max-width: 54ch;
+  font-size: clamp(15px, 1.25vw, 17px);
+  line-height: 1.62;
+  color: var(--color-ink-soft);
+}
+.gz-body {
+  max-width: 64ch;
+  font-size: 14.5px;
+  line-height: 1.68;
+  color: var(--color-ink-soft);
+}
+.gz-num {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --- links: an ink rule that draws itself -------------------------------- */
+.gz-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-ink);
+}
+.gz-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.22, 0.8, 0.28, 1);
+}
+.gz-link:hover::after,
+.gz-link:focus-visible::after,
+.gz-link[data-alive="true"]::after {
+  transform: scaleX(1);
+}
+.gz-link svg {
+  transition: transform 340ms cubic-bezier(0.22, 0.8, 0.28, 1);
+}
+.gz-link:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* --- ruled index rows ---------------------------------------------------- */
+.gz-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding-block: 12px;
+  border-top: 1px solid var(--color-line);
+  transition: border-color 240ms ease, background-color 240ms ease;
+}
+.gz-row:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+.gz-row:hover {
+  border-color: var(--color-ink);
+}
+.gz-row__name {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+.gz-row__meta {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* --- buttons: printed blocks, not pills ---------------------------------- */
+.gz-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 20px;
+  border: 1px solid var(--color-ink);
+  border-radius: 2px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease;
+}
+.gz-btn:hover {
+  background: transparent;
+  color: var(--color-ink);
+}
+.gz-btn--ghost {
+  background: transparent;
+  color: var(--color-ink);
+}
+.gz-btn--ghost:hover {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* --- ink block ----------------------------------------------------------- */
+.gz-block {
+  position: relative;
+  background: var(--gz-block);
+  color: var(--gz-block-ink);
+}
+.gz-block .gz-display,
+.gz-block .gz-h2,
+.gz-block .gz-h3 {
+  color: var(--gz-block-ink);
+}
+.gz-block .gz-kicker,
+.gz-block .gz-rail__label {
+  color: var(--gz-block-muted);
+}
+.gz-block .gz-rail__num {
+  color: var(--gz-block-ink);
+}
+
+/* --- a vertical hairline between newspaper columns ----------------------- */
+.gz-col-rule {
+  border-left: 1px solid var(--color-line);
+  padding-left: clamp(18px, 2.4vw, 30px);
+}
+.gz-block .gz-col-rule {
+  border-left-color: var(--gz-block-line);
+}
+
+/* --- the date, set the way a paper sets it ------------------------------- */
+.gz-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  padding-block: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.gz-date__day {
+  font-family: var(--font-serif);
+  font-size: 27px;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.gz-date__month {
+  margin-top: 3px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* --- progress as a ruled measure ---------------------------------------- */
+.gz-measure {
+  position: relative;
+  height: 3px;
+  background: var(--color-line);
+}
+.gz-measure__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--color-ink);
+}
+.gz-block .gz-measure {
+  background: var(--gz-block-line);
+}
+.gz-block .gz-measure__fill {
+  background: var(--gz-block-ink);
+}
+
+/* --- the emblem plate: printed on the sheet, no gradient ----------------- */
+.gz-plate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background-color: var(--color-surface-2);
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--color-ink) 5%, transparent) 0 1px,
+    transparent 1px 6px
+  );
+}
+.gz-plate::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid var(--color-brass-line);
+  pointer-events: none;
+}
+
+/* --- reveal: the type rises out of a mask, it does not fade in ----------- */
+.gz-rise {
+  display: block;
+  overflow: hidden;
+}
+.gz-rise > * {
+  display: block;
+  transform: translateY(102%);
+  transition: transform 780ms cubic-bezier(0.16, 0.84, 0.24, 1);
+  transition-delay: var(--gz-delay, 0ms);
+}
+.gz-rise[data-in="true"] > *,
+html:not(.js) .gz-rise > * {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gz-rise > * {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- masthead ------------------------------------------------------------ */
+.site-header {
+  border-bottom: 1px solid var(--color-line);
+  background: color-mix(in oklab, var(--color-paper) 92%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.site-header[data-scrolled="true"] {
+  border-bottom-color: var(--color-ink);
+  background: color-mix(in oklab, var(--color-paper) 97%, transparent);
+}
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-soft);
+  transition: color 200ms ease;
+}
+.nav-link .nav-sep {
+  display: inline-block;
+  width: 1px;
+  height: 9px;
+  margin: 0 16px;
+  background: var(--color-line-strong);
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 380ms cubic-bezier(0.16, 0.84, 0.24, 1);
+}
+.nav-link[data-active="true"]::after,
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+.nav-link[data-active="true"] {
+  color: var(--color-ink);
+}
+.header-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+  transition: color 200ms ease;
+}
+.header-quiet:hover {
+  color: var(--color-ink);
 }

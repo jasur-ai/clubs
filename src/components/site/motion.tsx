@@ -22,11 +22,16 @@ export function RevealObserver() {
       /* storage blocked */
     }
 
-    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.is-in)"));
+    const nodes = Array.from(
+      document.querySelectorAll<HTMLElement>(".reveal:not(.is-in), .gz-rise:not([data-in])"),
+    );
     if (!nodes.length) return;
 
     if (!("IntersectionObserver" in window)) {
-      nodes.forEach((n) => n.classList.add("is-in"));
+      nodes.forEach((n) => {
+        n.classList.add("is-in");
+        n.setAttribute("data-in", "true");
+      });
       return;
     }
 
@@ -35,6 +40,7 @@ export function RevealObserver() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-in");
+            entry.target.setAttribute("data-in", "true");
             io.unobserve(entry.target);
           }
         });
@@ -45,7 +51,14 @@ export function RevealObserver() {
     nodes.forEach((n) => io.observe(n));
 
     // Safety net: never leave content hidden if the observer misbehaves.
-    const failSafe = window.setTimeout(() => nodes.forEach((n) => n.classList.add("is-in")), 4000);
+    const failSafe = window.setTimeout(
+      () =>
+        nodes.forEach((n) => {
+          n.classList.add("is-in");
+          n.setAttribute("data-in", "true");
+        }),
+      4000,
+    );
 
     return () => {
       window.clearTimeout(failSafe);

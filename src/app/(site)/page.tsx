@@ -1,25 +1,10 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BookOpen,
-  CalendarDays,
-  LayoutDashboard,
-  MapPin,
-  MessageSquare,
-  Send,
-  Smartphone,
-  Users,
-} from "lucide-react";
-import { BookCard, NewsCard } from "@/components/site/cards";
-import { CoverArt } from "@/components/ui/cover-art";
+import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, MapPin, Send, Smartphone, LayoutDashboard, Users } from "lucide-react";
 import { BookCover } from "@/components/ui/book-cover";
 import { ClubLogo } from "@/components/ui/club-logo";
-import { Badge, ProgressBar } from "@/components/ui/primitives";
 import { YoshlarIttifoqiLockup } from "@/components/brand/marks";
-import { Counter } from "@/components/site/motion";
 import { CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
-import { formatDate, relativeDate, tashkentDayStart, timeRange } from "@/lib/format";
+import { formatDate, tashkentDayStart, timeRange } from "@/lib/format";
 import { cycleTiming } from "@/lib/reading";
 import {
   getClubs,
@@ -33,11 +18,19 @@ import { addDays } from "date-fns";
 
 export const revalidate = 60;
 
+/* The date line on the nameplate. A paper states the day it was printed. */
+const EDITION = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Asia/Tashkent",
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+
 export default async function HomePage() {
   const clubs = await getClubs();
   const bookClub = clubs.find((c) => c.slug === "book-club");
   const [events, news, cycle, community] = await Promise.all([
-    getUpcomingEvents({ limit: 3 }),
+    getUpcomingEvents({ limit: 5 }),
     getLatestNews({ limit: 3 }),
     bookClub ? getCurrentCycle(bookClub.id) : null,
     bookClub ? getCommunityProgress(bookClub.id) : { average: 0, readers: 0 },
@@ -51,859 +44,623 @@ export default async function HomePage() {
 
   const books = await db.book.findMany({ orderBy: { createdAt: "asc" }, take: 6 });
 
-  // "This week" means the seven Tashkent days that start today, not the seven
-  // UTC days — a Monday 01:00 event belongs to Monday for the student.
   const weekStart = tashkentDayStart();
   const weekEvents = await db.event.findMany({
-    where: {
-      status: "PUBLISHED",
-      startsAt: { gte: weekStart, lt: addDays(weekStart, 7) },
-    },
+    where: { status: "PUBLISHED", startsAt: { gte: weekStart, lt: addDays(weekStart, 7) } },
     orderBy: { startsAt: "asc" },
-    take: 4,
+    take: 3,
     select: { id: true, title: true, startsAt: true },
   });
 
-  const heroTiming = cycle ? cycleTiming(cycle) : null;
+  const timing = cycle ? cycleTiming(cycle) : null;
   const featured = bookClub ?? clubs[0];
-  const rest = clubs.filter((c) => c.id !== featured?.id).slice(0, 3);
-  const nextEvent = events[0];
-  const categories = new Set(clubs.map((c) => c.category)).size;
+  const others = clubs.filter((c) => c.id !== featured?.id);
+  const today = EDITION.format(new Date()).toUpperCase();
 
   return (
-    <>
-      {/* ------------------------------------------------------------------ hero */}
-      <section className="hero-shell grain relative border-b border-[color:var(--color-line)]">
-        <div aria-hidden className="contour-field" />
-        <div aria-hidden className="bloom-blue -right-28 -top-32 h-[240px] w-[240px] opacity-70 drift sm:h-[420px] sm:w-[420px] sm:opacity-100" />
-        <div aria-hidden className="bloom-green -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
+    <div className="bg-[color:var(--color-paper)]">
+      {/* ══════════════════════════════════════════════════════════ nameplate */}
+      <div className="gz-wrap">
+        <div className="gz-nameplate">
+          <div>
+            <span className="gz-nameplate__title">Universitet byulleteni</span>
+            <span className="gz-nameplate__sub">
+              O‘zbekiston Yoshlar ittifoqi · Toshkent davlat iqtisodiyot universiteti
+            </span>
+          </div>
+          <div className="gz-edition">
+            <span>{today}</span>
+            <span>№ {String(clubs.length).padStart(2, "0")}</span>
+            <span>Bepul nashr</span>
+          </div>
+        </div>
+      </div>
 
-        <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-12 sm:px-6 lg:pt-16">
-          <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:gap-16">
-            <div className="min-w-0">
-              <div className="rise eyebrow" style={{ "--delay": "40ms" } as React.CSSProperties}>
-                O‘zbekiston Yoshlar ittifoqi · TDIU
-              </div>
-
-              {news[0] ? (
-                <Link
-                  href={`/news/${news[0].slug}`}
-                  className="rise group mt-6 inline-flex max-w-full items-center gap-2.5 rounded-full border border-[color:var(--color-line-strong)] bg-[color:var(--color-surface)] py-1.5 pl-2 pr-3.5 text-[12px] font-medium text-[color:var(--color-ink-soft)] shadow-[0_1px_2px_rgba(24,30,22,0.05)] transition-all duration-300 hover:border-[color:var(--color-green)] hover:text-[color:var(--color-ink)]"
-                  style={{ "--delay": "80ms" } as React.CSSProperties}
-                >
-                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--brand-green)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
-                    Yangilik
-                  </span>
-                  <span className="truncate">{news[0].title}</span>
-                  <span className="shrink-0 text-[color:var(--color-muted)] tabular-nums">
-                    {formatDate(news[0].publishedAt ?? news[0].createdAt, "d MMM")}
-                  </span>
-                  <ArrowRight
-                    size={13}
-                    className="shrink-0 text-[color:var(--color-muted)] transition-transform duration-300 group-hover:translate-x-0.5"
-                  />
-                </Link>
-              ) : null}
-
-              <h1
-                className="display rise mt-6 text-[44px] leading-[0.95] text-[color:var(--color-ink)] sm:text-[60px] lg:text-[68px]"
-                style={{ "--delay": "140ms" } as React.CSSProperties}
-              >
-                <span className="block">Universitetdagi</span>
-                <span className="block">har bir tashabbus</span>
-                <span className="relative inline-block">
-                  <em className="text-[color:var(--color-green)]">bir joyda.</em>
-                </span>
-              </h1>
-
-              <p
-                className="lede rise mt-7 max-w-[460px]"
-                style={{ "--delay": "200ms" } as React.CSSProperties}
-              >
-                {clubs.length} yo‘nalishdagi talabalar klublari, tadbirlar taqvimi va Bookonomics
-                kitobxonlik dasturi. Sayt, Telegram bot va mini-ilova — bitta hisob bilan.
-              </p>
-
-              <div
-                className="rise mt-8 flex flex-wrap items-center gap-3"
-                style={{ "--delay": "280ms" } as React.CSSProperties}
-              >
-                <Link href="/clubs" className="btn btn-primary btn-lg group">
-                  Klub topish
-                  <ArrowRight size={16} className="btn-arrow" />
-                </Link>
-                <Link href="/join" className="btn btn-secondary btn-lg group">
-                  A’zo bo‘lish
-                  <ArrowUpRight size={15} className="btn-arrow-up opacity-70" />
-                </Link>
-                <a
-                  href="https://t.me/Tsue_clubs_bot/app"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hidden items-center gap-1.5 px-2 text-[13px] font-semibold text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-ink)] sm:inline-flex"
-                >
-                  <Smartphone size={14} /> Mini-ilova
-                </a>
-              </div>
-
-              <dl
-                className="rise mt-11 grid grid-cols-2 gap-y-6 border-t border-[color:var(--color-line)] pt-6 sm:grid-cols-4"
-                style={{ "--delay": "360ms" } as React.CSSProperties}
-              >
-                <HeroStat value={clubs.length} label="klub" />
-                <HeroStat value={categories} label="yo‘nalish" />
-                <HeroStat value={eventCount} label="tadbir" />
-                <HeroStat value={memberCount} label="a’zo" />
-              </dl>
+      {/* ══════════════════════════════════════════════════════════════ hero */}
+      <section className="gz-wrap">
+        <div className="grid gap-y-12 pt-9 pb-11 lg:grid-cols-12 lg:gap-x-8">
+          {/* the statement */}
+          <div className="lg:col-span-8">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <span className="gz-kicker">Universitet hayoti</span>
+              <span aria-hidden className="h-px w-8 bg-[color:var(--color-line-strong)]" />
+              <span className="text-[11px] text-[color:var(--color-muted)]">
+                {clubs.length} yo‘nalish · {memberCount} a’zo · {eventCount} tadbir
+              </span>
             </div>
 
-            {/* live panel */}
-            <div className="relative rise min-w-0 [animation-delay:220ms]">
-              {cycle ? (
-                <div
-                  className="relative overflow-hidden rounded-[20px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-5 shadow-[var(--shadow-pop)]"
-                  style={{ "--club-accent": bookClub?.accent ?? "#a8492f" } as React.CSSProperties}
-                >
-                  <div
-                    aria-hidden
-                    className="absolute inset-x-0 top-0 h-[3px]"
-                    style={{ background: "var(--brand-gradient)" }}
-                  />
-                  <div className="flex items-center justify-between">
-                    <span className="eyebrow eyebrow-plain">
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[color:var(--color-green)] opacity-60" />
-                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[color:var(--color-green)]" />
-                      </span>
-                      {heroTiming?.closed ? "Yakunlangan o‘qish" : "Hozir o‘qilmoqda"}
-                    </span>
-                    <Link
-                      href="/clubs/book-club"
-                      className="text-[11px] font-semibold text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--club-accent-ink)]"
-                    >
-                      Book Club
+            <h1 className="gz-display mt-6 max-w-[16ch]">
+              <span className="gz-rise" data-in="true">
+                <span style={{ "--gz-delay": "40ms" } as React.CSSProperties}>Universitetdagi</span>
+              </span>
+              <span className="gz-rise" data-in="true">
+                <span style={{ "--gz-delay": "150ms" } as React.CSSProperties}>har bir tashabbus —</span>
+              </span>
+              <span className="gz-rise" data-in="true">
+                <span style={{ "--gz-delay": "260ms" } as React.CSSProperties}>
+                  <em>bitta tartibda.</em>
+                </span>
+              </span>
+            </h1>
+
+            <div className="mt-8 grid gap-7 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+              <p className="gz-lede">
+                Klub jadvali, tadbirlar, kitobxonlik dasturi va arizalar — bitta hisobda.
+                Telegram bot eslatadi, mini-ilova o‘qishni kuzatadi, sayt esa hammasini
+                bir joyda ko‘rsatadi.
+              </p>
+              <div className="flex shrink-0 flex-wrap items-center gap-2.5">
+                <Link href="/clubs" className="gz-btn">
+                  Klublarni ko‘rish <ArrowRight size={14} />
+                </Link>
+                <Link href="/join" className="gz-btn gz-btn--ghost">
+                  A’zo bo‘lish
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* the reading ledger — a newspaper column, not a floating card */}
+          <aside className="lg:col-span-4 lg:pl-8 lg:[border-left:1px_solid_var(--color-line)]">
+            <div className="flex items-baseline justify-between">
+              <span className="gz-kicker">{cycle?.program ?? "Bookomics"}</span>
+              <Link href="/books" className="gz-link text-[11px] font-semibold text-[color:var(--color-muted)]">
+                Katalog <ArrowUpRight size={11} />
+              </Link>
+            </div>
+
+            {cycle ? (
+              <div className="mt-4 flex gap-4">
+                <BookCover
+                  coverUrl={cycle.book.coverUrl}
+                  from={cycle.book.coverFrom}
+                  to={cycle.book.coverTo}
+                  title={cycle.book.title}
+                  author={cycle.book.author}
+                  priority
+                  className="h-[132px] w-[88px] shrink-0"
+                />
+                <div className="min-w-0">
+                  <h2 className="gz-h3 truncate">{cycle.book.title}</h2>
+                  <p className="mt-1 text-[11.5px] text-[color:var(--color-muted)]">
+                    {cycle.book.author}
+                    {cycle.book.year ? ` · ${cycle.book.year}` : ""}
+                  </p>
+                  <div className="mt-3">
+                    <div className="gz-measure">
+                      <span className="gz-measure__fill" style={{ width: `${community.average}%` }} />
+                    </div>
+                    <p className="mt-1.5 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                      {community.average}% o‘rtacha · {community.readers} o‘quvchi
+                    </p>
+                  </div>
+                  <Link href={`/books/${cycle.book.id}`} className="gz-link mt-3 text-[12px] font-semibold">
+                    Asar sahifasi <ArrowUpRight size={12} />
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <p className="gz-body mt-4">Hozir faol o‘qish davri yo‘q.</p>
+            )}
+
+            {timing && (
+              <div className="mt-5 border-t border-[color:var(--color-line)] pt-3.5">
+                <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+                  {timing.heading}
+                </p>
+                <p className="mt-1 text-[13px] leading-snug text-[color:var(--color-ink)]">
+                  {cycle?.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "—"}
+                  <span className="text-[color:var(--color-muted)]"> · {cycle?.location ?? "TDIU"}</span>
+                </p>
+              </div>
+            )}
+
+            {events[0] && (
+              <div className="mt-4 border-t border-[color:var(--color-line)] pt-3.5">
+                <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+                  Keyingi tadbir
+                </p>
+                <Link href={`/events/${events[0].id}`} className="gz-link mt-1 text-[13px] leading-snug">
+                  <span className="line-clamp-2">{events[0].title}</span>
+                </Link>
+                <p className="mt-1 text-[11.5px] text-[color:var(--color-muted)]">
+                  {formatDate(events[0].startsAt, "d MMM, HH:mm")} · {events[0].location}
+                </p>
+              </div>
+            )}
+          </aside>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════ this week: a rule */}
+      <div className="border-y border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
+        <div className="gz-wrap flex flex-wrap items-center gap-x-7 gap-y-2 py-3">
+          <span className="gz-kicker shrink-0">Bu hafta</span>
+          <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-6 gap-y-1.5 text-[12.5px]">
+            {weekEvents.length === 0 ? (
+              <span className="text-[color:var(--color-muted)]">Kelasi yetti kunda tadbir yo‘q.</span>
+            ) : (
+              weekEvents.map((e) => (
+                <Link key={e.id} href={`/events/${e.id}`} className="gz-link">
+                  <span className="font-variant-numeric tabular-nums text-[color:var(--color-muted)]">
+                    {formatDate(e.startsAt, "d MMM")}
+                  </span>
+                  <span className="text-[color:var(--color-ink-soft)]">{e.title}</span>
+                </Link>
+              ))
+            )}
+          </div>
+          <div className="flex shrink-0 items-center gap-5 text-[12px] font-semibold">
+            <Link href="/topish" className="gz-link">
+              Menga mos klub <ArrowUpRight size={12} />
+            </Link>
+            <Link href="/haftalik" className="gz-link">
+              Haftalik jadval
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════ 01 · the clubs */}
+      <section className="gz-wrap">
+        <div className="gz-section">
+          <div className="gz-rail">
+            <span className="gz-rail__num">01</span>
+            <span className="gz-rail__label">Klublar</span>
+            <span className="gz-rail__meta">
+              {clubs.length} yo‘nalish,
+              <br />
+              {new Set(clubs.map((c) => c.category)).size} kategoriya
+            </span>
+          </div>
+
+          <div className="min-w-0">
+            <h2 className="gz-h2 max-w-[22ch]">
+              Har bir klub — o‘z jamoasi, jadvali va kanali bilan alohida ekotizim.
+            </h2>
+
+            {/* the featured club: a two-column spread */}
+            {featured && (
+              <div className="mt-9 grid gap-8 border-t border-[color:var(--color-ink)] pt-8 md:grid-cols-[minmax(0,1fr)_228px]">
+                <div className="min-w-0">
+                  <span className="gz-kicker">
+                    Tanlangan · {cycle?.program ?? "Kitobxonlik dasturi"}
+                  </span>
+                  <h3 className="gz-display mt-3 !text-[clamp(34px,4.4vw,58px)]">
+                    <Link href={`/clubs/${featured.slug}`} className="gz-link">
+                      {featured.name}
                     </Link>
+                  </h3>
+                  <p className="gz-lede mt-3">{featured.tagline}</p>
+                  <p className="gz-body mt-3">{featured.summary}</p>
+
+                  <dl className="mt-7 grid max-w-lg grid-cols-3 gap-4 border-t border-[color:var(--color-line)] pt-4">
+                    {[
+                      { k: "A’zo", v: featured._count.memberships },
+                      { k: "Tadbir", v: featured._count.events },
+                      { k: "Asar", v: featured._count.books },
+                    ].map((s) => (
+                      <div key={s.k}>
+                        <dd className="gz-num text-[26px] leading-none text-[color:var(--color-ink)]">{s.v}</dd>
+                        <dt className="mt-1.5 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
+                          {s.k}
+                        </dt>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-5 text-[12.5px]">
+                    <Link href={`/clubs/${featured.slug}`} className="gz-link font-semibold">
+                      Klub sahifasi <ArrowUpRight size={13} />
+                    </Link>
+                    {featured.meetingDay && (
+                      <span className="inline-flex items-center gap-1.5 text-[color:var(--color-muted)]">
+                        <CalendarDays size={12} /> {featured.meetingDay}
+                        {featured.meetingTime ? `, ${featured.meetingTime}` : ""}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="gz-plate min-h-[228px]">
+                  <ClubLogo
+                    name={featured.name}
+                    logoUrl={featured.logoUrl}
+                    accent={featured.accent}
+                    size={104}
+                    className="relative"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* the index: every other club, as ruled rows */}
+            <div className="mt-9 grid gap-x-10 sm:grid-cols-2">
+              {others.slice(0, 10).map((c) => (
+                <Link key={c.id} href={`/clubs/${c.slug}`} className="gz-row">
+                  <span className="gz-row__name truncate">{c.name}</span>
+                  <span className="gz-row__meta">
+                    {CATEGORY_LABELS[c.category as ClubCategory] ?? c.category}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-[12px] text-[color:var(--color-muted)]">
+                Yana {Math.max(0, others.length - 10)} ta klub katalogda.
+              </p>
+              <Link href="/clubs" className="gz-link text-[12.5px] font-semibold">
+                Barcha klublar <ArrowUpRight size={13} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════= 02 · the programme */}
+      {cycle && (
+        <section className="gz-block">
+          <div className="gz-wrap">
+            <div className="gz-section !border-t-0">
+              <div className="gz-rail">
+                <span className="gz-rail__num">02</span>
+                <span className="gz-rail__label">O‘qish dasturi</span>
+                <span className="gz-rail__meta">{cycle.program ?? "Bookomics"}</span>
+              </div>
+
+              <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_248px] md:gap-12">
+                <div className="min-w-0">
+                  <h2 className="gz-display !text-[clamp(34px,5vw,64px)]">
+                    Bir kitob —<br />
+                    <em>butun universitet.</em>
+                  </h2>
+                  <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[var(--gz-block-muted)]">
+                    Har oy yangi asar, bosqichma-bosqich o‘qish va ochiq muhokama. Book Club —
+                    platformaning yadrosi va birinchi to‘liq ishga tushgan klubi.
+                  </p>
+
+                  <div className="mt-8 flex flex-wrap items-end gap-x-12 gap-y-6 border-t border-[var(--gz-block-line)] pt-6">
+                    {[
+                      { v: community.readers, k: "o‘quvchi" },
+                      { v: `${community.average}%`, k: "o‘rtacha progress" },
+                      { v: bookCount, k: "kutubxonada" },
+                    ].map((s) => (
+                      <div key={s.k}>
+                        <div className="gz-num text-[40px] leading-none">{s.v}</div>
+                        <div className="mt-2 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[var(--gz-block-muted)]">
+                          {s.k}
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="mt-5 flex gap-5">
+                  <div className="mt-8 flex flex-wrap items-center gap-5">
+                    <Link href="/clubs/book-club" className="gz-btn !border-[var(--gz-block-ink)] !bg-[var(--gz-block-ink)] !text-[var(--gz-block)] hover:!bg-transparent hover:!text-[var(--gz-block-ink)]">
+                      Book Club <ArrowRight size={14} />
+                    </Link>
+                    <Link href="/books" className="gz-link text-[13px] font-semibold text-[var(--gz-block-ink)]">
+                      Kutubxona
+                    </Link>
+                  </div>
+                </div>
+
+                {/* the current volume, set like a book review */}
+                <div className="border-t border-[var(--gz-block-line)] pt-6 md:border-l md:border-t-0 md:pl-8 md:pt-0">
+                  <span className="gz-kicker">{timing?.heading ?? "Joriy o‘qish"}</span>
+                  <div className="mt-4 flex gap-4">
                     <BookCover
                       coverUrl={cycle.book.coverUrl}
                       from={cycle.book.coverFrom}
                       to={cycle.book.coverTo}
                       title={cycle.book.title}
                       author={cycle.book.author}
-                      priority
-                      className="h-[150px] w-[100px] shrink-0"
+                      className="h-[124px] w-[83px] shrink-0"
                     />
-                    <div className="min-w-0 flex-1">
-                      <h2 className="font-serif text-[24px] leading-[1.1] tracking-[-0.01em] text-[color:var(--color-ink)]">
-                        {cycle.book.title}
-                      </h2>
-                      <p className="mt-1.5 text-[13px] text-[color:var(--color-muted)]">{cycle.book.author}</p>
-                      <div className="mt-5">
-                        <div className="mb-2 flex items-center justify-between text-[11px] text-[color:var(--color-muted)]">
-                          <span>Hamjamiyat progressi</span>
-                          <span className="font-semibold tabular-nums text-[color:var(--color-ink)]">
-                            {community.average}%
-                          </span>
-                        </div>
-                        <ProgressBar value={community.average} />
-                      </div>
-                      <p className="mt-3.5 text-[11.5px] text-[color:var(--color-muted)]">
-                        {community.readers} o‘quvchi · {cycle.milestones.length} bosqich
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 flex items-center justify-between gap-3 rounded-[11px] bg-[color:var(--color-surface-2)] px-4 py-3">
                     <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                        {heroTiming?.closed ? "Taqdimot o‘tkazildi" : "Yakuniy uchrashuv"}
-                      </p>
-                      <p className="mt-1 truncate text-[13px] font-medium text-[color:var(--color-ink)]">
-                        {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "Belgilanmagan"}
-                      </p>
-                    </div>
-                    <Link href="/clubs/book-club" className="btn btn-accent btn-sm">
-                      {heroTiming?.closed ? "Natijani ko‘rish" : "Davom etish"}
-                    </Link>
-                  </div>
-                </div>
-              ) : null}
-
-              {nextEvent ? (
-                <div className="relative z-10 -mt-4 ml-4 mr-2 rounded-[16px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-4 shadow-[var(--shadow-lift)] sm:ml-12 lg:ml-16">
-                  <div className="flex items-start gap-3.5">
-                    <div className="flex h-[52px] w-[48px] shrink-0 flex-col items-center justify-center rounded-[9px] border border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
-                      <span className="font-serif text-[20px] leading-none text-[color:var(--color-ink)]">
-                        {new Date(nextEvent.startsAt).getDate()}
-                      </span>
-                      <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                        {formatDate(nextEvent.startsAt, "MMM").replace(".", "")}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                        Keyingi tadbir · {relativeDate(nextEvent.startsAt)}
-                      </p>
-                      <p className="mt-1 line-clamp-2 text-[13.5px] font-semibold leading-snug text-[color:var(--color-ink)]">
-                        {nextEvent.title}
-                      </p>
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[11.5px] text-[color:var(--color-muted)]">
-                        <MapPin size={11} /> {nextEvent.location}
-                      </p>
+                      <h3 className="gz-h3">{cycle.book.title}</h3>
+                      <p className="mt-1 text-[11.5px] text-[var(--gz-block-muted)]">{cycle.book.author}</p>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ------------------------------------------------------------- this week */}
-      <section aria-label="Bu hafta" className="border-b border-[color:var(--color-line)] bg-[color:var(--color-surface)]">
-        <div className="mx-auto flex w-full max-w-[1180px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4 sm:px-6">
-          <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
-            <CalendarDays size={13} /> Bu hafta
-          </span>
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px]">
-            {weekEvents.length === 0 ? (
-              <span className="text-[color:var(--color-muted)]">Kelasi yetti kunda tadbir yo‘q.</span>
-            ) : (
-              weekEvents.slice(0, 3).map((event) => (
-                <Link key={event.id} href={`/events/${event.id}`} className="group inline-flex items-center gap-2">
-                  <span className="text-[color:var(--color-muted)]">{formatDate(event.startsAt, "d MMM")}</span>
-                  <span className="text-[color:var(--color-ink-soft)] transition-colors group-hover:text-[color:var(--color-link)]">
-                    {event.title}
-                  </span>
-                </Link>
-              ))
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/topish" className="link-quiet text-[12.5px] font-semibold">
-              Menga mos klub <ArrowUpRight size={12} />
-            </Link>
-            <Link href="/haftalik" className="btn btn-ghost btn-sm">
-              Haftalik jadval
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------------------- marquee */}
-      <section
-        aria-label="Klublar ro‘yxati"
-        className="relative overflow-hidden border-b border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] py-3.5"
-      >
-        <div className="marquee-mask">
-          <div className="marquee gap-0">
-            {[...clubs, ...clubs].map((club, i) => (
-              <span key={`${club.id}-${i}`} className="flex items-center whitespace-nowrap">
-                <Link
-                  href={`/clubs/${club.slug}`}
-                  className="px-5 text-[12px] font-medium tracking-[0.01em] text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-ink)]"
-                >
-                  {club.name}
-                </Link>
-                <span aria-hidden className="h-[3px] w-[3px] rounded-full bg-[color:var(--color-line-strong)]" />
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* -------------------------------------------------------------- channels */}
-      <section className="border-b border-[color:var(--color-line)]">
-        <div className="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
-          <div className="grid gap-3 py-8 sm:grid-cols-2 lg:grid-cols-4">
-            <Channel
-              index="01"
-              icon={<LayoutDashboard size={17} />}
-              title="Veb-sayt"
-              text="Klublar, yangiliklar, tadbirlar va kutubxona"
-              href="/clubs"
-            />
-            <Channel
-              index="02"
-              icon={<Send size={17} />}
-              title="Telegram bot"
-              text="@Tsue_clubs_bot — eslatmalar va ariza holati"
-              href="https://t.me/Tsue_clubs_bot"
-            />
-            <Channel
-              index="03"
-              icon={<Smartphone size={17} />}
-              title="Mini-ilova"
-              text="O‘qish progressi, RSVP va muhokamalar"
-              href="https://t.me/Tsue_clubs_bot/app"
-            />
-            <Channel
-              index="04"
-              icon={<Users size={17} />}
-              title="Boshqaruv"
-              text="A’zolar, kontent va statistika paneli"
-              href="/admin"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ----------------------------------------------------------------- clubs */}
-      <section className="mx-auto w-full max-w-[1180px] px-4 py-20 sm:px-6">
-        <div className="reveal flex flex-wrap items-end justify-between gap-5">
-          <div className="max-w-2xl">
-            <div className="section-index">01 — Klublar</div>
-            <h2 className="display mt-3 text-[34px] text-[color:var(--color-ink)] sm:text-[44px]">
-              {clubs.length} klub. Bitta universitet.
-            </h2>
-            <p className="lede mt-3 max-w-lg">
-              Har bir klub — o‘z jamoasi, jadvali va Telegram kanali bilan alohida ekotizim.
-            </p>
-          </div>
-          <Link href="/clubs" className="link-quiet pb-1 text-[13.5px]">
-            Barcha klublar <ArrowUpRight size={14} />
-          </Link>
-        </div>
-
-        <div className="mt-10 grid gap-4 lg:grid-cols-12">
-          {featured ? (
-            <Link
-              href={`/clubs/${featured.slug}`}
-              className="reveal group relative overflow-hidden rounded-[18px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] transition-all duration-500 hover:-translate-y-1 hover:border-[color:var(--color-line-strong)] hover:shadow-[var(--shadow-lift)] lg:col-span-6 lg:row-span-2"
-              style={
-                {
-                  "--club-accent": featured.accent,
-                  "--reveal-delay": "60ms",
-                } as React.CSSProperties
-              }
-            >
-              <div
-                aria-hidden
-                className="absolute inset-0 opacity-[0.5] transition-opacity duration-500 group-hover:opacity-[0.75]"
-                style={{
-                  background: `radial-gradient(90% 70% at 0% 0%, ${featured.accent}1a 0%, transparent 60%)`,
-                }}
-              />
-
-              <div className="relative flex h-full flex-col sm:flex-row">
-                <div className="flex flex-1 flex-col justify-between p-7 lg:p-9">
-                  <div>
-                    <span className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ background: featured.accent }} />
-                      Tanlangan klub · {cycle?.program ?? "Bookonomics"}
-                    </span>
-                    <h3 className="display mt-6 text-[32px] leading-tight text-[color:var(--color-ink)] lg:text-[40px]">
-                      {featured.name}
-                    </h3>
-                    <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-[color:var(--color-ink-soft)]">
-                      {featured.tagline}
-                    </p>
-                    <p className="mt-2 max-w-md text-[13px] leading-relaxed text-[color:var(--color-muted)]">
-                      {featured.summary}
-                    </p>
-                    {featured.meetingDay && (
-                      <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3 py-1.5 text-[11.5px] font-medium text-[color:var(--color-ink-soft)]">
-                        <CalendarDays size={12} className="text-[color:var(--club-accent-ink)]" />
-                        {featured.meetingDay}
-                        {featured.meetingTime ? `, ${featured.meetingTime}` : ""}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[color:var(--color-line)] pt-5 text-[12.5px] text-[color:var(--color-muted)]">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Users size={13} /> {featured._count.memberships} a’zo
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <CalendarDays size={13} /> {featured._count.events} tadbir
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <BookOpen size={13} /> {featured._count.books} asar
-                    </span>
-                  </div>
-                </div>
-
-                <div className="club-plate relative flex shrink-0 items-center justify-between gap-4 border-t border-[color:var(--color-line)] px-7 py-6 sm:w-[214px] sm:flex-col sm:justify-center sm:border-l sm:border-t-0 sm:px-6 sm:py-9">
-                  <ClubLogo
-                    name={featured.name}
-                    logoUrl={featured.logoUrl}
-                    accent={featured.accent}
-                    size={96}
-                    className="relative"
-                  />
-                  <div className="relative text-right sm:text-center">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
-                      Klub sahifasi
-                    </p>
-                    <span className="mt-2 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[color:var(--color-ink)]">
-                      Ochish
-                      <ArrowUpRight
-                        size={14}
-                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ) : null}
-
-          {rest.map((club, i) => (
-            <Link
-              key={club.id}
-              href={`/clubs/${club.slug}`}
-              className="reveal group relative flex flex-col justify-between overflow-hidden rounded-[14px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-5 transition-all duration-500 hover:-translate-y-1 hover:border-[color:var(--color-line-strong)] hover:shadow-[var(--shadow-card)] lg:col-span-3"
-              style={
-                {
-                  "--club-accent": club.accent,
-                  "--reveal-delay": `${120 + i * 70}ms`,
-                } as React.CSSProperties
-              }
-            >
-              <div>
-                <div className="flex items-start justify-between gap-2">
-                  <ClubLogo
-                    name={club.name}
-                    logoUrl={club.logoUrl}
-                    accent={club.accent}
-                    size={38}
-                    rounded="rounded-[10px]"
-                  />
-                  <ArrowUpRight
-                    size={15}
-                    className="mt-1 text-[color:var(--color-muted-soft)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[color:var(--club-accent-ink)]"
-                  />
-                </div>
-                <h3 className="mt-4 font-serif text-[18px] leading-snug text-[color:var(--color-ink)]">
-                  {club.name}
-                </h3>
-                <p className="mt-1.5 line-clamp-2 text-[12.5px] leading-relaxed text-[color:var(--color-muted)]">
-                  {club.summary}
-                </p>
-              </div>
-              <div className="mt-5 flex items-center justify-between text-[11px] text-[color:var(--color-muted)]">
-                <span>{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</span>
-                <span className="tabular-nums">
-                  {club._count.memberships > 0 ? `${club._count.memberships} a’zo` : club.meetingDay ?? "Ochiq"}
-                </span>
-              </div>
-            </Link>
-          ))}
-
-          <Link
-            href="/clubs"
-            className="reveal group relative flex flex-col justify-between overflow-hidden rounded-[14px] border border-dashed border-[color:var(--color-line-strong)] p-5 transition-colors duration-300 hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-surface-2)] lg:col-span-3"
-            style={{ "--reveal-delay": "400ms" } as React.CSSProperties}
-          >
-            <div className="flex items-start justify-between">
-              <span className="section-index">Yana {Math.max(clubs.length - 4, 0)} ta</span>
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--color-line-strong)] transition-colors duration-300 group-hover:border-[color:var(--color-ink)] group-hover:bg-[color:var(--color-ink)] group-hover:text-[color:var(--color-paper)]">
-                <ArrowUpRight size={14} />
-              </span>
-            </div>
-            <div>
-              <p className="font-serif text-[18px] leading-snug text-[color:var(--color-ink)]">
-                Barcha klublarni ko‘rish
-              </p>
-              <span className="mt-1.5 block text-[11.5px] text-[color:var(--color-muted)]">
-                Yo‘nalish bo‘yicha saralash
-              </span>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------------------- reading */}
-      <section className="band-brand grain relative">
-        <div aria-hidden className="contour-field" />
-        <div className="relative mx-auto grid w-full max-w-[1180px] gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
-          <div className="reveal">
-            <div className="eyebrow text-white/75">
-              {cycle?.program ?? "Bookonomics"} · Kitobxonlik dasturi
-            </div>
-            <h2 className="display mt-4 text-[36px] text-white sm:text-[46px]">
-              Bir kitob —
-              <br />
-              butun universitet.
-            </h2>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/80">
-              Har oy yangi asar, bosqichma-bosqich o‘qish va ochiq muhokama. Book Club — platformaning
-              yadrosi va birinchi to‘liq ishga tushgan klubi.
-            </p>
-
-            <div className="mt-9 grid max-w-md grid-cols-3 gap-6 border-t border-white/15 pt-6">
-              <div>
-                <div className="font-serif text-[30px] leading-none">
-                  <Counter value={community.readers} />
-                </div>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/65">o‘quvchi</div>
-              </div>
-              <div>
-                <div className="font-serif text-[30px] leading-none">
-                  <Counter value={community.average} suffix="%" />
-                </div>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/65">o‘rtacha</div>
-              </div>
-              <div>
-                <div className="font-serif text-[30px] leading-none">
-                  <Counter value={bookCount} />
-                </div>
-                <div className="mt-2 text-[10px] uppercase tracking-[0.12em] text-white/65">kutubxonada</div>
-              </div>
-            </div>
-
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/clubs/book-club" className="btn btn-light btn-lg group">
-                Book Club
-                <ArrowRight size={15} className="btn-arrow" />
-              </Link>
-              <Link href="/books" className="btn btn-outline-light btn-lg">
-                Kutubxona
-              </Link>
-            </div>
-          </div>
-
-          {cycle && (
-            <div className="reveal" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
-              <div className="relative overflow-hidden rounded-[20px] border border-white/12 bg-white/[0.05] p-6 backdrop-blur-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/50">
-                    {heroTiming?.heading ?? "Joriy o‘qish"} · {cycle.milestones.length} bosqich
-                  </span>
-                  <span className="rounded-full border border-white/20 px-2.5 py-1 text-[10.5px] font-semibold text-white/80">
-                    {cycle.program ?? "Bookonomics"}
-                  </span>
-                </div>
-
-                <div className="mt-6 flex flex-col gap-6 sm:flex-row">
-                  <BookCover
-                    coverUrl={cycle.book.coverUrl}
-                    from={cycle.book.coverFrom}
-                    to={cycle.book.coverTo}
-                    title={cycle.book.title}
-                    author={cycle.book.author}
-                    className="h-[180px] w-[120px] shrink-0"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-serif text-[26px] leading-tight">{cycle.book.title}</h3>
-                    <p className="mt-1.5 text-[13px] text-white/55">
-                      {cycle.book.author}
-                      {cycle.book.year ? ` · ${cycle.book.year}` : ""}
-                    </p>
-                    <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-white/65">
-                      {cycle.book.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 space-y-0">
-                  {cycle.milestones.slice(0, 3).map((m, i) => {
-                    // A closed cycle has no open milestones left; before that the
-                    // tick tracks how far the community has actually read.
-                    const done =
-                      (heroTiming?.closed ?? false) ||
-                      community.average >= ((i + 1) / Math.max(cycle.milestones.length, 1)) * 100;
-                    return (
-                      <div
-                        key={m.id}
-                        className="flex items-center justify-between gap-3 border-t border-white/10 py-2.5 text-[12px]"
-                      >
-                        <span className="flex items-center gap-2.5 text-white/80">
-                          <span
-                            className={`inline-flex h-4 w-4 items-center justify-center rounded-full border text-[9px] ${
-                              done ? "border-white bg-white text-[#0b1a12]" : "border-white/25 text-white/30"
-                            }`}
-                            aria-hidden
-                          >
-                            {done ? "✓" : ""}
+                  {cycle.milestones.length > 0 && (
+                    <ol className="mt-5 space-y-0">
+                      {cycle.milestones.map((m, i) => (
+                        <li
+                          key={m.id}
+                          className="flex items-baseline justify-between gap-3 border-t border-[var(--gz-block-line)] py-2 text-[12.5px]"
+                        >
+                          <span className="min-w-0 truncate">
+                            <span className="mr-2 font-variant-numeric tabular-nums text-[var(--gz-block-muted)]">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            {m.title}
                           </span>
-                          {m.title}
-                        </span>
-                        <span className="shrink-0 text-white/40">{formatDate(m.dueAt, "d MMM")}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                          <span className="shrink-0 font-variant-numeric tabular-nums text-[var(--gz-block-muted)]">
+                            {formatDate(m.dueAt, "d MMM")}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
 
-                <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                  <span className="text-[11.5px] text-white/50">
-                    {heroTiming?.closed ? "Taqdimot o‘tkazildi:" : "Yakuniy uchrashuv:"}{" "}
-                    <span className="text-white/85">
-                      {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "belgilanmagan"}
-                    </span>
-                  </span>
-                  <Link href="/app/read" className="text-[11.5px] font-semibold text-white/80 hover:text-white">
-                    {heroTiming?.closed ? "Natijam" : "Progressni yangilash"}
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- agenda + news */}
-      <section className="mx-auto w-full max-w-[1180px] px-4 py-20 sm:px-6">
-        <div className="grid gap-14 lg:grid-cols-[1.02fr_0.98fr]">
-          <div className="reveal">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <div className="section-index">02 — Jadval</div>
-                <h2 className="display mt-3 text-[30px] text-[color:var(--color-ink)] sm:text-[36px]">
-                  Yaqin kunlarda
-                </h2>
-              </div>
-              <Link href="/events" className="link-quiet pb-1 text-[13px]">
-                Taqvim <ArrowUpRight size={13} />
-              </Link>
-            </div>
-
-            <div className="mt-6">
-              {events.length === 0 && (
-                <p className="border-t border-[color:var(--color-line)] py-6 text-sm text-[color:var(--color-muted)]">
-                  Hozircha rejalashtirilgan tadbir yo‘q.
-                </p>
-              )}
-              {events.map((event) => (
-                <Link
-                  key={event.id}
-                  href={`/events/${event.id}`}
-                  className="group grid grid-cols-[56px_1fr_auto] items-start gap-5 border-t border-[color:var(--color-line)] py-5 transition-colors last:border-b hover:bg-[color:var(--color-surface-2)]"
-                >
-                  <div className="pt-0.5">
-                    <div className="font-serif text-[26px] leading-none text-[color:var(--color-ink)]">
-                      {new Date(event.startsAt).getDate()}
-                    </div>
-                    <div className="mt-1.5 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
-                      {formatDate(event.startsAt, "MMM").replace(".", "")}
-                    </div>
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ background: event.club.accent }} />
-                      {event.club.name}
-                    </div>
-                    <h3 className="mt-1.5 text-[16px] font-semibold leading-snug text-[color:var(--color-ink)] transition-colors group-hover:text-[color:var(--color-link)]">
-                      {event.title}
-                    </h3>
-                    <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-[color:var(--color-muted)]">
-                      <span className="inline-flex items-center gap-1.5">
-                        <CalendarDays size={12} /> {timeRange(event.startsAt, event.endsAt)}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5">
-                        <MapPin size={12} /> {event.location}
-                      </span>
-                    </div>
-                  </div>
-                  <ArrowUpRight
-                    size={16}
-                    className="mt-1 text-[color:var(--color-muted-soft)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[color:var(--color-ink)]"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="reveal" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <div className="section-index">03 — Yangiliklar</div>
-                <h2 className="display mt-3 text-[30px] text-[color:var(--color-ink)] sm:text-[36px]">
-                  Klub hayoti
-                </h2>
-              </div>
-              <Link href="/news" className="link-quiet pb-1 text-[13px]">
-                Barchasi <ArrowUpRight size={13} />
-              </Link>
-            </div>
-            <div className="mt-6">
-              {news[0] && <NewsCard item={news[0]} />}
-              {news.slice(1, 3).map((item) => (
-                <Link
-                  key={item.id}
-                  href={`/news/${item.slug}`}
-                  className="group flex items-start justify-between gap-4 border-b border-[color:var(--color-line)] py-4 first:border-t"
-                >
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                      {item.club?.name ?? "Klub hayoti"}
-                      {item.publishedAt ? ` · ${formatDate(item.publishedAt, "d MMM")}` : ""}
-                    </p>
-                    <p className="mt-1.5 line-clamp-2 text-[14px] font-medium leading-snug text-[color:var(--color-ink)] transition-colors group-hover:text-[color:var(--color-link)]">
-                      {item.title}
-                    </p>
-                  </div>
-                  <ArrowUpRight
-                    size={15}
-                    className="mt-1 shrink-0 text-[color:var(--color-muted-soft)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[color:var(--color-ink)]"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------------------- library */}
-      <section className="border-y border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
-        <div className="mx-auto w-full max-w-[1180px] px-4 py-16 sm:px-6">
-          <div className="reveal flex flex-wrap items-end justify-between gap-5">
-            <div className="max-w-2xl">
-              <div className="section-index">04 — Kutubxona</div>
-              <h2 className="display mt-3 text-[30px] text-[color:var(--color-ink)] sm:text-[38px]">
-                Ijtimoiy faollik indeksi
-              </h2>
-              <p className="lede mt-2.5 max-w-xl">
-                Vazirlikning 186-son buyrug‘i bo‘yicha 12 asar. Har bir kitob uchun klub miqyosida
-                tayyorgarlik sessiyalari o‘tkaziladi.
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Badge tone="neutral">{bookCount} asar</Badge>
-              <Link href="/books" className="link-quiet text-[13px]">
-                Katalog <ArrowUpRight size={13} />
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-9 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {books.map((book, i) => (
-              <div
-                key={book.id}
-                className="reveal"
-                style={{ "--reveal-delay": `${i * 60}ms` } as React.CSSProperties}
-              >
-                <BookCard book={book} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------- cta */}
-      <section className="mx-auto w-full max-w-[1180px] px-4 pt-16 sm:px-6">
-        <div className="band-dark grain relative overflow-hidden rounded-[24px]">
-          <div aria-hidden className="contour-field" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-24 -top-24 h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,rgba(30,158,79,0.35),transparent_65%)]"
-          />
-          <div className="relative grid gap-10 px-6 py-12 sm:px-12 sm:py-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-            <div className="reveal">
-              <div className="eyebrow text-white/50">Yoshlar ittifoqi · TDIU</div>
-              <h2 className="display mt-4 text-[32px] text-white sm:text-[42px]">
-                Jamoaga qo‘shiling.
-              </h2>
-              <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-white/60">
-                Ariza bir daqiqada to‘ldiriladi. Klub rahbari Telegram orqali javob beradi — natijani
-                shu yerda va botda kuzatasiz.
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link href="/join" className="btn btn-light btn-lg group">
-                  A’zo bo‘lish
-                  <ArrowRight size={16} className="btn-arrow" />
-                </Link>
-                <a
-                  href="https://t.me/Tsue_clubs_bot"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-outline-light btn-lg"
-                >
-                  <Send size={15} /> Telegram bot
-                </a>
-              </div>
-            </div>
-
-            <div className="reveal lg:justify-self-end" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
-              <div className="rounded-[16px] border border-white/12 bg-white/[0.04] p-5 backdrop-blur-sm">
-                <p className="text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/40">
-                  Rasmiy loyiha
-                </p>
-                <YoshlarIttifoqiLockup height={96} className="mt-4" />
-                <div className="mt-4 border-t border-white/12 pt-4">
-                  <p className="text-[11px] leading-relaxed text-white/55">
-                    Toshkent davlat iqtisodiyot universiteti
-                    <br />
-                    Yoshlar masalalari bo‘yicha bo‘lim
+                  <p className="mt-4 text-[11.5px] leading-relaxed text-[var(--gz-block-muted)]">
+                    {timing?.closed ? "Yakuniy uchrashuv bo‘lib o‘tdi: " : "Yakuniy uchrashuv: "}
+                    {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "—"}
                   </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* ------------------------------------------------------------- contact rail */}
-      <section className="mx-auto w-full max-w-[1180px] px-4 pt-8 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-[14px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-5 py-4">
-          <p className="text-[13px] text-[color:var(--color-muted)]">
-            Savol bormi? Klub rahbari bilan bog‘laning yoki bot orqali yozing.
-          </p>
-          <div className="flex items-center gap-4 text-[12.5px] font-semibold">
-            <a href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer" className="link-quiet">
-              <MessageSquare size={13} /> @tsuebookclub
-            </a>
-            <a href="mailto:info@tsue.uz" className="link-quiet">
-              info@tsue.uz
-            </a>
+      {/* ════════════════════════════════════════════════ 03 · the library */}
+      <section className="gz-wrap">
+        <div className="gz-section">
+          <div className="gz-rail">
+            <span className="gz-rail__num">03</span>
+            <span className="gz-rail__label">Kutubxona</span>
+            <span className="gz-rail__meta">
+              “Ijtimoiy faollik
+              <br />
+              indeksi” ro‘yxati
+            </span>
+          </div>
+
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 className="gz-h2 max-w-[26ch]">
+                Vazirlikning 186-son buyrug‘i bo‘yicha o‘n ikkita asar.
+              </h2>
+              <Link href="/books" className="gz-link shrink-0 text-[12.5px] font-semibold">
+                Butun katalog <ArrowUpRight size={13} />
+              </Link>
+            </div>
+
+            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+              {books.map((book) => (
+                <Link key={book.id} href={`/books/${book.id}`} className="group block">
+                  <BookCover
+                    coverUrl={book.coverUrl}
+                    from={book.coverFrom}
+                    to={book.coverTo}
+                    title={book.title}
+                    author={book.author}
+                    sizes="(max-width: 640px) 42vw, 190px"
+                  />
+                  <h3 className="mt-3 border-t border-[color:var(--color-line)] pt-2.5 text-[13.5px] font-semibold leading-snug text-[color:var(--color-ink)] group-hover:underline group-hover:decoration-[color:var(--color-brass-line)] group-hover:underline-offset-4">
+                    {book.title}
+                  </h3>
+                  <p className="mt-0.5 text-[11.5px] text-[color:var(--color-muted)]">
+                    {book.author}
+                    {book.year ? ` · ${book.year}` : ""}
+                  </p>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
-    </>
-  );
-}
 
-function HeroStat({ value, label }: { value: number; label: string }) {
-  return (
-    <div>
-      <dd className="font-serif text-[27px] leading-none text-[color:var(--color-ink)]">
-        <Counter value={value} />
-      </dd>
-      <dt className="mt-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
-        {label}
-      </dt>
+      {/* ═════════════════════════════════════════ 04 · agenda and the news */}
+      <section className="gz-wrap">
+        <div className="gz-section">
+          <div className="gz-rail">
+            <span className="gz-rail__num">04</span>
+            <span className="gz-rail__label">Taqvim</span>
+            <span className="gz-rail__meta">
+              Kelgusi
+              <br />
+              tadbirlar
+            </span>
+          </div>
+
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
+            {/* agenda */}
+            <div className="min-w-0">
+              <div className="flex items-end justify-between gap-4 border-b border-[color:var(--color-ink)] pb-3">
+                <h2 className="gz-h2">Yaqin kunlarda</h2>
+                <Link href="/events" className="gz-link shrink-0 text-[12px] font-semibold">
+                  Taqvim <ArrowUpRight size={12} />
+                </Link>
+              </div>
+
+              <ul className="mt-1">
+                {events.slice(0, 4).map((e) => (
+                  <li key={e.id} className="border-b border-[color:var(--color-line)]">
+                    <Link href={`/events/${e.id}`} className="group grid grid-cols-[52px_minmax(0,1fr)] items-start gap-4 py-4">
+                      <span className="gz-date">
+                        <span className="gz-date__day">{formatDate(e.startsAt, "d")}</span>
+                        <span className="gz-date__month">{formatDate(e.startsAt, "MMM").replace(".", "")}</span>
+                      </span>
+                      <span className="min-w-0">
+                        <span className="flex items-baseline gap-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+                          <span aria-hidden className="mt-[-1px] h-1 w-1 rounded-full" style={{ background: e.club.accent }} />
+                          {e.club.name}
+                        </span>
+                        <span className="mt-1.5 block font-serif text-[17px] leading-snug text-[color:var(--color-ink)] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">
+                          {e.title}
+                        </span>
+                        <span className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11.5px] text-[color:var(--color-muted)]">
+                          <span className="inline-flex items-center gap-1.5">
+                            <CalendarDays size={11} /> {timeRange(e.startsAt, e.endsAt)}
+                          </span>
+                          <span className="inline-flex items-center gap-1.5">
+                            <MapPin size={11} /> {e.location}
+                          </span>
+                          {typeof e._count?.rsvps === "number" && (
+                            <span className="inline-flex items-center gap-1.5">
+                              <Users size={11} /> {e._count.rsvps}
+                              {e.capacity ? `/${e.capacity}` : ""}
+                            </span>
+                          )}
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* news: lead story + two briefs */}
+            <div className="min-w-0 lg:border-l lg:border-[color:var(--color-line)] lg:pl-12">
+              <div className="flex items-end justify-between gap-4 border-b border-[color:var(--color-ink)] pb-3">
+                <h2 className="gz-h2">Klub hayoti</h2>
+                <Link href="/news" className="gz-link shrink-0 text-[12px] font-semibold">
+                  Barchasi <ArrowUpRight size={12} />
+                </Link>
+              </div>
+
+              {news[0] && (
+                <Link href={`/news/${news[0].slug}`} className="group mt-4 block">
+                  <div className="grid grid-cols-[104px_minmax(0,1fr)] gap-4">
+                    <div className="gz-plate h-[104px] overflow-hidden">
+                      {news[0].imageUrl && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={news[0].imageUrl}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className="relative h-full w-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+                        {formatDate(news[0].publishedAt ?? new Date(), "d MMMM")}
+                      </span>
+                      <h3 className="mt-1.5 font-serif text-[21px] leading-tight text-[color:var(--color-ink)] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-[5px]">
+                        {news[0].title}
+                      </h3>
+                      <p className="mt-2 line-clamp-2 text-[12.5px] leading-relaxed text-[color:var(--color-muted)]">
+                        {news[0].excerpt}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              )}
+
+              <ul className="mt-5">
+                {news.slice(1, 3).map((n) => (
+                  <li key={n.id} className="border-t border-[color:var(--color-line)]">
+                    <Link href={`/news/${n.slug}`} className="group block py-3.5">
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+                        {formatDate(n.publishedAt ?? new Date(), "d MMMM")}
+                      </span>
+                      <h3 className="mt-1 text-[14.5px] font-semibold leading-snug text-[color:var(--color-ink)] group-hover:underline group-hover:underline-offset-4">
+                        {n.title}
+                      </h3>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════ 05 · the four doors */}
+      <section className="gz-wrap">
+        <div className="gz-section">
+          <div className="gz-rail">
+            <span className="gz-rail__num">05</span>
+            <span className="gz-rail__label">Tizim</span>
+            <span className="gz-rail__meta">
+              Sayt, bot,
+              <br />
+              mini-ilova, panel
+            </span>
+          </div>
+
+          <div className="grid gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: LayoutDashboard, title: "Veb-sayt", text: "Klublar, yangiliklar, tadbirlar va kutubxona", href: "/clubs" },
+              { icon: Send, title: "Telegram bot", text: "@Tsue_clubs_bot — eslatmalar va ariza holati", href: "https://t.me/Tsue_clubs_bot" },
+              { icon: Smartphone, title: "Mini-ilova", text: "O‘qish progressi, RSVP va muhokamalar", href: "https://t.me/Tsue_clubs_bot/app" },
+              { icon: Users, title: "Boshqaruv", text: "A’zolar, kontent va statistika paneli", href: "/admin" },
+            ].map((c) => (
+              <a
+                key={c.title}
+                href={c.href}
+                className="group block border-t border-[color:var(--color-ink)] pt-4"
+              >
+                <c.icon size={17} strokeWidth={1.6} className="text-[color:var(--color-ink-soft)]" />
+                <h3 className="mt-3 font-serif text-[18px] leading-tight text-[color:var(--color-ink)]">
+                  {c.title}
+                </h3>
+                <p className="mt-1.5 text-[12px] leading-relaxed text-[color:var(--color-muted)]">{c.text}</p>
+                <span className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[color:var(--color-ink)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  Ochish <ArrowUpRight size={11} />
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ join us */}
+      <section className="gz-wrap pb-16">
+        <div className="grid gap-8 border-t border-[color:var(--color-ink)] pt-9 md:grid-cols-[minmax(0,1fr)_320px] md:items-end">
+          <div className="min-w-0">
+            <span className="gz-kicker">A’zolik</span>
+            <h2 className="gz-display mt-4 !text-[clamp(32px,4.6vw,62px)]">
+              Jamoaga <em>qo‘shiling.</em>
+            </h2>
+            <p className="gz-body mt-4 max-w-md">
+              Ariza bir daqiqada to‘ldiriladi. Klub rahbari Telegram orqali javob beradi —
+              natijani shu yerda va botda kuzatasiz.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-2.5">
+              <Link href="/join" className="gz-btn">
+                Ariza topshirish <ArrowRight size={14} />
+              </Link>
+              <a href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer" className="gz-btn gz-btn--ghost">
+                Telegram bot
+              </a>
+            </div>
+          </div>
+
+          <div className="gz-plate min-h-[190px] p-6">
+            <YoshlarIttifoqiLockup className="relative" height={54} />
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[color:var(--color-line)] pt-4 text-[11.5px] text-[color:var(--color-muted)]">
+          <span className="inline-flex items-center gap-2">
+            <BookOpen size={12} /> Muqovalar nashriyot variantlari. Ro‘yxat Vazirlikning 186-son buyrug‘i asosida.
+          </span>
+          <span className="inline-flex items-center gap-4">
+            <a href="https://t.me/tsuebookclub" target="_blank" rel="noreferrer" className="gz-link">
+              @tsuebookclub
+            </a>
+            <a href="https://t.me/Tsue_clubs_bot" target="_blank" rel="noreferrer" className="gz-link">
+              @Tsue_clubs_bot
+            </a>
+          </span>
+        </div>
+      </section>
     </div>
-  );
-}
-
-function Channel({
-  index,
-  icon,
-  title,
-  text,
-  href,
-}: {
-  index: string;
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-  href: string;
-}) {
-  const external = href.startsWith("http");
-  return (
-    <a
-      href={href}
-      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-      className="group relative flex flex-col justify-between gap-6 rounded-[14px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color:color-mix(in_oklab,var(--color-green)_38%,var(--color-line))] hover:shadow-[var(--shadow-card)]"
-    >
-      <span className="flex items-start justify-between">
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[color:color-mix(in_oklab,var(--color-green)_9%,transparent)] text-[color:var(--color-green)] transition-colors duration-300 group-hover:bg-[color:var(--color-green)] group-hover:text-white">
-          {icon}
-        </span>
-        <span className="section-index">{index}</span>
-      </span>
-      <span className="min-w-0">
-        <span className="flex items-center gap-1.5 text-[13.5px] font-semibold text-[color:var(--color-ink)]">
-          {title}
-          <ArrowUpRight
-            size={13}
-            className="text-[color:var(--color-muted-soft)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[color:var(--color-green)]"
-          />
-        </span>
-        <span className="mt-1 block text-[11.5px] leading-snug text-[color:var(--color-muted)]">{text}</span>
-      </span>
-    </a>
   );
 }

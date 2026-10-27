@@ -68,27 +68,34 @@ export function HeaderBar({ authed }: { authed: boolean }) {
         className="scroll-progress"
         style={{ transform: `scaleX(${progress})` }}
       />
-      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-[1180px] items-center justify-between gap-6 px-4 sm:px-6">
-        <div className="flex items-center gap-9">
+      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-[1240px] items-center justify-between gap-6 px-4 sm:px-6">
+        <div className="flex items-center gap-8">
           <Logo />
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Asosiy navigatsiya">
-            {links.map((l) => (
-              <Link key={l.href} href={l.href} className="nav-link" data-active={isActive(l.href)} aria-current={isActive(l.href) ? "page" : undefined}>
+          <nav className="hidden items-center lg:flex" aria-label="Asosiy navigatsiya">
+            {links.map((l, i) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="nav-link"
+                data-active={isActive(l.href)}
+                aria-current={isActive(l.href) ? "page" : undefined}
+              >
+                {i > 0 && <span aria-hidden className="nav-sep" />}
                 {l.label}
               </Link>
             ))}
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <a
             href="https://t.me/Tsue_clubs_bot"
             target="_blank"
             rel="noreferrer"
-            className="hidden items-center gap-1 px-1.5 text-[12.5px] font-medium text-[color:var(--color-muted)] transition-colors hover:text-[color:var(--color-ink)] md:inline-flex"
+            className="header-quiet hidden md:inline-flex"
           >
             Telegram
-            <ArrowUpRight size={12} />
+            <ArrowUpRight size={11} />
           </a>
           <SearchTrigger className="hidden sm:inline-flex" />
           <span className="hidden sm:inline-flex">
@@ -101,15 +108,14 @@ export function HeaderBar({ authed }: { authed: boolean }) {
               {savedCount > 0 && <span className="saved-badge">{savedCount > 9 ? "9+" : savedCount}</span>}
             </Link>
           </span>
-          <span aria-hidden className="mx-1 hidden h-4 w-px bg-[color:var(--color-line)] md:block" />
+          <span aria-hidden className="hidden h-4 w-px bg-[color:var(--color-line-strong)] md:block" />
           <ThemeToggle />
-          <div className="hidden items-center gap-2 sm:flex">
-            <Link href={authed ? "/app" : "/login"} className="btn btn-ghost btn-sm">
+          <div className="hidden items-center gap-4 sm:flex">
+            <Link href={authed ? "/app" : "/login"} className="header-quiet">
               {authed ? "Kabinet" : "Kirish"}
             </Link>
-            <Link href="/join" className="btn btn-primary btn-sm group">
+            <Link href="/join" className="gz-btn !px-3.5 !py-2 !text-[12px]">
               A’zo bo‘lish
-              <ArrowUpRight size={14} className="btn-arrow-up opacity-80" />
             </Link>
           </div>
           <button
@@ -134,7 +140,7 @@ export function HeaderBar({ authed }: { authed: boolean }) {
               window.dispatchEvent(new Event("clubs:search"));
             }}
             tabIndex={open ? 0 : -1}
-            className="mb-3 flex items-center gap-2.5 rounded-[11px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3.5 py-2.5 text-left text-[13px] text-[color:var(--color-muted)]"
+            className="mb-3 flex items-center gap-2.5 border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-3.5 py-3 text-left text-[13px] text-[color:var(--color-muted)]"
           >
             <Search size={15} />
             Qidirish — klub, kitob, tadbir
@@ -156,17 +162,17 @@ export function HeaderBar({ authed }: { authed: boolean }) {
 
           <div className="mt-auto flex flex-col gap-3 pt-8">
             <div className="flex items-center gap-3">
-              <Link href="/join" tabIndex={open ? 0 : -1} className="btn btn-primary btn-lg flex-1">
+              <Link href="/join" tabIndex={open ? 0 : -1} className="gz-btn flex-1 justify-center">
                 A’zo bo‘lish
               </Link>
-              <Link href={authed ? "/app" : "/login"} tabIndex={open ? 0 : -1} className="btn btn-secondary btn-lg flex-1">
+              <Link href={authed ? "/app" : "/login"} tabIndex={open ? 0 : -1} className="gz-btn gz-btn--ghost flex-1 justify-center">
                 {authed ? "Kabinet" : "Kirish"}
               </Link>
             </div>
             <Link
               href="/saqlangan"
               tabIndex={open ? 0 : -1}
-              className="flex items-center justify-between rounded-[10px] border border-[color:var(--color-line)] px-4 py-3 text-[13px] text-[color:var(--color-ink-soft)]"
+              className="flex items-center justify-between border border-[color:var(--color-line)] px-4 py-3 text-[13px] text-[color:var(--color-ink-soft)]"
             >
               <span className="inline-flex items-center gap-2">
                 <Bookmark size={14} strokeWidth={1.9} /> Saqlanganlar
@@ -180,7 +186,7 @@ export function HeaderBar({ authed }: { authed: boolean }) {
               target="_blank"
               rel="noreferrer"
               tabIndex={open ? 0 : -1}
-              className="flex items-center justify-between rounded-[10px] border border-[color:var(--color-line)] px-4 py-3 text-[13px] text-[color:var(--color-ink-soft)]"
+              className="flex items-center justify-between border border-[color:var(--color-line)] px-4 py-3 text-[13px] text-[color:var(--color-ink-soft)]"
             >
               Telegram bot — @Tsue_clubs_bot
               <ArrowUpRight size={14} />
