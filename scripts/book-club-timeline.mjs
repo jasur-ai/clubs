@@ -97,6 +97,29 @@ async function main() {
     }
   }
 
+  // An older database may still advertise a "next session" for a book that has
+  // already been discussed — a leftover from dates that were guessed relative
+  // to the seeding date. It is not a plan, it is a duplicate: retire it rather
+  // than delete it, so an organiser can still see and republish the row.
+  const now = new Date();
+  for (const meeting of MEETINGS) {
+    const stale = await db.event.findMany({
+      where: {
+        clubId: club.id,
+        status: "PUBLISHED",
+        startsAt: { gt: now },
+        title: { contains: meeting.book },
+      },
+      select: { id: true, title: true },
+    });
+    for (const event of stale) {
+      if (!/Bookonomics/i.test(event.title)) continue;
+      await db.event.update({ where: { id: event.id }, data: { status: "CANCELLED" } });
+      console.log(`[book-club] retired stale event: ${event.title}`);
+      fixedEvents += 1;
+    }
+  }
+
   // The month book's presentation: create once, only if the club has no event
   // mentioning it at all — an organiser may have written it by hand already.
   const monthTitle = "“Bir oyda bir kitob”: “Iqrornoma” taqdimoti";
