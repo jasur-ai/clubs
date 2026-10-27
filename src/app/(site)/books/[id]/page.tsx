@@ -5,6 +5,7 @@ import { CalendarDays, MapPin, MessageSquare } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
 import { Badge } from "@/components/ui/primitives";
 import { SaveButton } from "@/components/site/save-button";
+import { cycleTiming } from "@/lib/reading";
 import { formatDate } from "@/lib/format";
 import { db } from "@/lib/db";
 
@@ -26,6 +27,7 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
   if (!book) notFound();
 
   const cycle = book.cycles[0];
+  const timing = cycle ? cycleTiming(cycle) : null;
   const threads = await db.discussionThread.findMany({
     where: { cycleId: cycle?.id ?? "-" },
     orderBy: { createdAt: "desc" },
@@ -68,8 +70,14 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
                 <h2 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
                   O‘qish davri{cycle.program ? ` · ${cycle.program}` : ""}
                 </h2>
-                <Badge tone={cycle.status === "READING" ? "success" : "neutral"}>
-                  {cycle.status === "READING" ? "O‘qilmoqda" : cycle.status === "FINISHED" ? "Yakunlangan" : "Rejalashtirilgan"}
+                <Badge tone={cycle.status === "READING" && !timing?.closed ? "success" : "neutral"}>
+                  {timing?.closed
+                    ? "Taqdimot o‘tkazildi"
+                    : cycle.status === "READING"
+                      ? "O‘qilmoqda"
+                      : cycle.status === "FINISHED"
+                        ? "Yakunlangan"
+                        : "Rejalashtirilgan"}
                 </Badge>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -113,7 +121,7 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
               Klub sahifasi
             </Link>
             <Link href="/app/read" className="btn btn-secondary">
-              O‘qishni davom etish
+              {timing?.closed ? "O‘z natijam" : "O‘qishni davom etish"}
             </Link>
             <SaveButton
               kind="book"
