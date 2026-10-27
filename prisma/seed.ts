@@ -128,7 +128,7 @@ async function main() {
     ["Jasur", "Nematov", 210, "jasur_n"],
   ] as const;
 
-  const members = [];
+  const members: Array<{ id: string; firstName: string; lastName: string | null }> = [];
   for (const [first, last, points, username] of memberSeed) {
     members.push(
       await db.user.create({
@@ -162,6 +162,86 @@ async function main() {
       { userId: superAdmin.id, clubId: bookClubId, role: "MANAGER", status: "ACTIVE" },
     ],
   });
+
+  // --- the rest of the network ---------------------------------------------
+  // The pilot club is Book Club, but a directory where 21 of 22 clubs are empty
+  // misrepresents the campus. These are the same students joining a second club
+  // plus a few officers for the larger directions, so every count on the site
+  // (directory, filters, leaderboard) reflects a plausible network.
+  const extraPeople = [
+    ["Diyora", "Rahimova", 380, "diyora_r"],
+    ["Islom", "Yo‘ldoshev", 340, "islom_y"],
+    ["Zarina", "Sattorova", 310, "zarina_s"],
+    ["Ulug‘bek", "Mirzayev", 295, "ulugbek_m"],
+    ["Kamila", "Saidova", 275, "kamila_s"],
+    ["Temur", "Alimov", 240, "temur_a"],
+    ["Nilufar", "Qodirova", 225, "nilufar_q"],
+    ["Doniyor", "Toshmatov", 190, "doniyor_t"],
+  ] as const;
+
+  const extra: Array<{ id: string; firstName: string; lastName: string | null }> = [];
+  for (const [first, last, points, username] of extraPeople) {
+    extra.push(
+      await db.user.create({
+        data: {
+          firstName: first,
+          lastName: last,
+          telegramId: `3${Math.floor(Math.random() * 1e8).toString().padStart(8, "0")}`,
+          username,
+          email: `${username}@demo.tdiu.uz`,
+          passwordHash: await bcrypt.hash(password, 10),
+          role: "MEMBER",
+          points,
+        },
+      }),
+    );
+  }
+
+  const network: Array<[string, number[], string | null]> = [
+    // slug, member indexes from `extra`, president first name source
+    ["zakovat", [0, 1, 2, 3], "Diyora"],
+    ["debate", [1, 2, 4, 5], "Islom"],
+    ["wikiclub", [0, 3, 6], "Zarina"],
+    ["it-club", [3, 5, 7], "Ulug‘bek"],
+    ["speaking", [2, 4], "Kamila"],
+    ["eco-club", [5, 6, 7], "Temur"],
+    ["art-club", [6, 0], "Nilufar"],
+    ["handmade", [7, 1], "Doniyor"],
+    ["sport", [3, 4, 5, 6], "Ulug‘bek"],
+    ["cybersport", [2, 7], "Diyora"],
+    ["iqtisodchilar", [1, 6], "Islom"],
+    ["mushoira", [4, 5], "Kamila"],
+    ["ijodkor", [0, 7], "Diyora"],
+    ["networking", [2, 3], "Diyora"],
+  ];
+
+  for (const [slug, indexes, leader] of network) {
+    const clubId = clubMap.get(slug);
+    if (!clubId) continue;
+    const roster = indexes.map((index) => extra[index]).filter(Boolean);
+    if (roster.length === 0) continue;
+    const lead = roster.find((person) => person.firstName === leader) ?? roster[0];
+    await db.membership.createMany({
+      data: roster.map((person) => ({
+        userId: person.id,
+        clubId,
+        role: person.id === lead.id ? "PRESIDENT" : "MEMBER",
+        status: "ACTIVE",
+      })),
+    });
+  }
+
+  // Every student is in at least one club beyond Book Club, the way a real
+  // campus works: the directory should read as a network, not a roster.
+  const crossClub = ["book-club", "debate", "zakovat", "speaking"];
+  for (const [index, person] of members.entries()) {
+    const slug = crossClub[index % crossClub.length];
+    const clubId = clubMap.get(slug);
+    if (!clubId || slug === "book-club") continue;
+    await db.membership
+      .create({ data: { userId: person.id, clubId, role: "MEMBER", status: "ACTIVE" } })
+      .catch(() => null);
+  }
 
   // --- join requests -------------------------------------------------------
   const requests = [
@@ -809,7 +889,7 @@ async function main() {
     ],
   });
 
-  console.log(`Done. Clubs: ${clubs.length}, users: ${members.length + 3}, events: ${eventData.length}`);
+  console.log(`Done. Clubs: ${clubs.length}, users: ${members.length + extra.length + 3}, events: ${eventData.length}`);
   console.log(`Admin login: ${process.env.SEED_ADMIN_EMAIL ?? "admin@clubs.tdiu.uz"} / ${password}`);
 }
 

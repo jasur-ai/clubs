@@ -62,11 +62,24 @@ export default async function MembersDirectoryPage({
     take: 400,
   });
 
-  const clubs = await db.club.findMany({
-    where: { isActive: true },
-    orderBy: { sortOrder: "asc" },
-    select: { id: true, name: true, slug: true },
+  // Only clubs that actually have members get a facet: an empty chip is a dead
+  // end, and the directory is meant to answer questions, not to prove it has 22
+  // rows. The count sits in the chip so the reader knows what they are opening.
+  const perClub = await db.membership.groupBy({
+    by: ["clubId"],
+    where: { status: "ACTIVE" },
+    _count: { _all: true },
   });
+  const countByClub = new Map(perClub.map((row) => [row.clubId, row._count._all]));
+  const clubs = (
+    await db.club.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+      select: { id: true, name: true, slug: true },
+    })
+  )
+    .filter((club) => (countByClub.get(club.id) ?? 0) > 0)
+    .sort((a, b) => (countByClub.get(b.id) ?? 0) - (countByClub.get(a.id) ?? 0));
 
   // group by club, keeping the query order
   const groups = new Map<string, { club: (typeof memberships)[number]["club"]; rows: typeof memberships }>();
@@ -75,7 +88,10 @@ export default async function MembersDirectoryPage({
     bucket.rows.push(row);
     groups.set(row.club.id, bucket);
   }
+  // A student can belong to several clubs, so the headline counts people, not
+  // rows: "54 memberships" would overstate the campus.
   const total = memberships.length;
+  const people = new Set(memberships.map((row) => row.user.id)).size;
   const leaders = memberships.filter((row) => row.role !== "MEMBER").length;
 
   return (
@@ -84,8 +100,8 @@ export default async function MembersDirectoryPage({
         <div className="eyebrow">Jamoa</div>
         <h1 className="display mt-3 text-[36px] leading-tight sm:text-[44px]">A’zolar</h1>
         <p className="lede mt-3 max-w-xl">
-          Jami {total} nafar a’zo. Rahbarlar to‘liq ismi bilan, oddiy a’zolar ism va familiya bosh
-          harfi bilan ko‘rsatiladi.
+          {groups.size} klub, {people} nafar talaba. Rahbarlar to‘liq ismi bilan, oddiy a’zolar ism va
+          familiya bosh harfi bilan ko‘rsatiladi.
         </p>
       </div>
 
@@ -136,13 +152,14 @@ export default async function MembersDirectoryPage({
             )}
           >
             {club.name}
+            <span className="ml-1.5 text-[10.5px] tabular-nums opacity-60">{countByClub.get(club.id)}</span>
           </Link>
         ))}
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-1 text-[12px] text-[color:var(--color-muted)]">
         <span className="inline-flex items-center gap-1.5">
-          <Users size={13} /> {total} a’zo
+          <Users size={13} /> {people} talaba · {total} a’zolik
         </span>
         <span className="inline-flex items-center gap-1.5">
           <Crown size={13} /> {leaders} rahbar
