@@ -60,7 +60,7 @@ export const clubs: ClubSeed[] = [
     tagline: "Har qanday yorug‘likka — kitob bilan.",
     summary: "Kitobxonlik madaniyati, mualliflar bilan uchrashuvlar va har oy yangi asar muhokamasi.",
     description:
-      "TDIU Book Club — universitetdagi eng faol kitobxonlar hamjamiyati. Klub har oy yangi asarni tanlaydi, uni bosqichma-bosqich o‘qiydi va ochiq muhokamada tahlil qiladi. Bookonomics loyihasi, “Yosh kitobxon” tanlovi va jamoaviy tadbirlar orqali talabalar nafaqat kitob o‘qishni, balki fikrni dalillash, jamoa bilan ishlash va sahna madaniyatini ham o‘zlashtiradi.",
+      "TDIU Book Club — universitetdagi eng faol kitobxonlar hamjamiyati. Klub har oy yangi asarni tanlaydi, uni bosqichma-bosqich o‘qiydi va ochiq muhokamada tahlil qiladi. Bookonomics va “Bir oyda bir kitob” dasturlari, “Yosh kitobxon” tanlovi va jamoaviy tadbirlar orqali talabalar nafaqat kitob o‘qishni, balki fikrni dalillash, jamoa bilan ishlash va sahna madaniyatini ham o‘zlashtiradi.",
     category: "intellectual",
     accent: "#a8492f",
     coverStyle: "arc",
@@ -76,6 +76,11 @@ export const clubs: ClubSeed[] = [
         title: "Bookonomics",
         description:
           "Klubning asosiy loyihasi: har son bir asarga bag‘ishlanadi. Muhokama yo‘nalishlari oldindan e’lon qilinadi, suhbat ochiq va dalillarga asoslanadi.",
+      },
+      {
+        title: "Bir oyda bir kitob",
+        description:
+          "Oyning bitta asari klub kun tartibida turadi va oy oxirida taqdimot bilan yakunlanadi. Oktyabr oyida — Lev Tolstoyning “Iqrornoma”si.",
       },
       {
         title: "Yosh kitobxon",

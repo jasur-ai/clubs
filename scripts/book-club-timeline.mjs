@@ -56,6 +56,24 @@ async function main() {
   let fixedEvents = 0;
   let fixedCycles = 0;
 
+  // The club runs two reading programmes, not one. A description written when
+  // only Bookonomics existed still says so on the club page; fix that sentence
+  // and nothing else.
+  const clubRow = await db.club.findUnique({ where: { id: club.id }, select: { description: true } });
+  const stalePhrase = "Bookonomics loyihasi, “Yosh kitobxon” tanlovi";
+  if (clubRow?.description?.includes(stalePhrase)) {
+    await db.club.update({
+      where: { id: club.id },
+      data: {
+        description: clubRow.description.replace(
+          stalePhrase,
+          "Bookonomics va “Bir oyda bir kitob” dasturlari, “Yosh kitobxon” tanlovi",
+        ),
+      },
+    });
+    console.log("[book-club] description now names both reading programmes");
+  }
+
   // --- events ---------------------------------------------------------------
   for (const meeting of MEETINGS) {
     const id = bookId(meeting.book);
