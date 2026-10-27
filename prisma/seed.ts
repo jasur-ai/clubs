@@ -881,6 +881,9 @@ async function main() {
         "Book Clubning Bookonomics loyihasi doirasida Mixail Bulgakovning “It yurak” asari muhokama qilindi.\n\nSuhbat davomida ishtirokchilar asardagi ilm va mas’uliyat chegaralari, Preobrajenskiyning tanlovi va Sharikning taqdiri haqida fikr almashdilar. Muhokama oldindan e’lon qilingan uchta yo‘nalish bo‘yicha kichik guruhlarda davom etdi.\n\nKeyingi son uchun “Dyavoliada” tanlandi. Ro‘yxatdan o‘tish klub kanalida ochiq.",
       from: "#1b4b31",
       to: "#4a3a1f",
+      // The story is about a book, so the picture is that book — the publisher's
+      // cover, not a coloured rectangle with the title typed over it.
+      image: "/books/it-yurak.jpg",
       publishedAt: at(-2, 18),
     },
     {
@@ -938,6 +941,7 @@ async function main() {
         body: n.body,
         coverFrom: n.from,
         coverTo: n.to,
+        imageUrl: (n as { image?: string }).image ?? null,
         status: "PUBLISHED",
         publishedAt: n.publishedAt,
         authorId: editor.id,

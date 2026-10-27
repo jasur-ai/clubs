@@ -1727,3 +1727,117 @@ html[data-theme-anim="on"]::view-transition-new(root) {
 :root[data-theme="dark"] .club-plate {
   background-color: color-mix(in oklab, var(--color-surface-2) 82%, var(--color-surface));
 }
+
+/* ─── News media ─────────────────────────────────────────────────────────────
+   A story with a picture shows the picture; a story without one shows its own
+   date set as a plate. Both sit on paper, both carry the same hairline.        */
+.news-media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background-color: color-mix(in oklab, var(--color-paper) 88%, var(--color-surface));
+}
+.news-media--object {
+  display: grid;
+  place-items: center;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in oklab, var(--color-ink) 4%, transparent) 0 1px,
+      transparent 1px 5px
+    ),
+    radial-gradient(
+      120% 90% at 50% 120%,
+      color-mix(in oklab, var(--color-ink) 10%, transparent) 0%,
+      transparent 58%
+    );
+}
+.news-media__object {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: var(--shadow-book);
+}
+
+.news-media--plate {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 13px 15px;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in oklab, var(--color-ink) 3.5%, transparent) 0 1px,
+      transparent 1px 5px
+    ),
+    radial-gradient(
+      130% 110% at 100% 0%,
+      color-mix(in oklab, var(--plate-accent) 12%, transparent) 0%,
+      transparent 66%
+    );
+}
+.news-plate__frame {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid var(--color-brass-line);
+  pointer-events: none;
+}
+.news-plate__mark {
+  position: relative;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.news-plate__date {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+}
+.news-plate__day {
+  font-family: var(--font-serif, Fraunces, serif);
+  font-size: 44px;
+  line-height: 0.78;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.news-plate__month {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+.news-plate__year {
+  font-weight: 500;
+  color: var(--color-muted-soft);
+}
+.news-plate__foot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+.news-plate__rule {
+  display: block;
+  width: 18px;
+  height: 1px;
+  background: var(--color-brass);
+}
+:root[data-theme="dark"] .news-media {
+  background-color: color-mix(in oklab, var(--color-surface-2) 88%, var(--color-surface));
+}

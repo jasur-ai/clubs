@@ -9,6 +9,7 @@ type News = {
   excerpt: string;
   body: string;
   status: string;
+  imageUrl?: string | null;
 };
 
 export function NewsForm({ clubs, item, lockedClubId }: { clubs: Club[]; item?: News; lockedClubId?: string }) {
@@ -38,6 +39,20 @@ export function NewsForm({ clubs, item, lockedClubId }: { clubs: Club[]; item?: 
       <div>
         <FieldLabel>Matn</FieldLabel>
         <textarea name="body" defaultValue={item?.body} rows={8} className="textarea" required maxLength={20000} />
+      </div>
+      <div>
+        <FieldLabel>Rasm manzili</FieldLabel>
+        <input
+          name="imageUrl"
+          defaultValue={item?.imageUrl ?? ""}
+          className="input"
+          maxLength={500}
+          placeholder="/books/it-yurak.jpg yoki https://…"
+        />
+        <p className="mt-1 text-[11px] leading-relaxed text-[color:var(--color-muted)]">
+          Kitob haqidagi yangilikda — o‘sha kitobning muqovasi. Bo‘sh qoldirilsa, karta sana
+          plastinkasi bilan chiziladi.
+        </p>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>

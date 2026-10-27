@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CoverArt } from "@/components/ui/cover-art";
+import { NewsMedia } from "@/components/ui/news-media";
 import { SaveButton } from "@/components/site/save-button";
 import { ShareButton } from "@/components/site/share-button";
 import { formatDate } from "@/lib/format";
@@ -32,7 +32,7 @@ export default async function NewsItemPage({ params }: { params: Promise<{ slug:
     where: { status: "PUBLISHED", slug: { not: slug } },
     orderBy: { publishedAt: "desc" },
     take: 3,
-    select: { slug: true, title: true, publishedAt: true, coverFrom: true, coverTo: true },
+    select: { slug: true, title: true, publishedAt: true, imageUrl: true, coverFrom: true, coverTo: true },
   });
 
   return (
@@ -57,7 +57,16 @@ export default async function NewsItemPage({ params }: { params: Promise<{ slug:
       <h1 className="display mt-3 text-[34px] leading-tight sm:text-[42px]">{item.title}</h1>
       <p className="mt-3 text-[16px] leading-relaxed text-[color:var(--color-muted)]">{item.excerpt}</p>
 
-      <CoverArt from={item.coverFrom} to={item.coverTo} title={item.title} compact className="mt-7 aspect-[16/8] w-full" />
+      <NewsMedia
+        imageUrl={item.imageUrl}
+        title={item.title}
+        publishedAt={item.publishedAt}
+        section={item.club?.name ?? "Yangiliklar"}
+        accent={item.club?.accent}
+        size="wide"
+        priority
+        className="mt-7 h-[248px] w-full rounded-[14px] border border-[color:var(--color-line)] sm:h-[300px]"
+      />
 
       <div className="prose-editorial mt-8 whitespace-pre-line">{item.body}</div>
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalendarDays, MapPin, Users, ArrowUpRight, BookOpen } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
+import { NewsMedia } from "@/components/ui/news-media";
 import { BookCover } from "@/components/ui/book-cover";
 import { Badge } from "@/components/ui/primitives";
 import { ClubLogo } from "@/components/ui/club-logo";
@@ -143,6 +144,7 @@ type NewsCardItem = {
   title: string;
   excerpt: string;
   publishedAt: Date | null;
+  imageUrl?: string | null;
   coverFrom: string;
   coverTo: string;
   club: { name: string; slug: string; accent: string } | null;
@@ -157,13 +159,16 @@ export function NewsCard({ item, featured = false }: { item: NewsCardItem; featu
         featured && "sm:flex-row",
       )}
     >
-      <CoverArt
-        from={item.coverFrom}
-        to={item.coverTo}
-        title={item.club?.name ?? "Klub hayoti"}
-        label="Yangilik"
-        compact
-        className={cn("w-full", featured ? "sm:w-[46%] sm:min-h-[240px]" : "h-[132px]")}
+      <NewsMedia
+        imageUrl={item.imageUrl}
+        title={item.title}
+        publishedAt={item.publishedAt}
+        section={item.club?.name ?? "Yangiliklar"}
+        accent={item.club?.accent}
+        className={cn(
+          "border-b border-[color:var(--color-line)]",
+          featured ? "h-[188px] w-full sm:h-auto sm:min-h-[248px] sm:w-[46%] sm:border-b-0 sm:border-r" : "h-[140px] w-full",
+        )}
       />
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--color-muted)]">
@@ -173,7 +178,11 @@ export function NewsCard({ item, featured = false }: { item: NewsCardItem; featu
               {item.club.name}
             </>
           )}
-          {item.publishedAt && <span className="text-[color:var(--color-muted-soft)]">· {formatDate(item.publishedAt)}</span>}
+          {/* A plate already states its own date; printing it twice in one card
+              is the kind of repetition that makes a page feel machine-made. */}
+          {item.publishedAt && item.imageUrl && (
+            <span className="text-[color:var(--color-muted-soft)]">· {formatDate(item.publishedAt)}</span>
+          )}
         </div>
         <h3 className={cn("mt-2 font-serif leading-snug text-[color:var(--color-ink)]", featured ? "text-[24px]" : "text-[18px]")}>
           {item.title}

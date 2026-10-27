@@ -386,6 +386,8 @@ const newsSchema = z.object({
   excerpt: z.string().min(10).max(300),
   body: z.string().min(20).max(20000),
   status: z.string().default("DRAFT"),
+  /// Optional path or absolute URL of the picture shown above the story.
+  imageUrl: z.string().trim().max(500).optional(),
   coverFrom: z.string().default("#1b4b31"),
   coverTo: z.string().default("#3f7a55"),
 });
@@ -424,6 +426,7 @@ export async function saveNewsAction(formData: FormData) {
     slug,
     status: d.status,
     publishedAt: d.status === "PUBLISHED" ? new Date() : null,
+    imageUrl: d.imageUrl ? d.imageUrl : null,
     coverFrom: d.coverFrom,
     coverTo: d.coverTo,
     authorId: user.id,

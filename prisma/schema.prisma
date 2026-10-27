@@ -244,6 +244,9 @@ model Event {
   endsAt      DateTime?
   location    String
   capacity    Int?
+  /// A real picture for the story: the cover of the book it reports on, or a
+  /// photograph of the event. Null means the card falls back to its date plate.
+  imageUrl    String?
   coverFrom   String    @default("#1b4b31")
   coverTo     String    @default("#3f7a55")
   status      String    @default("DRAFT") // DRAFT | PUBLISHED | CANCELLED | FINISHED
@@ -280,6 +283,9 @@ model News {
   title       String
   excerpt     String
   body        String
+  /// A real picture for the story: the cover of the book it reports on, or a
+  /// photograph of the event. Null means the card falls back to its date plate.
+  imageUrl    String?
   coverFrom   String    @default("#1b4b31")
   coverTo     String    @default("#3f7a55")
   status      String    @default("DRAFT") // DRAFT | PUBLISHED

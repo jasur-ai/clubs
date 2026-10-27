@@ -55,6 +55,7 @@ async function main() {
 
   let fixedEvents = 0;
   let fixedCycles = 0;
+  let fixedNews = 0;
 
   // The club runs two reading programmes, not one. A description written when
   // only Bookonomics existed still says so on the club page; fix that sentence
@@ -105,6 +106,21 @@ async function main() {
     }
   }
   if (covered) console.log(`[book-club] ${covered} cover(s) attached`);
+
+  // --- news pictures ---------------------------------------------------------
+  // A story about a book shows that book. The seed only reaches an empty
+  // database; this is what fills the picture in on a deployment that already
+  // carries the article.
+  const NEWS_IMAGES = {
+    "bookonomics-it-yurak-yakunlandi": "/books/it-yurak.jpg",
+  };
+  for (const [slug, url] of Object.entries(NEWS_IMAGES)) {
+    const item = await db.news.findUnique({ where: { slug }, select: { id: true, imageUrl: true } });
+    if (!item || item.imageUrl === url) continue;
+    await db.news.update({ where: { id: item.id }, data: { imageUrl: url } });
+    fixedNews += 1;
+  }
+  if (fixedNews) console.log(`[book-club] ${fixedNews} news picture(s) attached`);
 
   // --- events ---------------------------------------------------------------
   for (const meeting of MEETINGS) {
