@@ -6,7 +6,8 @@ ClubHelix (club-website archetypes for sports and community clubs), connectMyClu
 management), Klubraum and Pace/Heylo (club calendars, RSVPs, waitlists).
 
 The list below is ordered by value for a TDIU club, not by how often the vendor mentions it.
-Status is honest: what ships in this repository today, and what is queued.
+Every one of the twenty is implemented; the notes record the deliberate deviation where the
+obvious implementation would have been wrong for a 60-seat room or a 4 000-student campus.
 
 | # | Feature | Seen in | Why it matters here | Status |
 | --- | --- | --- | --- | --- |
@@ -24,12 +25,24 @@ Status is honest: what ships in this repository today, and what is queued.
 | 12 | Admin roster management with roles and status | CampusGroups (rosters, officer transitions) | Club leadership changes every year; the platform must survive the handover. | shipped |
 | 13 | CSV export of members, requests and participants | CampusGroups (reports), ClubExpress | Club leads still hand lists to the dean's office; that is the slowest recurring manual task. | shipped |
 | 14 | Admin analytics: growth and attendance trends | CampusGroups (data intelligence) | A lead should see whether interest is growing without exporting anything. | shipped |
-| 15 | Attendance check-in (QR or tap) | Presence, CampusGroups | Turns "RSVP" into a real record and feeds the leaderboard. | next |
-| 16 | Waitlist that promotes automatically when places free up | Pace, Klubraum, ClubExpress | Capacity is real in a 60-seat room; a waitlist is the difference between a full room and a no-show. | next |
-| 17 | Recurring events (weekly club meeting) | Klubraum, Eventbrite | Clubs meet weekly; creating 30 identical events by hand is why calendars go stale. | next |
-| 18 | Document and resource library per club | connectMyClub, ClubHelix | Bylaws, schedules, reading packs — currently scattered across Telegram files. | next |
-| 19 | Post-event feedback and ratings | connectMyClub (event reports/reviews) | The only cheap way to learn why attendance drops in week three. | next |
-| 20 | Directory of people, not only clubs | CampusGroups, Engage | Useful once every club has members; premature at 11 Book Club members. | next |
+| 15 | Attendance check-in (door list, one tap per name) | Presence, CampusGroups | Turns "RSVP" into a real record and feeds the leaderboard. The QR scanner is replaced by a door list: 30 people at a door do not want to open a camera. | shipped |
+| 16 | Waitlist that promotes automatically when places free up | Pace, Klubraum, ClubExpress | Capacity is real in a 60-seat room; a waitlist is the difference between a full room and a no-show. The oldest waiter is promoted and notified the moment a place frees. | shipped |
+| 17 | Recurring events (weekly club meeting) | Klubraum, Eventbrite | Clubs meet weekly; creating 30 identical events by hand is why calendars go stale. Creating one event offers "every week × 12"; every occurrence stays a real event, so RSVP, capacity and the ICS feed are unchanged. | shipped |
+| 18 | Document and resource library per club | connectMyClub, ClubHelix | Bylaws, schedules, reading packs — currently scattered across Telegram files. Links are curated in the admin panel and rendered on the club page. | shipped |
+| 19 | Post-event feedback and ratings | connectMyClub (event reports/reviews) | The only cheap way to learn why attendance drops in week three. One 1–5 rating per member, averaged on the event and aggregated per club. | shipped |
+| 20 | Directory of people, not only clubs | CampusGroups, Engage | "Who is in the debate club" is a real question before a first meeting. Leadership is named in full, ordinary members appear as first name + surname initial — the platform does not publish a full student list to the open web. | shipped |
+
+## What was added on top
+
+The comparison produced features 1–20. Three further pieces came out of building them, because
+the platform felt incomplete without them:
+
+- **Notification centre** (`/app/bildirishnomalar`) — waitlist promotions, approvals and
+  announcements in one list, linked from the bell with an unread count.
+- **Application tracker** (`/app/arizalar`) — a three-stage stepper (yuborildi → ko‘rilmoqda →
+  qaror) so an applicant can see where their request stands without messaging a lead.
+- **Calendar subscription** (`/api/calendar.ics`, per club with `?club=slug`) — the recurring-meeting
+  feature is only useful if the series lands in the phone's own calendar.
 
 ## What the analysis changed
 

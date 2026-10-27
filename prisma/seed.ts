@@ -28,6 +28,7 @@ async function main() {
   await db.eventRsvp.deleteMany();
   await db.event.deleteMany();
   await db.news.deleteMany();
+  await db.resource.deleteMany();
   await db.joinRequest.deleteMany();
   await db.membership.deleteMany();
   await db.club.deleteMany();
@@ -208,8 +209,8 @@ async function main() {
       genre: "Satira",
       description:
         "Professor Preobrajenskiyning tajribasi natijasida oddiy it inson qiyofasiga kiradi. Asar ilm, axloq va mas’uliyat chegaralari haqida.",
-      from: "#1c3f66",
-      to: "#4b7aa8",
+      from: "#1b4b31",
+      to: "#4a3a1f",
     },
     {
       title: "Ikki eshik orasi",
@@ -230,8 +231,8 @@ async function main() {
       genre: "Povest",
       description:
         "Byurokratiya va tartibsizlik ichida yo‘qolgan inson haqidagi grotesk povest. Navbatdagi muhokama uchun tanlangan asar.",
-      from: "#3a2f4a",
-      to: "#6d5a8a",
+      from: "#9a5a42",
+      to: "#9a8046",
     },
     {
       title: "Sayyohi hindi",
@@ -250,8 +251,8 @@ async function main() {
       pages: 432,
       genre: "Roman",
       description: "Buyuk shoir hayoti va davri haqidagi tarixiy-biografik roman.",
-      from: "#104070",
-      to: "#2070d0",
+      from: "#1b4b31",
+      to: "#3f7a55",
     },
     {
       title: "Ufq trilogiyasi",
@@ -270,8 +271,8 @@ async function main() {
       pages: 560,
       genre: "Roman",
       description: "Zahiriddin Muhammad Bobur hayoti haqidagi roman.",
-      from: "#1f3f5a",
-      to: "#43769c",
+      from: "#2e3a22",
+      to: "#3a3226",
     },
     {
       title: "Sarob",
@@ -280,8 +281,8 @@ async function main() {
       pages: 320,
       genre: "Roman",
       description: "Yangi hayot qurilishi davridagi qarama-qarshiliklar haqida.",
-      from: "#3f4a5a",
-      to: "#71839b",
+      from: "#123b33",
+      to: "#4a2a2a",
     },
     {
       title: "Otamdan qolgan dalalar",
@@ -300,8 +301,8 @@ async function main() {
       pages: 512,
       genre: "Drama",
       description: "Bilim va vasvasa, tanlov va javobgarlik haqidagi klassik asar.",
-      from: "#2a2a3a",
-      to: "#57577a",
+      from: "#6b7350",
+      to: "#9a7b4f",
     },
     {
       title: "Iqrornoma",
@@ -320,8 +321,8 @@ async function main() {
       pages: 800,
       genre: "Sarguzasht",
       description: "Adolat, qasos va sabr haqidagi mashhur roman.",
-      from: "#143a52",
-      to: "#2f6f92",
+      from: "#1b4b31",
+      to: "#4a3a1f",
     },
     {
       title: "G‘arbiy frontda o‘zgarish yo‘q",
@@ -340,8 +341,8 @@ async function main() {
       pages: 352,
       genre: "Roman",
       description: "Xotira, yo‘qotish va insoniylik haqidagi falsafiy asar.",
-      from: "#2f3f5a",
-      to: "#5a759b",
+      from: "#5b2f26",
+      to: "#5a4a28",
     },
   ];
 
@@ -520,8 +521,8 @@ async function main() {
       endsAt: at(5, 15),
       location: "Asosiy kampus, 2-bino, 207-xona",
       capacity: 60,
-      from: "#1c3f66",
-      to: "#4b7aa8",
+      from: "#1b4b31",
+      to: "#4a3a1f",
       status: "PUBLISHED",
     },
     {
@@ -533,8 +534,8 @@ async function main() {
       startsAt: at(19, 14),
       location: "Asosiy kampus, 7-bino, 206-xona",
       capacity: 50,
-      from: "#3a2f4a",
-      to: "#6d5a8a",
+      from: "#9a5a42",
+      to: "#9a8046",
       status: "PUBLISHED",
     },
     {
@@ -558,8 +559,8 @@ async function main() {
       type: "contest",
       startsAt: at(6, 14),
       location: "Asosiy kampus, Zakovat zali",
-      from: "#104070",
-      to: "#2070d0",
+      from: "#1b4b31",
+      to: "#3f7a55",
       status: "PUBLISHED",
     },
     {
@@ -569,8 +570,8 @@ async function main() {
       type: "workshop",
       startsAt: at(4, 11),
       location: "7-bino, “Faollar” zali",
-      from: "#1f5f8b",
-      to: "#4b8fb8",
+      from: "#2e3a22",
+      to: "#3a3226",
       status: "PUBLISHED",
     },
     {
@@ -581,8 +582,8 @@ async function main() {
       startsAt: at(12, 10),
       location: "Akseleratsiya markazi",
       capacity: 80,
-      from: "#1b4f72",
-      to: "#3f88b8",
+      from: "#123b33",
+      to: "#4a2a2a",
       status: "PUBLISHED",
     },
     {
@@ -592,8 +593,8 @@ async function main() {
       type: "sport",
       startsAt: at(5, 7, 45),
       location: "Paxtakor shop oldida",
-      from: "#0f5f66",
-      to: "#3f9a9f",
+      from: "#33392b",
+      to: "#58422a",
       status: "PUBLISHED",
     },
     {
@@ -627,8 +628,8 @@ async function main() {
       startsAt: at(26, 15),
       location: "Asosiy kampus, kutubxona zali",
       capacity: 70,
-      from: "#5b3f7a",
-      to: "#8f6bb0",
+      from: "#3f7a55",
+      to: "#8a6a33",
       status: "PUBLISHED",
     },
   ];
@@ -675,8 +676,8 @@ async function main() {
         "Bir oylik o‘qish yakunida talabalar asar qahramonlari va muallifning savollari atrofida ochiq suhbat o‘tkazdi.",
       body:
         "Book Clubning Bookonomics loyihasi doirasida Mixail Bulgakovning “It yurak” asari muhokama qilindi.\n\nSuhbat davomida ishtirokchilar asardagi ilm va mas’uliyat chegaralari, Preobrajenskiyning tanlovi va Sharikning taqdiri haqida fikr almashdilar. Muhokama oldindan e’lon qilingan uchta yo‘nalish bo‘yicha kichik guruhlarda davom etdi.\n\nKeyingi son uchun “Dyavoliada” tanlandi. Ro‘yxatdan o‘tish klub kanalida ochiq.",
-      from: "#1c3f66",
-      to: "#4b7aa8",
+      from: "#1b4b31",
+      to: "#4a3a1f",
       publishedAt: at(-2, 18),
     },
     {
@@ -708,8 +709,8 @@ async function main() {
         "Yangi o‘quv yili boshida klub jamoasi ochiq team building o‘tkazdi. Ishtirokchilar jamoaviy o‘yinlar va muhokamalarda qatnashdi.",
       body:
         "Book Club yangi o‘quv yilini ochiq team building bilan boshladi.\n\nAsosiy kampusning piknik zonasida o‘tkazilgan tadbirda 250 dan ortiq talaba qatnashdi. Ishtirokchilar jamoaviy o‘yinlar, kitob almashinuvi va tanishuv sessiyalarida ishtirok etdi.\n\nKlub har oy shunday ochiq tadbirlarni o‘tkazishni rejalashtirgan.",
-      from: "#104070",
-      to: "#2070d0",
+      from: "#1b4b31",
+      to: "#3f7a55",
       publishedAt: at(-29, 16),
     },
     {
@@ -718,8 +719,8 @@ async function main() {
       excerpt: "Universitet xalqaro reytingda TOP-700 oralig‘idan joy oldi.",
       body:
         "Toshkent davlat iqtisodiyot universiteti Times Higher Education World University Rankings 2027 reytingida 651–700-o‘rin oralig‘ini egalladi.\n\nBu natija universitetning ilm-fan va ta’lim sohasidagi izchil ishlarining natijasidir. Book Club jamoasi universitet jamoasini tabriklaydi.",
-      from: "#0b1f33",
-      to: "#104070",
+      from: "#2e3a22",
+      to: "#5c6f3f",
       publishedAt: at(-12, 10),
     },
   ];
@@ -739,6 +740,40 @@ async function main() {
         authorId: editor.id,
       },
     });
+  }
+
+  // --- resources -----------------------------------------------------------
+  // The files a club re-sends in the chat every semester. Stored as links: the
+  // real assets live on Drive / Telegram, the platform keeps them findable.
+  const resourceData = [
+    {
+      title: "Bookonomics: 2026 bahor o‘quv rejasi",
+      description: "12 hafta, 4 kitob, har hafta shanba kuni",
+      url: "https://docs.google.com/document/d/1bookonomics-spring",
+      kind: "file",
+    },
+    {
+      title: "Klub nizomi va a’zolik qoidalari",
+      description: "Qabul, qatnashish va baholash tartibi",
+      url: "https://docs.google.com/document/d/1bookclub-charter",
+      kind: "guide",
+    },
+    {
+      title: "Muhokama savollari shabloni",
+      description: "Har qanday kitob uchun ishlatiladi",
+      url: "https://docs.google.com/document/d/1discussion-template",
+      kind: "guide",
+    },
+    {
+      title: "Toshkent kutubxonalari xaritasi",
+      description: "Kitob topish uchun tekshirilgan manzillar",
+      url: "https://www.google.com/maps/d/edit?mid=tashkent-libraries",
+      kind: "link",
+    },
+  ];
+
+  for (const resource of resourceData) {
+    await db.resource.create({ data: { ...resource, clubId: bookClubId } });
   }
 
   // --- notifications & audit ----------------------------------------------

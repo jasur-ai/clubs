@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, BookOpen, CalendarDays, Clock, MapPin, MessageSquare, Send, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Clock, FileText, Link2, MapPin, MessageSquare, Send, Users } from "lucide-react";
 import { getClubSeed, CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
 import { getClubBySlug, getCurrentCycle, getCycleHistory, getPastEvents, getUpcomingEvents, getCommunityProgress } from "@/lib/queries";
 import { EventRow, BookRow } from "@/components/site/cards";
@@ -293,7 +293,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                     </li>
                   ))}
                 </ol>
-                <div className="mt-5 rounded-[10px] bg-[#f7f8fa] p-4">
+                <div className="mt-5 rounded-[10px] bg-[color:var(--color-surface-2)] p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">Yakuniy uchrashuv</p>
                   <p className="mt-1.5 text-[13.5px] font-medium">
                     {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "—"}
@@ -372,6 +372,44 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <span className="mt-auto inline-flex items-center gap-1 pt-4 text-[12px] font-semibold text-[color:var(--color-ink)] group-hover:text-[var(--club-accent)]">
                   Kanalda o‘qish <ArrowRight size={13} />
                 </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* resources */}
+      {club.resources.length > 0 && (
+        <section className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6">
+          <SectionHeading
+            eyebrow="Resurslar"
+            title="Klub materiallari"
+            description="Doimiy fayllar: jadval, nizom, o‘quv to‘plami va shablonlar."
+          />
+          <div className="mt-6 grid gap-2 sm:grid-cols-2">
+            {club.resources.map((resource) => (
+              <a
+                key={resource.id}
+                href={resource.url}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-start gap-3 rounded-[12px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-4 transition-all hover:-translate-y-0.5 hover:border-[color:var(--color-line-strong)] hover:shadow-[var(--shadow-card)]"
+              >
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--color-surface-2)] text-[color:var(--color-green)]">
+                  {resource.kind === "file" ? <FileText size={16} /> : <Link2 size={16} />}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[13px] font-semibold text-[color:var(--color-ink)]">
+                    {resource.title}
+                  </span>
+                  <span className="mt-0.5 block truncate text-[11.5px] text-[color:var(--color-muted)]">
+                    {resource.description ?? (resource.kind === "file" ? "Fayl" : resource.kind === "guide" ? "Qo‘llanma" : "Havola")}
+                  </span>
+                </span>
+                <ArrowUpRight
+                  size={14}
+                  className="mt-1 shrink-0 text-[color:var(--color-muted-soft)] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
               </a>
             ))}
           </div>

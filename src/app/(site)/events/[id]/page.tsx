@@ -40,6 +40,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const mine = user
     ? await db.eventRsvp.findUnique({ where: { eventId_userId: { eventId: event.id, userId: user.id } } })
     : null;
+  const series = event.seriesId
+    ? await db.event.findMany({
+        where: { seriesId: event.seriesId, status: "PUBLISHED" },
+        orderBy: { startsAt: "asc" },
+        select: { id: true, startsAt: true },
+      })
+    : [];
   const waitlist = await db.eventRsvp.findMany({
     where: { eventId: event.id, status: "WAITLIST" },
     orderBy: { createdAt: "asc" },
@@ -67,6 +74,11 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone="accent">{event.club.name}</Badge>
             <Badge tone={isPast ? "neutral" : "success"}>{isPast ? "Yakunlangan" : "Ochiq"}</Badge>
+            {series.length > 1 && (
+              <Badge tone="neutral">
+                Turkum · {series.findIndex((row) => row.id === event.id) + 1}/{series.length}
+              </Badge>
+            )}
           </div>
           <h1 className="display mt-4 text-[36px] leading-tight sm:text-[44px]">{event.title}</h1>
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[13.5px] text-[color:var(--color-ink-soft)]">
@@ -81,6 +93,34 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             </span>
           </div>
           <p className="prose-editorial mt-6 whitespace-pre-line">{event.description}</p>
+
+          {series.length > 1 && (
+            <div className="mt-8 rounded-[12px] border border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
+                Haftalik turkum
+              </p>
+              <ol className="mt-3 grid gap-1.5 sm:grid-cols-2">
+                {series.map((row, index) => (
+                  <li key={row.id}>
+                    <Link
+                      href={`/events/${row.id}`}
+                      aria-current={row.id === event.id ? "page" : undefined}
+                      className={
+                        row.id === event.id
+                          ? "flex items-center gap-2 rounded-[7px] bg-[color:var(--color-surface)] px-2 py-1.5 text-[12.5px] font-semibold text-[color:var(--color-ink)]"
+                          : "flex items-center gap-2 rounded-[7px] px-2 py-1.5 text-[12.5px] text-[color:var(--color-ink-soft)] transition-colors hover:bg-[color:var(--color-surface)]"
+                      }
+                    >
+                      <span className="w-5 shrink-0 text-[11px] tabular-nums text-[color:var(--color-muted-soft)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {formatDate(row.startsAt, "d MMM, EEEE")}
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
 
         <aside className="space-y-4">

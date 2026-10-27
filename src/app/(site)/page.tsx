@@ -426,7 +426,7 @@ export default async function HomePage() {
                       160deg,
                       color-mix(in oklab, ${featured.accent} 88%, #ffffff) 0%,
                       ${featured.accent} 42%,
-                      color-mix(in oklab, ${featured.accent} 62%, #0a1630) 100%
+                      color-mix(in oklab, ${featured.accent} 62%, #0b1a12) 100%
                     )`,
                   }}
                 >
@@ -622,7 +622,7 @@ export default async function HomePage() {
                         <span className="flex items-center gap-2.5 text-white/80">
                           <span
                             className={`inline-flex h-4 w-4 items-center justify-center rounded-full border text-[9px] ${
-                              done ? "border-white bg-white text-[#08102c]" : "border-white/25 text-white/30"
+                              done ? "border-white bg-white text-[#0b1a12]" : "border-white/25 text-white/30"
                             }`}
                             aria-hidden
                           >

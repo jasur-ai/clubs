@@ -3,17 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import {
-  BarChart3,
-  BookOpen,
-  CalendarDays,
-  Inbox,
-  Library,
-  Newspaper,
-  Settings,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { BarChart3, BookOpen, CalendarDays, FolderOpen, Inbox, Library, Newspaper, Settings, ShieldCheck, Users } from "lucide-react";
 
 const items = [
   { href: "/admin", label: "Boshqaruv paneli", icon: BarChart3, exact: true },
@@ -23,6 +13,7 @@ const items = [
   { href: "/admin/reading", label: "O‘qish davrlari", icon: BookOpen },
   { href: "/admin/events", label: "Tadbirlar", icon: CalendarDays },
   { href: "/admin/news", label: "Yangiliklar", icon: Newspaper },
+  { href: "/admin/resurslar", label: "Resurslar", icon: FolderOpen },
   { href: "/admin/clubs", label: "Klublar", icon: ShieldCheck, superOnly: true },
   { href: "/admin/settings", label: "Sozlamalar", icon: Settings, superOnly: true },
 ];
@@ -42,7 +33,7 @@ export function AdminSidebar({ pending, isSuper }: { pending: number; isSuper: b
               href={item.href}
               className={cn(
                 "flex items-center gap-2.5 rounded-[8px] px-2.5 py-2 text-[12.5px] font-medium transition-colors",
-                active ? "bg-white text-[#0a1630] shadow-[0_2px_8px_rgba(0,0,0,0.25)]" : "text-white/60 hover:bg-white/10 hover:text-white",
+                active ? "bg-white text-[#0b1a12] shadow-[0_2px_8px_rgba(0,0,0,0.25)]" : "text-white/60 hover:bg-white/10 hover:text-white",
               )}
             >
               <Icon size={15} className={active ? "text-[color:var(--color-link)]" : ""} />

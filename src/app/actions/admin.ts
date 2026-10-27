@@ -28,6 +28,7 @@ function refreshAll() {
   revalidatePath("/admin/reading");
   revalidatePath("/admin/events");
   revalidatePath("/admin/news");
+  revalidatePath("/admin/resurslar");
   revalidatePath("/clubs");
   revalidatePath("/events");
   revalidatePath("/news");
@@ -156,8 +157,8 @@ const bookSchema = z.object({
   genre: z.string().optional(),
   language: z.string().default("uz"),
   description: z.string().min(10).max(2000),
-  coverFrom: z.string().default("#104070"),
-  coverTo: z.string().default("#2070D0"),
+  coverFrom: z.string().default("#1b4b31"),
+  coverTo: z.string().default("#3f7a55"),
 });
 
 export async function saveBookAction(formData: FormData) {
@@ -268,6 +269,7 @@ const eventSchema = z.object({
   location: z.string().min(2).max(160),
   capacity: z.string().optional(),
   status: z.string().default("PUBLISHED"),
+  repeat: z.string().optional(),
 });
 
 export async function saveEventAction(formData: FormData) {
@@ -292,11 +294,76 @@ export async function saveEventAction(formData: FormData) {
 
   if (id) {
     await db.event.update({ where: { id }, data });
+    await audit(user.id, "event.update", "Event", id);
   } else {
-    await db.event.create({ data });
+    // A weekly club meeting is one decision, not twelve forms. `repeat` is the
+    // number of extra weeks to schedule; every occurrence is a real event, so
+    // RSVP, capacity and the ICS feed keep working unchanged.
+    const extraWeeks = Math.min(11, Math.max(0, Number(d.repeat ?? 0) || 0));
+    const seriesId = extraWeeks > 0 ? `ser_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}` : null;
+
+    await db.event.create({ data: { ...data, seriesId } });
+    if (extraWeeks > 0) {
+      const week = 7 * 24 * 60 * 60 * 1000;
+      for (let index = 1; index <= extraWeeks; index += 1) {
+        await db.event.create({
+          data: {
+            ...data,
+            startsAt: new Date(data.startsAt.getTime() + week * index),
+            endsAt: data.endsAt ? new Date(data.endsAt.getTime() + week * index) : null,
+            seriesId,
+          },
+        });
+      }
+    }
+    await audit(user.id, "event.create", "Event", d.title, extraWeeks > 0 ? `${extraWeeks + 1} haftalik turkum` : undefined);
   }
-  await audit(user.id, id ? "event.update" : "event.create", "Event", id || d.title);
   refreshAll();
+}
+
+/* ------------------------------------------------------------------- resurslar */
+
+const resourceSchema = z.object({
+  clubId: z.string().min(1),
+  title: z.string().min(3).max(140),
+  description: z.string().max(280).optional(),
+  url: z.string().url().max(600),
+  kind: z.string().default("link"),
+});
+
+export async function saveResourceAction(formData: FormData) {
+  const user = await requireStaff();
+  const parsed = resourceSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) throw new Error("Havola to‘liq emas yoki manzil noto‘g‘ri");
+  const d = parsed.data;
+  await assertClub(user, d.clubId);
+
+  await db.resource.create({
+    data: {
+      clubId: d.clubId,
+      title: d.title,
+      description: d.description?.trim() || null,
+      url: d.url,
+      kind: d.kind,
+    },
+  });
+  await audit(user.id, "resource.create", "Resource", d.title);
+  revalidatePath("/admin/resurslar");
+  refreshAll();
+  const club = await db.club.findUnique({ where: { id: d.clubId }, select: { slug: true } });
+  if (club) revalidatePath(`/clubs/${club.slug}`);
+}
+
+export async function deleteResourceAction(formData: FormData) {
+  const user = await requireStaff();
+  const id = String(formData.get("id") ?? "");
+  const resource = await db.resource.findUnique({ where: { id }, include: { club: { select: { slug: true } } } });
+  if (!resource) throw new Error("Resurs topilmadi");
+  await assertClub(user, resource.clubId);
+  await db.resource.delete({ where: { id } });
+  await audit(user.id, "resource.delete", "Resource", id, resource.title);
+  revalidatePath("/admin/resurslar");
+  revalidatePath(`/clubs/${resource.club.slug}`);
 }
 
 export async function deleteEventAction(formData: FormData) {
@@ -318,8 +385,8 @@ const newsSchema = z.object({
   excerpt: z.string().min(10).max(300),
   body: z.string().min(20).max(20000),
   status: z.string().default("DRAFT"),
-  coverFrom: z.string().default("#104070"),
-  coverTo: z.string().default("#2070D0"),
+  coverFrom: z.string().default("#1b4b31"),
+  coverTo: z.string().default("#3f7a55"),
 });
 
 function slugify(value: string) {
@@ -428,7 +495,7 @@ export async function updateClubAction(formData: FormData) {
       meetingDay: String(formData.get("meetingDay") ?? "") || null,
       meetingTime: String(formData.get("meetingTime") ?? "") || null,
       location: String(formData.get("location") ?? "") || null,
-      accent: String(formData.get("accent") ?? "#104070"),
+      accent: String(formData.get("accent") ?? "#0f6b39"),
     },
   });
   await audit(user.id, "club.update", "Club", id);

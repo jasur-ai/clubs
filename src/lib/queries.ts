@@ -51,6 +51,7 @@ export async function getClubBySlug(slug: string) {
         orderBy: { role: "asc" },
         take: 4,
       },
+      resources: { orderBy: { createdAt: "desc" }, take: 12 },
     },
   });
 }

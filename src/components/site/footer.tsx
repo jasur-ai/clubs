@@ -31,6 +31,7 @@ export function SiteFooter() {
               ["A’zo bo‘lish", "/join"],
               ["Tadbirlar", "/events"],
               ["Yangiliklar", "/news"],
+              ["A’zolar", "/azolar"],
               ["Bu hafta", "/haftalik"],
               ["Reyting", "/reyting"],
               ["Saqlanganlar", "/saqlangan"],

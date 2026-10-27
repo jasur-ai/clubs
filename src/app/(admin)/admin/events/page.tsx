@@ -85,6 +85,21 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
             <option value="CANCELLED">Bekor qilingan</option>
           </select>
         </div>
+        {!event && (
+          <div className="sm:col-span-2">
+            <FieldLabel>Takrorlanish</FieldLabel>
+            <select name="repeat" defaultValue="0" className="select">
+              <option value="0">Bir marta</option>
+              <option value="3">Har hafta · 4 marta</option>
+              <option value="7">Har hafta · 8 marta</option>
+              <option value="11">Har hafta · 12 marta</option>
+            </select>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[color:var(--color-muted)]">
+              Bir xil vaqtda, har hafta. Har bir uchrashuv alohida tadbir bo‘lib, RSVP va taqvim
+              obunasi o‘zgarishsiz ishlaydi.
+            </p>
+          </div>
+        )}
       </div>
       <button className="btn btn-primary w-full">Saqlash</button>
     </form>

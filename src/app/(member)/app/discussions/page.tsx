@@ -43,7 +43,7 @@ export default async function DiscussionsPage() {
 
       <div className="overflow-hidden rounded-[14px] border border-[color:var(--color-line)] bg-white">
         {threads.map((t) => (
-          <Link key={t.id} href={`/app/discussions/${t.id}`} className="block border-b border-[color:var(--color-line)] px-4 py-3.5 last:border-0 active:bg-[#f6f7f8]">
+          <Link key={t.id} href={`/app/discussions/${t.id}`} className="block border-b border-[color:var(--color-line)] px-4 py-3.5 last:border-0 active:bg-[color:var(--color-surface-2)]">
             <div className="flex items-start gap-2">
               {t.isPinned && <Pin size={12} className="mt-1 shrink-0 text-[color:var(--club-accent-ink)]" />}
               <div className="min-w-0 flex-1">

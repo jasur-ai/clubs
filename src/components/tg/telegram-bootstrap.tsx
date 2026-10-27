@@ -20,7 +20,7 @@ export function TelegramBootstrap() {
     tg.expand();
     try {
       tg.setHeaderColor?.("#ffffff");
-      tg.setBackgroundColor?.("#f6f7f8");
+      tg.setBackgroundColor?.("#efece3");
       tg.disableVerticalSwipes?.();
     } catch {
       /* older clients */

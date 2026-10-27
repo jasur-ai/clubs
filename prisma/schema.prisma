@@ -54,7 +54,7 @@ model Club {
   summary      String
   description  String
   category     String // intellectual | academic | creative | sport | social | travel
-  accent       String   @default("#104070")
+  accent       String   @default("#0f6b39")
   logoUrl      String? // club's own emblem, seeded from /public/clubs/<slug>.jpg
   coverStyle   String   @default("grid") // visual variant for generated covers
   telegramUrl  String?
@@ -75,6 +75,7 @@ model Club {
   threads      DiscussionThread[]
   events       Event[]
   news         News[]
+  resources    Resource[]
 
   @@index([category])
 }
@@ -130,8 +131,8 @@ model Book {
   language    String   @default("uz")
   description String
   genre       String?
-  coverFrom   String   @default("#104070")
-  coverTo     String   @default("#2070D0")
+  coverFrom   String    @default("#1b4b31")
+  coverTo     String    @default("#3f7a55")
   sourceUrl   String?
   createdAt   DateTime @default(now())
 
@@ -235,9 +236,10 @@ model Event {
   endsAt      DateTime?
   location    String
   capacity    Int?
-  coverFrom   String    @default("#104070")
-  coverTo     String    @default("#2070D0")
+  coverFrom   String    @default("#1b4b31")
+  coverTo     String    @default("#3f7a55")
   status      String    @default("DRAFT") // DRAFT | PUBLISHED | CANCELLED | FINISHED
+  seriesId    String? // groups the weekly occurrences of one recurring meeting
   createdAt   DateTime  @default(now())
 
   club     Club            @relation(fields: [clubId], references: [id], onDelete: Cascade)
@@ -245,6 +247,7 @@ model Event {
   feedback EventFeedback[]
 
   @@index([clubId, startsAt])
+  @@index([seriesId])
 }
 
 model EventRsvp {
@@ -269,8 +272,8 @@ model News {
   title       String
   excerpt     String
   body        String
-  coverFrom   String    @default("#104070")
-  coverTo     String    @default("#2070D0")
+  coverFrom   String    @default("#1b4b31")
+  coverTo     String    @default("#3f7a55")
   status      String    @default("DRAFT") // DRAFT | PUBLISHED
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
@@ -329,4 +332,23 @@ model AuditLog {
 model SiteSetting {
   key   String @id
   value String
+}
+
+// ---------------------------------------------------------------------------
+// Club resources: reading packs, schedules, bylaws — the files that otherwise
+// live in a Telegram chat and are impossible to find three weeks later.
+// ---------------------------------------------------------------------------
+
+model Resource {
+  id          String   @id @default(cuid())
+  clubId      String
+  title       String
+  description String?
+  url         String
+  kind        String   @default("link") // link | file | guide
+  createdAt   DateTime @default(now())
+
+  club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId])
 }

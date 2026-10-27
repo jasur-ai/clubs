@@ -51,10 +51,20 @@ placeholder grid.
 | Join | `/join?club=slug` | Membership application, routed to the club lead |
 | Member Mini App | `/app` | Reading progress, discussions, RSVP, profile — Telegram-first |
 | Admin console | `/admin` | Requests, members, library, reading cycles, events, news, settings |
+| Discovery | `/clubs?category&day&q&sort` | Facets on the directory — interest area, meeting day, free-text, ranking |
+| Fit finder | `/topish` | Four-question quiz that ranks the 22 clubs by interest fit and current activity |
+| Compare | `/clubs/solishtirish?clubs=a,b,c` | Up to three clubs side by side: direction, schedule, members, ratings |
+| This week | `/haftalik` | Seven-day strip with the week's totals and any day's meetings |
+| Ratings | `/reyting` | Members and clubs by activity points |
+| People | `/azolar?club&q` | Member directory: leaders in full, members as name + initial |
 | Search | `/qidiruv?q=` | One field across clubs, library, events and news; ⌘K palette everywhere |
 | Help | `/yordam` | Short guide: joining, calendar, search, bookmarks, admin exports |
 | Saved | `/saqlangan` | Device-local bookmarks for clubs, books, events and news — no account needed |
-| Calendar | `/api/events/[id]/ics`, `/api/events/ics?ids=`, `/api/events/feed.ics` | Single event, a shortlist, or a subscription that keeps updating |
+| Member centre | `/app/bildirishnomalar`, `/app/arizalar` | Notification centre and a three-stage application tracker |
+| Door list | `/admin/events/[id]/davomat` | Attendance check-in by tap, four stat tiles, CSV for the dean's office |
+| Resources | `/admin/resurslar` | Per-club link library (schedule, charter, reading packs) shown on the club page |
+| Calendar | `/api/calendar.ics[?club=]` | One subscribable feed for the platform or a single club |
+| PWA | `/manifest.webmanifest` | Installable with shortcuts to the directory, the week and saved items |
 | Link previews | `/api/og` | 1200×630 Open Graph card for every club, event and news item |
 | Admin export | `/api/admin/export?type=` | CSV for members, join requests and event participants |
 | Bot webhook | `/api/telegram` | Commands, deep links, web-app entry point |
@@ -74,7 +84,8 @@ all disabled under `prefers-reduced-motion`.
 
 Club emblems are never recoloured: the same file is used in both themes, and on dark surfaces a
 hairline halo separates dark ink from the background. The benchmark behind the current feature set
-is written up in `docs/club-website-benchmarks.md`.
+— twenty patterns taken from international club platforms, all of them implemented — is written up
+in `docs/club-website-benchmarks.md`.
 
 Brand assets in `public/brand/`: `yoshlar-ittifoqi-mark.png` (official lockup, knocked out to
 transparency for dark surfaces) and `yoshlar-ittifoqi.png` (full artwork).
