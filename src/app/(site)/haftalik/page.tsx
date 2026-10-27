@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { addDays, startOfDay } from "date-fns";
+import { addDays } from "date-fns";
 import { ArrowUpRight, CalendarDays, MapPin, Users } from "lucide-react";
 import { db } from "@/lib/db";
-import { formatDate, timeRange } from "@/lib/format";
+import { formatDate, tashkentDayKey, tashkentDayStart, tashkentWeekday, timeRange } from "@/lib/format";
 import { dayIndex } from "@/lib/discovery";
 import { ShareButton } from "@/components/site/share-button";
 
@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 const DAY_NAMES = ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"];
 
 export default async function WeekPage() {
-  const from = startOfDay(new Date());
+  const from = tashkentDayStart();
   const to = addDays(from, 7);
 
   const [events, clubs] = await Promise.all([
@@ -38,11 +38,12 @@ export default async function WeekPage() {
 
   const days = Array.from({ length: 7 }, (_, index) => {
     const date = addDays(from, index);
-    const dayName = DAY_NAMES[date.getDay()];
+    const dayName = DAY_NAMES[tashkentWeekday(date)];
+    const key = tashkentDayKey(date);
     return {
       date,
       dayName,
-      events: events.filter((event) => startOfDay(event.startsAt).getTime() === date.getTime()),
+      events: events.filter((event) => tashkentDayKey(event.startsAt) === key),
       meetings: clubs.filter((club) => club.meetingDay && dayIndex(club.meetingDay) === dayIndex(dayName)),
     };
   });

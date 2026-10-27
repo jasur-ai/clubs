@@ -55,11 +55,11 @@ export default async function ReadingAdminPage({ searchParams }: { searchParams:
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div>
                     <FieldLabel>Boshlanish</FieldLabel>
-                    <input type="datetime-local" name="startsAt" className="input" required />
+                    <input type="datetime-local" lang="uz" name="startsAt" className="input" required />
                   </div>
                   <div>
                     <FieldLabel>Uchrashuv</FieldLabel>
-                    <input type="datetime-local" name="meetingAt" className="input" />
+                    <input type="datetime-local" lang="uz" name="meetingAt" className="input" />
                   </div>
                 </div>
                 <div>

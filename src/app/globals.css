@@ -900,12 +900,14 @@ html[data-theme="dark"] .club-emblem {
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
 }
 html[data-theme="dark"] .club-emblem--ink {
-  /* A thin light rim plus a short falloff: enough separation to read a dark
-     emblem on a dark surface, tight enough that it never looks like a glow. */
-  filter:
-    drop-shadow(0 0 1px rgb(238 241 234 / 0.92))
-    drop-shadow(0 0 3px rgb(238 241 234 / 0.46))
-    drop-shadow(0 2px 4px rgb(0 0 0 / 0.45));
+  /* No halo. A blurred rim around a 44 px emblem turns its small lettering into
+     mush, which is exactly what it was supposed to fix. The mark is lifted in
+     brightness instead — per emblem, see INK_EMBLEM_LIFT — and a little
+     saturation keeps the lift from reading as a wash. The artwork stays sharp
+     because nothing is being blurred. */
+  filter: brightness(var(--emblem-lift, 1.4)) saturate(1.06);
+  /* Lifting every pixel of a dark mark also lifts its anti-aliased edge; a
+     hair of contrast pulls the silhouette back without touching colour. */
 }
 
 /* Motion ------------------------------------------------------------------ */

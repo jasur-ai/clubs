@@ -18,7 +18,8 @@ import { Badge, ProgressBar } from "@/components/ui/primitives";
 import { YoshlarIttifoqiLockup } from "@/components/brand/marks";
 import { Counter } from "@/components/site/motion";
 import { CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
-import { formatDate, relativeDate, timeRange } from "@/lib/format";
+import { formatDate, relativeDate, tashkentDayStart, timeRange } from "@/lib/format";
+import { cycleTiming } from "@/lib/reading";
 import {
   getClubs,
   getCommunityProgress,
@@ -27,7 +28,7 @@ import {
   getUpcomingEvents,
 } from "@/lib/queries";
 import { db } from "@/lib/db";
-import { addDays, startOfDay } from "date-fns";
+import { addDays } from "date-fns";
 
 export const revalidate = 60;
 
@@ -49,16 +50,20 @@ export default async function HomePage() {
 
   const books = await db.book.findMany({ orderBy: { createdAt: "asc" }, take: 6 });
 
+  // "This week" means the seven Tashkent days that start today, not the seven
+  // UTC days — a Monday 01:00 event belongs to Monday for the student.
+  const weekStart = tashkentDayStart();
   const weekEvents = await db.event.findMany({
     where: {
       status: "PUBLISHED",
-      startsAt: { gte: startOfDay(new Date()), lt: addDays(startOfDay(new Date()), 7) },
+      startsAt: { gte: weekStart, lt: addDays(weekStart, 7) },
     },
     orderBy: { startsAt: "asc" },
     take: 4,
     select: { id: true, title: true, startsAt: true },
   });
 
+  const heroTiming = cycle ? cycleTiming(cycle) : null;
   const featured = bookClub ?? clubs[0];
   const rest = clubs.filter((c) => c.id !== featured?.id).slice(0, 3);
   const nextEvent = events[0];
@@ -169,7 +174,7 @@ export default async function HomePage() {
                         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[color:var(--color-green)] opacity-60" />
                         <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[color:var(--color-green)]" />
                       </span>
-                      Hozir o‘qilmoqda
+                      {heroTiming?.closed ? "Yakunlangan o‘qish" : "Hozir o‘qilmoqda"}
                     </span>
                     <Link
                       href="/clubs/book-club"
@@ -212,14 +217,14 @@ export default async function HomePage() {
                   <div className="mt-5 flex items-center justify-between gap-3 rounded-[11px] bg-[color:var(--color-surface-2)] px-4 py-3">
                     <div className="min-w-0">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                        Yakuniy uchrashuv
+                        {heroTiming?.closed ? "Taqdimot o‘tkazildi" : "Yakuniy uchrashuv"}
                       </p>
                       <p className="mt-1 truncate text-[13px] font-medium text-[color:var(--color-ink)]">
                         {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "Belgilanmagan"}
                       </p>
                     </div>
                     <Link href="/clubs/book-club" className="btn btn-accent btn-sm">
-                      Davom etish
+                      {heroTiming?.closed ? "Natijani ko‘rish" : "Davom etish"}
                     </Link>
                   </div>
                 </div>
@@ -534,7 +539,9 @@ export default async function HomePage() {
         <div aria-hidden className="contour-field" />
         <div className="relative mx-auto grid w-full max-w-[1180px] gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div className="reveal">
-            <div className="eyebrow text-white/75">Bookonomics · Kitobxonlik dasturi</div>
+            <div className="eyebrow text-white/75">
+              {cycle?.program ?? "Bookonomics"} · Kitobxonlik dasturi
+            </div>
             <h2 className="display mt-4 text-[36px] text-white sm:text-[46px]">
               Bir kitob —
               <br />
@@ -582,10 +589,10 @@ export default async function HomePage() {
               <div className="relative overflow-hidden rounded-[20px] border border-white/12 bg-white/[0.05] p-6 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/50">
-                    Joriy o‘qish · {cycle.milestones.length} bosqich
+                    {heroTiming?.heading ?? "Joriy o‘qish"} · {cycle.milestones.length} bosqich
                   </span>
                   <span className="rounded-full border border-white/20 px-2.5 py-1 text-[10.5px] font-semibold text-white/80">
-                    Bookonomics
+                    {cycle.program ?? "Bookonomics"}
                   </span>
                 </div>
 
@@ -613,7 +620,11 @@ export default async function HomePage() {
 
                 <div className="mt-6 space-y-0">
                   {cycle.milestones.slice(0, 3).map((m, i) => {
-                    const done = community.average >= ((i + 1) / Math.max(cycle.milestones.length, 1)) * 100;
+                    // A closed cycle has no open milestones left; before that the
+                    // tick tracks how far the community has actually read.
+                    const done =
+                      (heroTiming?.closed ?? false) ||
+                      community.average >= ((i + 1) / Math.max(cycle.milestones.length, 1)) * 100;
                     return (
                       <div
                         key={m.id}
@@ -638,13 +649,13 @@ export default async function HomePage() {
 
                 <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
                   <span className="text-[11.5px] text-white/50">
-                    Yakuniy uchrashuv:{" "}
+                    {heroTiming?.closed ? "Taqdimot o‘tkazildi:" : "Yakuniy uchrashuv:"}{" "}
                     <span className="text-white/85">
                       {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "belgilanmagan"}
                     </span>
                   </span>
                   <Link href="/app/read" className="text-[11.5px] font-semibold text-white/80 hover:text-white">
-                    Progressni yangilash
+                    {heroTiming?.closed ? "Natijam" : "Progressni yangilash"}
                   </Link>
                 </div>
               </div>

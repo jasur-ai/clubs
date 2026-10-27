@@ -7,6 +7,7 @@ import { CoverArt } from "@/components/ui/cover-art";
 import { ProgressBar } from "@/components/ui/primitives";
 import { ProgressForm } from "@/components/app/progress-form";
 import { formatDate } from "@/lib/format";
+import { cycleTiming } from "@/lib/reading";
 
 export default async function ReadPage() {
   const user = await requireUserPage();
@@ -47,7 +48,10 @@ export default async function ReadPage() {
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">Joriy davr</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
+          {cycleTiming(cycle).heading}
+          {cycle.program ? ` · ${cycle.program}` : ""}
+        </p>
         <h1 className="mt-1 font-serif text-[24px] leading-tight">{cycle.book.title}</h1>
         <p className="text-[12.5px] text-[color:var(--color-muted)]">{cycle.book.author}</p>
       </div>

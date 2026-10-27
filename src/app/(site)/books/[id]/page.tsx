@@ -66,7 +66,7 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
             <div className="mt-8 rounded-[14px] border border-[color:var(--color-line)] bg-white p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
-                  O‘qish davri
+                  O‘qish davri{cycle.program ? ` · ${cycle.program}` : ""}
                 </h2>
                 <Badge tone={cycle.status === "READING" ? "success" : "neutral"}>
                   {cycle.status === "READING" ? "O‘qilmoqda" : cycle.status === "FINISHED" ? "Yakunlangan" : "Rejalashtirilgan"}

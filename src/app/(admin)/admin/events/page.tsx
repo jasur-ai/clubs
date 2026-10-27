@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
+import { toTashkentInput } from "@/lib/format";
 import { managedClubIds } from "@/lib/auth";
 import { requireStaffPage } from "@/lib/session";
 import { db } from "@/lib/db";
@@ -9,11 +10,6 @@ import { FormDialog } from "@/components/admin/form-dialog";
 import { formatDate, timeRange } from "@/lib/format";
 
 export const metadata = { title: "Tadbirlar" };
-
-function toLocalInput(date: Date) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
 
 export default async function AdminEventsPage({ searchParams }: { searchParams: Promise<{ club?: string; filter?: string }> }) {
   const params = await searchParams;
@@ -67,11 +63,11 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
         </div>
         <div>
           <FieldLabel>Boshlanish</FieldLabel>
-          <input type="datetime-local" name="startsAt" defaultValue={event ? toLocalInput(event.startsAt) : ""} className="input" required />
+          <input type="datetime-local" lang="uz" name="startsAt" defaultValue={event ? toTashkentInput(event.startsAt) : ""} className="input" required />
         </div>
         <div>
           <FieldLabel>Tugash</FieldLabel>
-          <input type="datetime-local" name="endsAt" defaultValue={event?.endsAt ? toLocalInput(event.endsAt) : ""} className="input" />
+          <input type="datetime-local" lang="uz" name="endsAt" defaultValue={event?.endsAt ? toTashkentInput(event.endsAt) : ""} className="input" />
         </div>
         <div>
           <FieldLabel>Joylar soni</FieldLabel>

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { fromTashkentInput } from "@/lib/format";
 import { db } from "@/lib/db";
 import { canManageClub, getSession, isAdminRole, managedClubIds, type SessionUser } from "@/lib/auth";
 import { notifyUser } from "@/lib/notify";
@@ -220,8 +221,8 @@ export async function createCycleAction(formData: FormData) {
       clubId,
       bookId,
       status: "READING",
-      startsAt: startsAt ? new Date(startsAt) : new Date(),
-      meetingAt: meetingAt ? new Date(meetingAt) : null,
+      startsAt: (startsAt && fromTashkentInput(startsAt)) || new Date(),
+      meetingAt: meetingAt ? fromTashkentInput(meetingAt) : null,
       location: location || null,
     },
   });
@@ -249,7 +250,7 @@ export async function addMilestoneAction(formData: FormData) {
     data: {
       cycleId,
       title: String(formData.get("title") ?? "").slice(0, 120),
-      dueAt: new Date(String(formData.get("dueAt") ?? Date.now())),
+      dueAt: fromTashkentInput(String(formData.get("dueAt") ?? "")) ?? new Date(),
       sort: Number(formData.get("sort") ?? 0),
     },
   });
@@ -285,8 +286,8 @@ export async function saveEventAction(formData: FormData) {
     title: d.title,
     description: d.description,
     type: d.type,
-    startsAt: new Date(d.startsAt),
-    endsAt: d.endsAt ? new Date(d.endsAt) : null,
+    startsAt: fromTashkentInput(d.startsAt) ?? new Date(),
+    endsAt: d.endsAt ? fromTashkentInput(d.endsAt) : null,
     location: d.location,
     capacity: d.capacity ? Number(d.capacity) : null,
     status: d.status,

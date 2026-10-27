@@ -135,6 +135,23 @@ The console is organized by the jobs an officer does, not by database tables:
 Every mutation revalidates the public routes it affects, so the site never shows stale data after
 an admin action.
 
+## 7a. Time
+
+Every time on the site is Tashkent time (UTC+5, no daylight saving since 1992).
+Instants are stored as UTC, as they must be; the conversion lives in
+`src/lib/format.ts` and is applied at the edge of the UI, not in the database:
+
+- `formatDate`, `timeRange`, `relativeDate` and friends move the instant onto
+  the Tashkent wall clock before formatting, so a 15:00 discussion prints as
+  15:00 whether the server is in UTC or anywhere else.
+- `tashkentDayStart` / `tashkentDayKey` / `tashkentWeekday` are what "today" and
+  "this week" mean, so a Monday 01:00 event belongs to Monday.
+- `fromTashkentInput` / `toTashkentInput` convert `<input type="datetime-local">`
+  values. An admin typing 15:00 must save 15:00 — parsing the string with
+  `new Date()` on a UTC server would silently shift it by five hours.
+- The calendar feed (`.ics`) keeps UTC with the trailing `Z`, which is the one
+  format every calendar client reads unambiguously.
+
 ## 8. Design system
 
 Tokens live in `src/app/globals.css`: brand green `#21a04c` with deep `#0f6b39` and ink `#0b4527`,

@@ -6,11 +6,32 @@ import { clubs } from "../src/config/clubs";
 
 const db = new PrismaClient();
 
+/**
+ * "`hour` o'clock, `dayOffset` days from today", in Tashkent time.
+ *
+ * Built from UTC parts plus the fixed +5 offset so the result is the same
+ * instant no matter what timezone the seeding machine is in — and so the site,
+ * which prints Tashkent time, shows the hour the seed asked for.
+ */
 function at(dayOffset: number, hour = 18, minute = 0) {
-  const d = new Date();
-  d.setHours(hour, minute, 0, 0);
-  d.setDate(d.getDate() + dayOffset);
-  return d;
+  const now = new Date(Date.now() + 5 * 3_600_000);
+  return new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + dayOffset, hour - 5, minute),
+  );
+}
+
+/**
+ * Absolute date, in Tashkent time.
+ *
+ * The reading programme is not invented: it is what the club channel
+ * (@tsuebookclub) actually announced. Those dates are facts, so they are written
+ * as facts and must not drift with the day the seed happens to run. Offsetting
+ * from "now" is what previously moved a finished October discussion into
+ * November.
+ */
+function on(isoDate: string, hour: number, minute = 0) {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day, hour - 5, minute));
 }
 
 async function main() {
@@ -445,76 +466,111 @@ async function main() {
   }
 
   // --- reading cycles ------------------------------------------------------
-  const finished = await db.readingCycle.create({
-    data: {
-      clubId: bookClubId,
-      bookId: bookMap.get("Ikki eshik orasi")!,
+  // These are not invented. Every date, room and discussion direction below comes
+  // from the club's own channel (@tsuebookclub): the announcements of 2 and 14–15
+  // October, and the recaps of 19–20 October. Book Club runs two programmes on
+  // the same bookshelf, and the difference matters to a member:
+  //
+  //   Bookonomics        — one work per session, three discussion directions.
+  //   Bir oyda bir kitob — the month's book, closed with a presentation.
+  const cycleSeed = [
+    {
+      book: "Ikki eshik orasi",
+      program: "Bookonomics",
       status: "FINISHED",
-      startsAt: at(-45, 9),
-      endsAt: at(-2, 11),
-      meetingAt: at(-2, 10),
+      startsAt: on("2026-09-12", 9),
+      meetingAt: on("2026-10-03", 10),
       location: "Asosiy kampus, piknik maydonchasi",
-      focus: "Inson taqdiri va hayot sinovlari\nQahramonlarning ruhiy kechinmalari\nUrushning inson hayotidagi izlari",
+      focus:
+        "Inson taqdiri va hayot sinovlari\nQahramonlarning ruhiy kechinmalari\nUrushning inson hayotidagi izlari",
     },
-  });
-
-  const current = await db.readingCycle.create({
-    data: {
-      clubId: bookClubId,
-      bookId: bookMap.get("It yurak")!,
-      status: "READING",
-      startsAt: at(-9, 9),
-      endsAt: at(5, 13),
-      meetingAt: at(5, 13),
+    {
+      book: "It yurak",
+      program: "Bookonomics",
+      status: "FINISHED",
+      startsAt: on("2026-10-04", 9),
+      meetingAt: on("2026-10-17", 13),
       location: "Asosiy kampus, 2-bino, 207-xona",
       focus:
-        "Ichki kechinmalar va hissiy iztiroblar\nYurak amri va taqdir sinovi\nQahramonlarning ma’naviy qiyofasi",
+        "Ichki kechinmalar va hissiy iztiroblar\nYurak amri (tanlov) va taqdir sinovi\nQahramonlarning ma’naviy qiyofasi",
     },
-  });
+    {
+      book: "Dyavoliada",
+      program: "Bookonomics",
+      status: "FINISHED",
+      startsAt: on("2026-10-05", 9),
+      meetingAt: on("2026-10-17", 14, 30),
+      location: "Asosiy kampus, 7-bino, 206-xona",
+      focus: "Byurokratiya va tartibsizlik\nGrotesk va satira tili\nInsonning o‘z o‘rnini yo‘qotishi",
+    },
+    {
+      book: "Iqrornoma",
+      program: "Bir oyda bir kitob",
+      status: "READING",
+      startsAt: on("2026-10-01", 9),
+      meetingAt: on("2026-10-24", 15),
+      location: "Asosiy kampus, 2-bino, 207-xona",
+      focus:
+        "Asar mazmuni va falsafiy qarashlar\nE’tirof janri va ichki izlanish\nHayot mazmuni haqidagi savollar",
+    },
+  ] as const;
+
+  const cycleIds = new Map<string, string>();
+  for (const cycle of cycleSeed) {
+    const created = await db.readingCycle.create({
+      data: {
+        clubId: bookClubId,
+        bookId: bookMap.get(cycle.book)!,
+        program: cycle.program,
+        status: cycle.status,
+        startsAt: cycle.startsAt,
+        endsAt: cycle.meetingAt,
+        meetingAt: cycle.meetingAt,
+        location: cycle.location,
+        focus: cycle.focus,
+      },
+    });
+    cycleIds.set(cycle.book, created.id);
+  }
+
+  const finished = { id: cycleIds.get("Ikki eshik orasi")! };
+  const current = { id: cycleIds.get("Iqrornoma")! };
 
   await db.milestone.createMany({
     data: [
-      { cycleId: current.id, title: "I–III boblar", dueAt: at(-6, 20), sort: 1 },
-      { cycleId: current.id, title: "IV–VI boblar", dueAt: at(-1, 20), sort: 2 },
-      { cycleId: current.id, title: "Yakuniy boblar", dueAt: at(4, 20), sort: 3 },
-      { cycleId: finished.id, title: "Birinchi yarmi", dueAt: at(-38, 20), sort: 1 },
-      { cycleId: finished.id, title: "Yakun", dueAt: at(-5, 20), sort: 2 },
+      // Bookonomics sessions are short: three stretches, then the discussion.
+      { cycleId: cycleIds.get("It yurak")!, title: "I–III boblar", dueAt: on("2026-10-10", 20), sort: 1 },
+      { cycleId: cycleIds.get("It yurak")!, title: "IV–VI boblar", dueAt: on("2026-10-15", 20), sort: 2 },
+      { cycleId: cycleIds.get("It yurak")!, title: "Yakuniy boblar", dueAt: on("2026-10-16", 20), sort: 3 },
+      { cycleId: cycleIds.get("Ikki eshik orasi")!, title: "Birinchi yarmi", dueAt: on("2026-09-24", 20), sort: 1 },
+      { cycleId: cycleIds.get("Ikki eshik orasi")!, title: "Yakun", dueAt: on("2026-10-02", 20), sort: 2 },
+      // The month's book closes with one presentation, not chapter deadlines.
+      { cycleId: cycleIds.get("Iqrornoma")!, title: "Taqdimotga tayyorgarlik", dueAt: on("2026-10-18", 20), sort: 1 },
+      { cycleId: cycleIds.get("Iqrornoma")!, title: "Taqdimot", dueAt: on("2026-10-24", 15), sort: 2 },
     ],
   });
 
-  const next = await db.readingCycle.create({
-    data: {
-      clubId: bookClubId,
-      bookId: bookMap.get("Dyavoliada")!,
-      status: "PLANNED",
-      startsAt: at(6, 9),
-      endsAt: at(19, 14),
-      meetingAt: at(19, 14),
-      location: "Asosiy kampus, 7-bino, 206-xona",
-      focus: "Byurokratiya va inson\nGrotesk va satira tili",
-    },
-  });
-
-  const progressValues = [82, 65, 61, 58, 45, 40, 22, 12];
+  const progressValues = [92, 85, 78, 74, 66, 58, 45, 31];
+  const monthBookPages = bookData.find((b) => b.title === "Iqrornoma")?.pages ?? 400;
   for (let i = 0; i < members.length; i++) {
     await db.readingProgress.create({
       data: {
         cycleId: current.id,
         userId: members[i].id,
         percent: progressValues[i],
-        pagesRead: Math.round(((bookData[0].pages ?? 160) * progressValues[i]) / 100),
+        pagesRead: Math.round((monthBookPages * progressValues[i]) / 100),
       },
     });
   }
   await db.readingProgress.create({
-    data: { cycleId: current.id, userId: president.id, percent: 100, pagesRead: 160 },
+    data: { cycleId: current.id, userId: president.id, percent: 100, pagesRead: monthBookPages },
   });
 
   // --- discussions ---------------------------------------------------------
   const thread1 = await db.discussionThread.create({
     data: {
       clubId: bookClubId,
-      cycleId: current.id,
+      cycleId: cycleIds.get("It yurak")!,
       authorId: president.id,
       title: "“It yurak”: I–III boblar bo‘yicha fikrlar",
       body:
@@ -540,7 +596,7 @@ async function main() {
       {
         threadId: thread1.id,
         authorId: editor.id,
-        body: "Eslatma: 24-oktabrdagi uchrashuvda aynan shu boblar bo‘yicha jamoaviy tahlil qilamiz. Savollaringizni shu yerga qoldiring.",
+        body: "Eslatma: 17-oktabrdagi uchrashuvda aynan shu boblar bo‘yicha jamoaviy tahlil qilamiz. Savollaringizni shu yerga qoldiring.",
         createdAt: at(-2, 9),
       },
     ],
@@ -549,10 +605,10 @@ async function main() {
   const thread2 = await db.discussionThread.create({
     data: {
       clubId: bookClubId,
-      cycleId: current.id,
+      cycleId: cycleIds.get("Iqrornoma")!,
       authorId: members[1].id,
-      title: "Kitobni qayerdan topsa bo‘ladi?",
-      body: "Universitet kutubxonasida “It yurak” ning o‘zbekcha nashri bormi? Elektron variantni qayerdan olsam bo‘ladi?",
+      title: "“Iqrornoma”ni qayerdan topsa bo‘ladi?",
+      body: "Universitet kutubxonasida “Iqrornoma” ning o‘zbekcha nashri bormi? Taqdimotga qadar o‘qib ulgurish uchun elektron variant kerak.",
       kind: "QUESTION",
     },
   });
@@ -591,14 +647,29 @@ async function main() {
     to: string;
     status?: string;
   }> = [
+    // Book Club timeline, exactly as the channel announced it (October 2026).
+    {
+      club: "book-club",
+      title: "Bookonomics: “Ikki eshik orasi” muhokamasi",
+      description:
+        "Asar bo‘yicha ochiq muhokama: inson taqdiri va hayot sinovlari, qahramonlarning ruhiy kechinmalari, urushning inson hayotidagi izlari.",
+      type: "meetup",
+      startsAt: on("2026-10-03", 10),
+      endsAt: on("2026-10-03", 12),
+      location: "Asosiy kampus, piknik maydonchasi",
+      capacity: 60,
+      from: "#6b3a2a",
+      to: "#b07a4a",
+      status: "PUBLISHED",
+    },
     {
       club: "book-club",
       title: "Bookonomics: “It yurak” muhokamasi",
       description:
-        "Joriy o‘qish yakuni: asar bo‘yicha ochiq muhokama. Muhokama yo‘nalishlari — ichki kechinmalar, yurak amri va ma’naviy qiyofa. Kitobni o‘qib kelgan barcha talabalar qatnashishi mumkin.",
+        "Asar bo‘yicha muhokama: ichki kechinmalar, yurak amri va taqdir sinovi, qahramonlarning ma’naviy qiyofasi.",
       type: "meetup",
-      startsAt: at(5, 13),
-      endsAt: at(5, 15),
+      startsAt: on("2026-10-17", 13),
+      endsAt: on("2026-10-17", 15),
       location: "Asosiy kampus, 2-bino, 207-xona",
       capacity: 60,
       from: "#1b4b31",
@@ -607,11 +678,12 @@ async function main() {
     },
     {
       club: "book-club",
-      title: "Bookonomics: “Dyavoliada” — navbatdagi son",
+      title: "Bookonomics: “Dyavoliada” muhokamasi",
       description:
-        "Yangi o‘qish boshlanishi. Asar bilan tanishtiruv, muhokama rejasi va kitobni tarqatish. Kichik guruhlarda ishlash formatida.",
+        "Rus tilidagi son: “Дьяволиада” — byurokratiya va tartibsizlik, grotesk va satira tili.",
       type: "meetup",
-      startsAt: at(19, 14),
+      startsAt: on("2026-10-17", 14, 30),
+      endsAt: on("2026-10-17", 16, 30),
       location: "Asosiy kampus, 7-bino, 206-xona",
       capacity: 50,
       from: "#9a5a42",
@@ -620,16 +692,44 @@ async function main() {
     },
     {
       club: "book-club",
+      title: "“Bir oyda bir kitob”: “Iqrornoma” taqdimoti",
+      description:
+        "Lev Tolstoyning “Iqrornoma” asari taqdimoti: asar mazmuni, falsafiy qarashlar va hayot haqidagi mushohazalar.",
+      type: "meetup",
+      startsAt: on("2026-10-24", 15),
+      endsAt: on("2026-10-24", 17),
+      location: "Asosiy kampus, 2-bino, 207-xona",
+      capacity: 60,
+      from: "#3a2f2a",
+      to: "#7a5f4a",
+      status: "PUBLISHED",
+    },
+    {
+      club: "book-club",
       title: "“Yosh kitobxon” universitet bosqichi",
       description:
-        "Ikki shart: “Men yoqtirgan asar” tahlili va “Eng kitobxon jamoa” bellashuvi. G‘olib jamoa shahar bosqichiga yo‘llanma oladi.",
+        "Ikki shart: “Men yoqtirgan asar” tahlili va “Eng kitobxon jamoa” bellashuvi. G‘olib jamoalar 20-oktabrda e’lon qilindi.",
       type: "contest",
-      startsAt: at(12, 15),
-      endsAt: at(12, 17),
+      startsAt: on("2026-10-20", 10),
+      endsAt: on("2026-10-20", 13),
       location: "Zakovat zali",
       capacity: 120,
       from: "#6b3a2a",
       to: "#b07a4a",
+      status: "PUBLISHED",
+    },
+    {
+      club: "book-club",
+      title: "BRAINBOOK: Abdulhamid Cho‘lpon hayoti va ijodi",
+      description:
+        "Turizm va Iqtisodiyot fakultetlari hamkorligida o‘tkazilgan intellektual kurash. G‘olib: “Just If” jamoasi.",
+      type: "contest",
+      startsAt: on("2026-10-24", 13),
+      endsAt: on("2026-10-24", 15),
+      location: "Asosiy kampus, 7-bino, 214-xona",
+      capacity: 100,
+      from: "#5b2f26",
+      to: "#5a4a28",
       status: "PUBLISHED",
     },
     {
@@ -877,7 +977,7 @@ async function main() {
   await db.auditLog.createMany({
     data: [
       { actorId: editor.id, action: "news.published", entity: "News", entityId: "seed", meta: "Yosh kitobxon arizalari" },
-      { actorId: president.id, action: "cycle.started", entity: "ReadingCycle", entityId: current.id, meta: "It yurak" },
+      { actorId: president.id, action: "cycle.started", entity: "ReadingCycle", entityId: current.id, meta: "Iqrornoma" },
     ],
   });
 

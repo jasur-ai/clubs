@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Clock, FileText, Link2, MapPin, MessageSquare, Send, Users } from "lucide-react";
 import { getClubSeed, CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
+import { cycleTiming } from "@/lib/reading";
 import { getClubBySlug, getCurrentCycle, getCycleHistory, getPastEvents, getUpcomingEvents, getCommunityProgress } from "@/lib/queries";
 import { EventRow, BookRow } from "@/components/site/cards";
 import { CoverArt } from "@/components/ui/cover-art";
@@ -50,6 +51,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
     }),
   ]);
 
+  const timing = cycle ? cycleTiming(cycle) : null;
   const channel = channelUsername(club.telegramUrl);
   const feed = channel ? await getChannelFeed(channel, 3) : [];
 
@@ -80,7 +82,7 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="accent">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
                   <Badge tone="neutral">{club._count.memberships} a’zo</Badge>
-                  {isBookClub && <Badge tone="navy">Bookonomics</Badge>}
+                  {isBookClub && cycle && <Badge tone="navy">{cycle.program ?? "Bookonomics"}</Badge>}
                 </div>
               </div>
               <h1 className="display mt-4 text-[40px] leading-[1.03] sm:text-[54px]">{club.name}</h1>
@@ -230,13 +232,17 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
       </section>
 
       {/* current reading */}
-      {isBookClub && cycle && (
+      {isBookClub && cycle && timing && (
         <section className="border-y border-[color:var(--color-line)] bg-[color:var(--color-surface-2)]">
           <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
             <SectionHeading
-              eyebrow="Joriy o‘qish"
-              title="Bookonomics"
-              description="Bir asar, uch bosqich, bitta yakuniy muhokama."
+              eyebrow={timing.heading}
+              title={cycle.program ?? "Bookonomics"}
+              description={
+                cycle.program === "Bir oyda bir kitob"
+                  ? "Oyning bitta asari, oy oxirida taqdimot va ochiq muhokama."
+                  : "Bir asar, uch bosqich, bitta yakuniy muhokama."
+              }
               action={<Link href="/books" className="btn btn-secondary btn-sm">Kutubxona</Link>}
             />
             <div className="mt-8 grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
@@ -252,7 +258,9 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                     className="h-[210px] w-[148px] shrink-0"
                   />
                   <div className="min-w-0 flex-1">
-                    <Badge tone="accent">O‘qilmoqda</Badge>
+                    <Badge tone={timing.closed ? "neutral" : "accent"}>
+                      {timing.closed ? "Taqdimot o‘tkazildi" : "O‘qilmoqda"}
+                    </Badge>
                     <h3 className="mt-3 font-serif text-[26px] leading-tight">{cycle.book.title}</h3>
                     <p className="mt-1 text-[13px] text-[color:var(--color-muted)]">
                       {cycle.book.author}
@@ -268,10 +276,14 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                         <span className="font-semibold">{community.average}%</span>
                       </div>
                       <ProgressBar value={community.average} />
-                      <p className="mt-2 text-[11.5px] text-[color:var(--color-muted)]">{community.readers} o‘quvchi qatnashmoqda</p>
+                      <p className="mt-2 text-[11.5px] text-[color:var(--color-muted)]">
+                        {community.readers} o‘quvchi {timing.closed ? "qatnashgan" : "qatnashmoqda"}
+                      </p>
                     </div>
                     <div className="mt-5 flex flex-wrap gap-2">
-                      <Link href="/app/read" className="btn btn-accent btn-sm">Progressni yangilash</Link>
+                      <Link href="/app/read" className="btn btn-accent btn-sm">
+                        {timing.closed ? "O‘z natijam" : "Progressni yangilash"}
+                      </Link>
                       <Link href="/app/discussions" className="btn btn-secondary btn-sm">Muhokama</Link>
                     </div>
                   </div>
@@ -294,7 +306,9 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                   ))}
                 </ol>
                 <div className="mt-5 rounded-[10px] bg-[color:var(--color-surface-2)] p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">Yakuniy uchrashuv</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">
+                    {timing.closed ? "Yakuniy uchrashuv bo‘lib o‘tdi" : "Yakuniy uchrashuv"}
+                  </p>
                   <p className="mt-1.5 text-[13.5px] font-medium">
                     {cycle.meetingAt ? formatDate(cycle.meetingAt, "d MMMM, HH:mm") : "—"}
                   </p>
@@ -324,15 +338,38 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
           title="Klub tadbirlari"
           action={<Link href="/events" className="btn btn-ghost btn-sm">Barchasi <ArrowRight size={14} /></Link>}
         />
-        <div className="mt-6 grid gap-3 lg:grid-cols-2">
-          {events.map((e) => (
-            <EventRow key={e.id} event={e} />
-          ))}
-          {past.map((e) => (
-            <div key={e.id} className="opacity-70">
-              <EventRow event={e} compact />
+        {/* Upcoming and past are different questions — "what can I attend" and
+            "what did I miss" — so they get their own headings instead of one
+            list where half the cards are already over. */}
+        <div className="mt-6 space-y-7">
+          {events.length > 0 && (
+            <div>
+              {past.length > 0 && (
+                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                  Kelgusi
+                </h3>
+              )}
+              <div className="grid gap-3 lg:grid-cols-2">
+                {events.map((e) => (
+                  <EventRow key={e.id} event={e} />
+                ))}
+              </div>
             </div>
-          ))}
+          )}
+          {past.length > 0 && (
+            <div>
+              <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                Bo‘lib o‘tgan
+              </h3>
+              <div className="grid gap-3 lg:grid-cols-2">
+                {past.map((e) => (
+                  <div key={e.id} className="opacity-75">
+                    <EventRow event={e} compact />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         {events.length === 0 && past.length === 0 && (
           <p className="mt-6 text-sm text-[color:var(--color-muted)]">Hozircha tadbir e’lon qilinmagan.</p>

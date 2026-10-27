@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CLUBS_WITH_INK_EMBLEM } from "@/config/club-logos";
+import { CLUBS_WITH_INK_EMBLEM, inkEmblemLift } from "@/config/club-logos";
 
 type Props = {
   name: string;
@@ -19,8 +19,9 @@ type Props = {
  * card without drawing a box around it.
  *
  * One image, one set of colours: the emblem is identical in light and dark
- * themes. Dark ink marks receive a light halo in the dark theme so they stay
- * readable; nothing is recoloured, inverted or tinted.
+ * themes. Dark ink marks are lifted in brightness on the dark surface so they
+ * stay readable; nothing is recoloured, inverted or tinted, and no blurred halo
+ * is drawn around them — a glow at this size destroys the small lettering.
  */
 export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, className, rounded }: Props) {
   if (logoUrl) {
@@ -31,7 +32,8 @@ export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, classNa
       width: "auto",
       // wide wordmarks would push past the card edge at full height
       maxWidth: size * 1.6,
-    } as const;
+      ...(ink ? { "--emblem-lift": inkEmblemLift(slug) } : {}),
+    } as React.CSSProperties & { height: number; width: string; maxWidth: number };
 
     return (
       <span className="inline-flex shrink-0" aria-hidden>

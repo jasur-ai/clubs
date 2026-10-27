@@ -147,6 +147,9 @@ model ReadingCycle {
   clubId    String
   bookId    String
   status    String    @default("PLANNED") // PLANNED | READING | FINISHED | ARCHIVED
+  // The club runs more than one reading programme on the same shelf
+  // (Bookonomics, Bir oyda bir kitob), and a member needs to know which.
+  program   String?   @default("Bookonomics")
   startsAt  DateTime?
   endsAt    DateTime?
   meetingAt DateTime?

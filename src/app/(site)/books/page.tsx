@@ -27,7 +27,7 @@ export default async function BooksPage({ searchParams }: { searchParams: Promis
       <SectionHeading
         eyebrow="Kutubxona"
         title="Kitoblar"
-        description="Bookonomics tanlovlari va Ijtimoiy faollik indeksi ro‘yxatidagi 12 ta asar."
+        description={`Ijtimoiy faollik indeksi ro‘yxatidagi 12 asar va Bookonomics tanlovlari — jami ${books.length} kitob. Klubda o‘qilayotganini asar sahifasida ko‘rish mumkin.`}
         action={
           <form action="/books" className="flex gap-2">
             <input name="q" defaultValue={params.q ?? ""} placeholder="Kitob yoki muallif" className="input h-[38px] w-52" aria-label="Kitob qidirish" />

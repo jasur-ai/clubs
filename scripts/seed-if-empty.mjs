@@ -18,6 +18,11 @@ try {
   await db.$disconnect();
 }
 
+// The Book Club programme is real content, not demo data: an older database may
+// still carry the dates that were guessed before the club announced them. This
+// reconciler only touches rows that are provably wrong and is safe on every boot.
+execFileSync("node", ["scripts/book-club-timeline.mjs"], { stdio: "inherit" });
+
 // Demo deployments opt in to a full club network on every boot (idempotent).
 if (process.env.DEMO_NETWORK === "1") {
   execFileSync("node", ["scripts/demo-network.mjs"], { stdio: "inherit" });
