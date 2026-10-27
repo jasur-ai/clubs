@@ -3,7 +3,7 @@ import { CheckCircle2, Circle, Clock } from "lucide-react";
 import { requireUserPage } from "@/lib/session";
 import { db } from "@/lib/db";
 import { getCurrentCycle, getCycleHistory } from "@/lib/queries";
-import { CoverArt } from "@/components/ui/cover-art";
+import { BookCover } from "@/components/ui/book-cover";
 import { ProgressBar } from "@/components/ui/primitives";
 import { ProgressForm } from "@/components/app/progress-form";
 import { formatDate } from "@/lib/format";
@@ -57,7 +57,7 @@ export default async function ReadPage() {
       </div>
 
       <div className="flex gap-4 rounded-[14px] border border-[color:var(--color-line)] bg-white p-3.5">
-        <CoverArt from={cycle.book.coverFrom} to={cycle.book.coverTo} title={cycle.book.title} author={cycle.book.author} label="Kitob" variant="lines" className="h-[104px] w-[78px] shrink-0 rounded-[6px]" compact />
+        <BookCover coverUrl={cycle.book.coverUrl} from={cycle.book.coverFrom} to={cycle.book.coverTo} title={cycle.book.title} author={cycle.book.author} className="h-[108px] w-[72px] shrink-0" />
         <div className="min-w-0 text-[12px] leading-relaxed text-[color:var(--color-muted)]">
           <p className="line-clamp-4">{cycle.book.description}</p>
           {cycle.meetingAt && (

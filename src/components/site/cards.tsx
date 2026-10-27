@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalendarDays, MapPin, Users, ArrowUpRight, BookOpen } from "lucide-react";
 import { CoverArt } from "@/components/ui/cover-art";
+import { BookCover } from "@/components/ui/book-cover";
 import { Badge } from "@/components/ui/primitives";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
@@ -192,28 +193,37 @@ type BookCardBook = {
   author: string;
   year?: number | null;
   genre?: string | null;
+  coverUrl?: string | null;
   coverFrom: string;
   coverTo: string;
   pages?: number | null;
 };
 
-export function BookCard({ book }: { book: BookCardBook }) {
+export function BookCard({ book, state }: { book: BookCardBook; state?: string | null }) {
   return (
-    <Link href={`/books/${book.id}`} className="group block">
-      <CoverArt
+    <Link href={`/books/${book.id}`} className="book-link group block">
+      <BookCover
+        coverUrl={book.coverUrl}
         from={book.coverFrom}
         to={book.coverTo}
         title={book.title}
         author={book.author}
-        variant="lines"
-        className="aspect-[3/4] w-full shadow-[var(--shadow-card)] transition-transform group-hover:-translate-y-1"
+        sizes="(max-width: 640px) 45vw, (max-width: 1024px) 22vw, 200px"
       />
-      <div className="mt-3">
-        <h3 className="line-clamp-1 text-[14.5px] font-semibold text-[color:var(--color-ink)]">{book.title}</h3>
-        <p className="mt-0.5 text-[12.5px] text-[color:var(--color-muted)]">
+      <div className="mt-3.5">
+        <h3 className="title line-clamp-2 text-[16px] leading-[1.25] text-[color:var(--color-ink)] decoration-[color:var(--color-brass-line)] decoration-1 underline-offset-[5px] group-hover:underline">
+          {book.title}
+        </h3>
+        <p className="mt-1.5 text-[12.5px] leading-snug text-[color:var(--color-muted)]">
           {book.author}
-          {book.year ? `, ${book.year}` : ""}
+          {book.year ? ` · ${book.year}` : ""}
         </p>
+        {state && (
+          <span className="mt-2 inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-link)]">
+            <span className="h-1 w-1 rounded-full bg-current" aria-hidden />
+            {state}
+          </span>
+        )}
       </div>
     </Link>
   );
@@ -221,21 +231,28 @@ export function BookCard({ book }: { book: BookCardBook }) {
 
 export function BookRow({ book, meta }: { book: BookCardBook; meta?: string }) {
   return (
-    <Link href={`/books/${book.id}`} className="group flex items-center gap-4 rounded-[12px] border border-[color:var(--color-line)] bg-white p-3">
-      <CoverArt
+    <Link
+      href={`/books/${book.id}`}
+      className="book-link group flex items-center gap-4 border-b border-[color:var(--color-line)] py-3 last:border-b-0"
+    >
+      <BookCover
+        coverUrl={book.coverUrl}
         from={book.coverFrom}
         to={book.coverTo}
         title={book.title}
-        variant="lines"
-        compact
-        className="h-[72px] w-[54px] shrink-0"
+        author={book.author}
+        sizes="56px"
+        className="w-[52px] shrink-0"
+        shadow={false}
       />
       <div className="min-w-0 flex-1">
-        <h4 className="truncate text-[14px] font-semibold text-[color:var(--color-ink)] group-hover:underline">{book.title}</h4>
+        <h4 className="truncate text-[14px] font-medium text-[color:var(--color-ink)] group-hover:underline group-hover:decoration-[color:var(--color-brass-line)] group-hover:underline-offset-4">
+          {book.title}
+        </h4>
         <p className="mt-0.5 truncate text-[12.5px] text-[color:var(--color-muted)]">{book.author}</p>
         {meta && <p className="mt-1 text-[11.5px] text-[color:var(--color-muted-soft)]">{meta}</p>}
       </div>
-      <BookOpen size={15} className="shrink-0 text-[color:var(--color-muted-soft)]" />
+      <BookOpen size={14} className="shrink-0 text-[color:var(--color-muted-soft)] transition-transform duration-300 group-hover:-translate-y-0.5" />
     </Link>
   );
 }

@@ -6,7 +6,7 @@ import { getClubSeed, CATEGORY_LABELS, type ClubCategory } from "@/config/clubs"
 import { cycleTiming } from "@/lib/reading";
 import { getClubBySlug, getCurrentCycle, getCycleHistory, getPastEvents, getUpcomingEvents, getCommunityProgress } from "@/lib/queries";
 import { EventRow, BookRow } from "@/components/site/cards";
-import { CoverArt } from "@/components/ui/cover-art";
+import { BookCover } from "@/components/ui/book-cover";
 import { Avatar, Badge, ProgressBar, SectionHeading } from "@/components/ui/primitives";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { SaveButton } from "@/components/site/save-button";
@@ -248,14 +248,13 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
             <div className="mt-8 grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
               <div className="rounded-[16px] border border-[color:var(--color-line)] bg-white p-6">
                 <div className="flex flex-col gap-6 sm:flex-row">
-                  <CoverArt
+                  <BookCover
+                    coverUrl={cycle.book.coverUrl}
                     from={cycle.book.coverFrom}
                     to={cycle.book.coverTo}
                     title={cycle.book.title}
                     author={cycle.book.author}
-                    variant="lines"
-                    compact
-                    className="h-[210px] w-[148px] shrink-0"
+                    className="h-[210px] w-[140px] shrink-0"
                   />
                   <div className="min-w-0 flex-1">
                     <Badge tone={timing.closed ? "neutral" : "accent"}>

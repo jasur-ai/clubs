@@ -39,4 +39,7 @@ COPY --from=build /app/next.config.ts ./next.config.ts
 COPY --from=build /app/tsconfig.json ./tsconfig.json
 
 EXPOSE 3000
-CMD ["sh", "-c", "node scripts/use-db.mjs && npx prisma db push --skip-generate && node scripts/seed-if-empty.mjs && npx next start -H 0.0.0.0 -p ${PORT:-3000}"]
+# The timeline reconciler is idempotent and exits 0 on failure; it is what
+# back-fills the book covers and the club's real meeting record on an existing
+# database, which the seed can no longer do once rows exist.
+CMD ["sh", "-c", "node scripts/use-db.mjs && npx prisma db push --skip-generate && node scripts/seed-if-empty.mjs && node scripts/book-club-timeline.mjs && npx next start -H 0.0.0.0 -p ${PORT:-3000}"]

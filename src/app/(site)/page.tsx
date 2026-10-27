@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { BookCard, NewsCard } from "@/components/site/cards";
 import { CoverArt } from "@/components/ui/cover-art";
+import { BookCover } from "@/components/ui/book-cover";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { Badge, ProgressBar } from "@/components/ui/primitives";
 import { YoshlarIttifoqiLockup } from "@/components/brand/marks";
@@ -185,14 +186,14 @@ export default async function HomePage() {
                   </div>
 
                   <div className="mt-5 flex gap-5">
-                    <CoverArt
+                    <BookCover
+                      coverUrl={cycle.book.coverUrl}
                       from={cycle.book.coverFrom}
                       to={cycle.book.coverTo}
                       title={cycle.book.title}
                       author={cycle.book.author}
-                      variant="lines"
-                      compact
-                      className="h-[148px] w-[104px] shrink-0 shadow-[0_18px_30px_-18px_rgba(11,20,38,0.55)]"
+                      priority
+                      className="h-[150px] w-[100px] shrink-0"
                     />
                     <div className="min-w-0 flex-1">
                       <h2 className="font-serif text-[24px] leading-[1.1] tracking-[-0.01em] text-[color:var(--color-ink)]">
@@ -391,7 +392,7 @@ export default async function HomePage() {
                   <div>
                     <span className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
                       <span className="h-1.5 w-1.5 rounded-full" style={{ background: featured.accent }} />
-                      Tanlangan klub · Bookonomics
+                      Tanlangan klub · {cycle?.program ?? "Bookonomics"}
                     </span>
                     <h3 className="display mt-6 text-[32px] leading-tight text-[color:var(--color-ink)] lg:text-[40px]">
                       {featured.name}
@@ -424,39 +425,19 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <div
-                  className="relative flex shrink-0 items-center justify-between gap-4 overflow-hidden border-t border-[color:var(--color-line)] px-7 py-6 text-white sm:w-[216px] sm:flex-col sm:justify-center sm:border-l sm:border-t-0 sm:px-6 sm:py-9"
-                  style={{
-                    background: `linear-gradient(
-                      160deg,
-                      color-mix(in oklab, ${featured.accent} 88%, #ffffff) 0%,
-                      ${featured.accent} 42%,
-                      color-mix(in oklab, ${featured.accent} 62%, #0b1a12) 100%
-                    )`,
-                  }}
-                >
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 opacity-40"
-                    style={{
-                      background:
-                        "repeating-radial-gradient(ellipse 140% 120% at 110% -10%, transparent 0 26px, rgb(255 255 255 / 0.16) 26px 27px)",
-                      maskImage: "radial-gradient(120% 100% at 90% 0%, #000 0%, transparent 72%)",
-                      WebkitMaskImage: "radial-gradient(120% 100% at 90% 0%, #000 0%, transparent 72%)",
-                    }}
-                  />
+                <div className="club-plate relative flex shrink-0 items-center justify-between gap-4 border-t border-[color:var(--color-line)] px-7 py-6 sm:w-[214px] sm:flex-col sm:justify-center sm:border-l sm:border-t-0 sm:px-6 sm:py-9">
                   <ClubLogo
                     name={featured.name}
                     logoUrl={featured.logoUrl}
                     accent={featured.accent}
-                    size={92}
-                    className="relative drop-shadow-[0_14px_28px_rgba(0,0,0,0.45)]"
+                    size={96}
+                    className="relative"
                   />
                   <div className="relative text-right sm:text-center">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-muted)]">
                       Klub sahifasi
                     </p>
-                    <span className="mt-2 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-white">
+                    <span className="mt-2 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[color:var(--color-ink)]">
                       Ochish
                       <ArrowUpRight
                         size={14}
@@ -597,14 +578,13 @@ export default async function HomePage() {
                 </div>
 
                 <div className="mt-6 flex flex-col gap-6 sm:flex-row">
-                  <CoverArt
+                  <BookCover
+                    coverUrl={cycle.book.coverUrl}
                     from={cycle.book.coverFrom}
                     to={cycle.book.coverTo}
                     title={cycle.book.title}
                     author={cycle.book.author}
-                    variant="lines"
-                    compact
-                    className="h-[176px] w-[124px] shrink-0 shadow-[0_24px_40px_-24px_rgba(0,0,0,0.9)]"
+                    className="h-[180px] w-[120px] shrink-0"
                   />
                   <div className="min-w-0 flex-1">
                     <h3 className="font-serif text-[26px] leading-tight">{cycle.book.title}</h3>

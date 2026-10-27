@@ -131,6 +131,11 @@ model Book {
   language    String   @default("uz")
   description String
   genre       String?
+  // The publisher's own cover. A library that shows coloured rectangles where
+  // the book has a face is a mock-up; the real artwork is part of the record,
+  // exactly like the club's emblem. `coverFrom`/`coverTo` stay as the fallback
+  // for a book that has no artwork yet.
+  coverUrl    String?
   coverFrom   String    @default("#1b4b31")
   coverTo     String    @default("#3f7a55")
   sourceUrl   String?

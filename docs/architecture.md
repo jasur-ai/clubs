@@ -158,9 +158,35 @@ Tokens live in `src/app/globals.css`: brand green `#21a04c` with deep `#0f6b39` 
 brass `#9a7434`, warm paper `#efece3`, ink `#131d17`, clay `#a8492f`. Blue is not used anywhere. Type: Fraunces (editorial), Manrope (UI). Radii
 6/10/14/20. One accent variable per club (`--club-accent`) themes buttons, badges and progress.
 
-Covers are generated, not photographed: `CoverArt` renders deterministic SVG/CSS patterns from
-the club's palette, so every page has a visual identity without external assets, image loading or
-licensing questions.
+## 8a. Book covers
+
+A shelf of coloured rectangles with the title typed over them is a mock-up, and it looks like one.
+The Book Club therefore ships the publishers' own artwork: fourteen covers under
+`public/books/<slug>.jpg`, addressed from the database through `Book.coverUrl`, so a new book only
+needs an upload and a row — no rebuild of the component tree.
+
+`BookCover` (`src/components/ui/book-cover.tsx`) draws the thing the picture is of: the 2:3
+proportion of a paperback, a dark spine band on the left where the cover turns away from the light,
+a tight contact shadow rather than one blurred box. `CoverArt` remains the fallback for the covers
+we do not have yet, and for events and news, which have no publisher artwork to show.
+
+The scans arrive at 460–860 px wide, in three different aspect ratios, and the library stamps each
+one with its own logo in the same spot at the top centre. `tmp/covers/pipeline6.py` normalises
+them: it removes the stamp, then fits the artwork onto a 600×900 canvas by *padding* — never
+cropping — so no title is ever cut, and writes progressive JPEGs at q85 (45–185 KB each).
+
+The stamp is removed in two layers, because either layer alone is visible:
+
+- **light and colour** come from a harmonic (Laplace) fill of the stamp's box — the smoothest
+  field that meets the real artwork on all four edges, which cannot drift bright or invent a blob;
+- **texture** is borrowed from the best-matching patch of the *same* cover, found by correlating
+  the ring of pixels around the stamp against every other position in the scan. A starfield
+  receives another starfield, a bookcase another bookcase. The borrowed detail has zero mean, so it
+  cannot shift the colour, and a patch that carries no change in brightness has no square edge to
+  show.
+
+Every result is checked on a zoomed contact sheet before it is committed; anything that still read
+as a smudge was re-cropped by hand rather than shipped.
 
 Rules: no emoji anywhere in the product; no marketing filler; every card leads to an action; empty
 states say what to do next.

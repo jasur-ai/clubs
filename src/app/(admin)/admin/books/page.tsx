@@ -7,7 +7,7 @@ import { deleteBookAction } from "@/app/actions/admin";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { FormDialog } from "@/components/admin/form-dialog";
 import { BookForm } from "@/components/admin/book-form";
-import { CoverArt } from "@/components/ui/cover-art";
+import { BookCover } from "@/components/ui/book-cover";
 
 export const metadata = { title: "Kutubxona" };
 
@@ -55,7 +55,7 @@ export default async function AdminBooksPage({ searchParams }: { searchParams: P
         {books.map((b) => (
           <Panel key={b.id}>
             <div className="flex gap-3 p-3.5">
-              <CoverArt from={b.coverFrom} to={b.coverTo} title={b.title} label="Kitob" variant="lines" className="h-[86px] w-[64px] shrink-0 rounded-[5px]" compact />
+              <BookCover coverUrl={b.coverUrl} from={b.coverFrom} to={b.coverTo} title={b.title} author={b.author} shadow={false} className="h-[84px] w-[56px] shrink-0" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-semibold">{b.title}</p>
                 <p className="text-[11.5px] text-[color:var(--color-muted)]">{b.author}{b.year ? `, ${b.year}` : ""}</p>

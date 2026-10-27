@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { getCurrentCycle } from "@/lib/queries";
 import { ProgressBar, Avatar } from "@/components/ui/primitives";
 import { formatDate, relativeDate, timeRange } from "@/lib/format";
-import { CoverArt } from "@/components/ui/cover-art";
+import { BookCover } from "@/components/ui/book-cover";
 
 export default async function AppHome() {
   const user = await requireUserPage();
@@ -70,7 +70,7 @@ export default async function AppHome() {
       {cycle && (
         <div className="overflow-hidden rounded-[16px] border border-[color:var(--color-line)] bg-white">
           <div className="flex gap-3.5 p-4">
-            <CoverArt from={cycle.book.coverFrom} to={cycle.book.coverTo} title={cycle.book.title} author={cycle.book.author} label="Kitob" variant="lines" className="h-[92px] w-[68px] shrink-0 rounded-[6px]" compact />
+            <BookCover coverUrl={cycle.book.coverUrl} from={cycle.book.coverFrom} to={cycle.book.coverTo} title={cycle.book.title} author={cycle.book.author} className="h-[96px] w-[64px] shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-muted)]">Hozir o‘qilmoqda</p>
               <p className="mt-1 truncate font-serif text-[17px] leading-tight">{cycle.book.title}</p>

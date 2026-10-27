@@ -74,6 +74,38 @@ async function main() {
     console.log("[book-club] description now names both reading programmes");
   }
 
+  // --- covers ---------------------------------------------------------------
+  // A library row without the publisher's artwork is a placeholder, and a page
+  // full of coloured rectangles looks exactly like what it is. Fill in the
+  // cover for every title that has one, and only touch rows that lack it.
+  const COVERS = {
+    "It yurak": "it-yurak",
+    "Ikki eshik orasi": "ikki-eshik-orasi",
+    Dyavoliada: "dyavoliada",
+    Iqrornoma: "iqrornoma",
+    "Asrga tatigulik kun": "asrga-tatigulik-kun",
+    Navoiy: "navoiy",
+    "Otamdan qolgan dalalar": "otamdan-qolgan-dalalar",
+    "Sayyohi hindi": "sayyohi-hindi",
+    "Ufq trilogiyasi": "ufq",
+    Sarob: "sarob",
+    "Yulduzli tunlar": "yulduzli-tunlar",
+    Faust: "faust",
+    "Graf Monte-Kristo": "graf-monte-kristo",
+    "G‘arbiy frontda o‘zgarish yo‘q": "garbiy-frontda",
+  };
+  let covered = 0;
+  for (const [title, slug] of Object.entries(COVERS)) {
+    const book = await db.book.findFirst({ where: { title }, select: { id: true, coverUrl: true } });
+    if (!book) continue;
+    const url = `/books/${slug}.jpg`;
+    if (book.coverUrl !== url) {
+      await db.book.update({ where: { id: book.id }, data: { coverUrl: url } });
+      covered += 1;
+    }
+  }
+  if (covered) console.log(`[book-club] ${covered} cover(s) attached`);
+
   // --- events ---------------------------------------------------------------
   for (const meeting of MEETINGS) {
     const id = bookId(meeting.book);

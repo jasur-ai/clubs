@@ -29,6 +29,28 @@ function at(dayOffset: number, hour = 18, minute = 0) {
  * from "now" is what previously moved a finished October discussion into
  * November.
  */
+/** Covers live at /public/books/<slug>.jpg — one file per title in the shelf. */
+export const BOOK_COVER_SLUGS: Record<string, string> = {
+  "It yurak": "it-yurak",
+  "Ikki eshik orasi": "ikki-eshik-orasi",
+  "Dyavoliada": "dyavoliada",
+  "Iqrornoma": "iqrornoma",
+  "Asrga tatigulik kun": "asrga-tatigulik-kun",
+  "Navoiy": "navoiy",
+  "Otamdan qolgan dalalar": "otamdan-qolgan-dalalar",
+  "Sayyohi hindi": "sayyohi-hindi",
+  "Ufq trilogiyasi": "ufq",
+  "Sarob": "sarob",
+  "Yulduzli tunlar": "yulduzli-tunlar",
+  "Faust": "faust",
+  "Graf Monte-Kristo": "graf-monte-kristo",
+  "G‘arbiy frontda o‘zgarish yo‘q": "garbiy-frontda",
+};
+
+function bookSlug(title: string) {
+  return BOOK_COVER_SLUGS[title] ?? title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 function on(isoDate: string, hour: number, minute = 0) {
   const [year, month, day] = isoDate.split("-").map(Number);
   return new Date(Date.UTC(year, month - 1, day, hour - 5, minute));
@@ -458,6 +480,7 @@ async function main() {
         pages: b.pages,
         genre: b.genre,
         description: b.description,
+        coverUrl: `/books/${bookSlug(b.title)}.jpg`,
         coverFrom: b.from,
         coverTo: b.to,
       },
