@@ -107,6 +107,8 @@ async function main() {
         logoUrl: logoFor(c.slug),
         coverStyle: c.coverStyle,
         telegramUrl: c.telegramUrl,
+        websiteUrl: c.websiteUrl,
+        botUrl: c.botUrl,
         instagramUrl: c.instagramUrl,
         email: c.email,
         meetingDay: c.meetingDay,

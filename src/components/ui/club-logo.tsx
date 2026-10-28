@@ -51,17 +51,19 @@ export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, classNa
     );
   }
 
+  // No emblem yet: a monogram, set bare. A tinted square here only produces the
+  // empty tile the emblems were freed from, and every club on the site now has
+  // real artwork — a letter in the club's ink reads as a mark, not a placeholder.
   return (
     <span
-      className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden bg-[color:color-mix(in_oklab,var(--club-accent)_10%,transparent)]",
-        rounded ?? "rounded-[10px]",
-        className,
-      )}
+      className={cn("relative inline-flex shrink-0 items-center justify-center", className)}
       style={{ width: size, height: size }}
       aria-hidden
     >
-      <span className="font-serif leading-none" style={{ color: accent, fontSize: size * 0.44 }}>
+      <span
+        className="font-serif leading-none tracking-tight"
+        style={{ color: accent, fontSize: size * 0.62 }}
+      >
         {name.slice(0, 1)}
       </span>
     </span>

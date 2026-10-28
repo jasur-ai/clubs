@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Clock, FileText, Link2, MapPin, MessageSquare, Send, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, Bot, CalendarDays, Clock, FileText, Globe, Link2, MapPin, MessageSquare, Send, Users } from "lucide-react";
 import { getClubSeed, CATEGORY_LABELS, type ClubCategory } from "@/config/clubs";
 import { cycleTiming } from "@/lib/reading";
 import { getClubBySlug, getCurrentCycle, getCycleHistory, getPastEvents, getUpcomingEvents, getCommunityProgress } from "@/lib/queries";
@@ -77,7 +77,6 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                   accent={club.accent}
                   size={72}
                   rounded="rounded-[14px]"
-                  className="shadow-[0_6px_20px_rgba(11,31,51,0.08)]"
                 />
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="accent">{CATEGORY_LABELS[club.category as ClubCategory] ?? club.category}</Badge>
@@ -101,9 +100,6 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                     <MapPin size={14} /> {club.location}
                   </span>
                 )}
-                <span className="inline-flex items-center gap-1.5">
-                  <Users size={14} /> Haftada 2 uchrashuv
-                </span>
               </div>
 
               {/* Primary actions stay on one line; secondary ones (save, share,
@@ -113,16 +109,26 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                 <Link href={`/join?club=${club.slug}`} className="btn btn-accent btn-lg">
                   A’zo bo‘lish <ArrowRight size={16} />
                 </Link>
-                {club.telegramUrl && (
-                  <a href={club.telegramUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
-                    <Send size={15} /> Telegram
+                {club.websiteUrl && (
+                  <a href={club.websiteUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
+                    <Globe size={15} /> Sayt
                   </a>
                 )}
-                <Link href="/app" className="btn btn-secondary btn-lg">
-                  <MessageSquare size={15} /> Mini-ilova
-                </Link>
+                {club.botUrl && (
+                  <a href={club.botUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
+                    <Bot size={15} /> Bot
+                  </a>
+                )}
+                {club.telegramUrl && (
+                  <a href={club.telegramUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-lg">
+                    <Send size={15} /> Kanal
+                  </a>
+                )}
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-2">
+                <Link href="/app" className="save-btn save-btn-compact">
+                  <MessageSquare size={13} /> Mini-ilova
+                </Link>
                 <SaveButton
                   kind="club"
                   id={club.id}
@@ -174,6 +180,27 @@ export default async function ClubPage({ params }: { params: Promise<Params> }) 
                         <Avatar key={m.id} first={m.user.firstName} last={m.user.lastName} size={24} className="ring-2 ring-white" />
                       ))}
                     </span>
+                  </div>
+                )}
+                {club.websiteUrl && (
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[color:var(--color-muted)]">Sayt</span>
+                    <a
+                      href={club.websiteUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="truncate font-semibold text-[color:var(--club-accent-ink)]"
+                    >
+                      {club.websiteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                    </a>
+                  </div>
+                )}
+                {club.botUrl && (
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[color:var(--color-muted)]">Bot</span>
+                    <a href={club.botUrl} target="_blank" rel="noreferrer" className="font-semibold text-[color:var(--club-accent-ink)]">
+                      @{club.botUrl.split("/").pop()}
+                    </a>
                   </div>
                 )}
                 <div className="flex items-center justify-between">

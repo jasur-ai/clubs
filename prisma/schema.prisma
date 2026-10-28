@@ -58,6 +58,8 @@ model Club {
   logoUrl      String? // club's own emblem, seeded from /public/clubs/<slug>.jpg
   coverStyle   String   @default("grid") // visual variant for generated covers
   telegramUrl  String?
+  websiteUrl   String? // the club's own site, when it runs one
+  botUrl       String? // the club's Telegram bot / mini app entry point
   instagramUrl String?
   email        String?
   meetingDay   String?

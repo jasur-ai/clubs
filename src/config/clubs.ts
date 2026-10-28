@@ -24,6 +24,8 @@ export type ClubSeed = {
   accent: string;
   coverStyle: "grid" | "arc" | "lines" | "dots";
   telegramUrl?: string;
+  websiteUrl?: string;
+  botUrl?: string;
   instagramUrl?: string;
   email?: string;
   meetingDay?: string;
@@ -96,6 +98,45 @@ export const clubs: ClubSeed[] = [
         title: "Team building",
         description:
           "Har semestr boshida klub jamoasini shakllantirish va talabalar o‘rtasida yangi aloqalarni o‘rnatish uchun ochiq tadbir.",
+      },
+    ],
+  },
+  {
+    slug: "raqamli-tadqiqot",
+    name: "Raqamli Tadqiqot",
+    shortName: "Raqamli Tadqiqot",
+    tagline: "Dalil bilan o‘lchaymiz, ochiq e’lon qilamiz.",
+    summary:
+      "Tashkilotlarda sun’iy intellekt va raqamli xizmatlar qanday ishlayotganini dalil bilan o‘lchaydigan ilmiy-tadqiqot klubi.",
+    description:
+      "Raqamli Tadqiqot — TDIU talabalarining ilmiy-tadqiqot klubi. Biz tashkilotlarda sun’iy intellekt va raqamli xizmatlar qayerda va qanday ishlayotganini dalil bilan o‘lchaymiz, natijalarni esa ochiq e’lon qilamiz. Birinchi pilotda 10 ta tijorat banki 6 o‘lchov bo‘yicha baholandi: 60 ta savoldan 30 tasiga dalil topildi, 32 ta manba tekshirildi va 6 ta xato tuzatildi. Baholash D1–D6 o‘lchov yo‘nalishlari bo‘yicha 0–3 ballik tizimda olib boriladi — har bir ball manbaga bog‘langan, ishni ikki mustaqil baholovchi tekshiradi va ularning kelishuv koeffitsiyenti hisoblanadi. Klub a’zolari tadqiqot tajribasi, ilmiy nashr imkoniyati, turli fakultetlardan iliq va professional jamoa hamda sertifikat oladi. Qabul ochiq: saralash yo‘q, kod bilish shart emas, barcha fakultet va kurslar uchun, a’zolik bepul.",
+    category: "academic",
+    accent: "#1d5b4a",
+    coverStyle: "dots",
+    telegramUrl: "https://t.me/Raqamli_tadqiqot",
+    websiteUrl: "https://raqamlitadqiqot.pages.dev",
+    botUrl: "https://t.me/aiindeksi_bot",
+    sortOrder: 22,
+    projects: [
+      {
+        title: "Banklar monitoringi",
+        description:
+          "Birinchi pilot: 10 ta tijorat banki 6 o‘lchov bo‘yicha baholandi, 60 ta savoldan 30 tasiga dalil topildi. Natijalar ochiq e’lon qilinadi.",
+      },
+      {
+        title: "D1–D6 metodikasi",
+        description:
+          "Har bir yo‘nalish 0–3 ballik shkalada baholanadi: ball manbaga bog‘langan, ikki mustaqil baholovchining kelishuv koeffitsiyenti hisoblanadi.",
+      },
+      {
+        title: "Manba tekshiruvi",
+        description:
+          "32 ta manba tekshirildi va 6 ta xato tuzatildi. Har bir da’vo ortida ko‘rsatiladigan havola turadi — dalilsiz xulosa nashr etilmaydi.",
+      },
+      {
+        title: "Ilmiy nashr va treninglar",
+        description:
+          "Klub a’zolari uchun tadqiqot tajribasi, nashr imkoniyati va tahliliy yozuv bo‘yicha amaliy mashg‘ulotlar.",
       },
     ],
   },
