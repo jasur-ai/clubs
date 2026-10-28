@@ -75,8 +75,6 @@ export default async function HomePage() {
       {/* ------------------------------------------------------------------ hero */}
       <section className="hero-shell grain relative border-b border-[color:var(--color-line)]">
         <div aria-hidden className="contour-field" />
-        <div aria-hidden className="bloom-blue -right-28 -top-32 h-[240px] w-[240px] opacity-70 drift sm:h-[420px] sm:w-[420px] sm:opacity-100" />
-        <div aria-hidden className="bloom-green -left-52 bottom-[-200px] hidden h-[300px] w-[300px] opacity-70 sm:block" />
 
         <div className="relative mx-auto w-full max-w-[1180px] px-4 pb-8 pt-12 sm:px-6 lg:pt-16">
           <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:gap-16">
