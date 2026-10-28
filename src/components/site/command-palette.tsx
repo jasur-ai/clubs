@@ -493,13 +493,13 @@ export function SearchTrigger({ className }: { className?: string }) {
       onClick={() => window.dispatchEvent(new Event("clubs:search"))}
       aria-label="Qidiruv (⌘K)"
       className={cn(
-        "group inline-flex items-center gap-2 border border-[color:var(--color-line)] bg-transparent px-2.5 py-1.5 text-[12px] font-semibold tracking-[0.02em] text-[color:var(--color-muted)] transition-colors duration-200 hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)]",
+        "group inline-flex items-center gap-2 rounded-[10px] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-2.5 py-1.5 text-[12.5px] text-[color:var(--color-muted)] transition-all duration-200 hover:border-[color:var(--color-line-strong)] hover:text-[color:var(--color-ink)]",
         className,
       )}
     >
       <Search size={14} strokeWidth={1.9} />
       <span className="hidden xl:inline">Qidirish</span>
-      <kbd className="hidden items-center border border-[color:var(--color-line)] px-1 py-[1px] text-[9px] font-semibold xl:inline-flex">
+      <kbd className="hidden items-center rounded-[4px] border border-[color:var(--color-line)] bg-[color:var(--color-surface-2)] px-1 py-[1px] text-[9.5px] font-semibold xl:inline-flex">
         ⌘K
       </kbd>
     </button>
