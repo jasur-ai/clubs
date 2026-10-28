@@ -62,7 +62,7 @@ export function ClubLogo({ name, logoUrl, accent = "#1f4a33", size = 44, classNa
     >
       <span
         className="font-serif leading-none tracking-tight"
-        style={{ color: accent, fontSize: size * 0.62 }}
+        style={{ color: "var(--club-accent-ink, " + accent + ")", fontSize: size * 0.62 }}
       >
         {name.slice(0, 1)}
       </span>
